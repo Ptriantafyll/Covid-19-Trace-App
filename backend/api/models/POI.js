@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// πίνακας Σημείο Ενδιαφέροντος (Point of interest) - mongodb
 const POISchema = mongoose.Schema({
     id: {
         type: String,

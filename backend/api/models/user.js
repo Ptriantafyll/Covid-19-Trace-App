@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// πίνακας Χρήστης (User) - mongodb
 const userSchema = mongoose.Schema({
     _id:mongoose.Schema.Types.ObjectId,
     username: {

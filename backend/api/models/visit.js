@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// πίνακας Επίσκεψη (Visit) - mongodb
 const visitSchema = mongoose.Schema({
     _id:mongoose.Schema.Types.ObjectId,
     user: {
