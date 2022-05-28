@@ -1,20 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-// get request (select) για την εμφάνιση όλων των χρηστών
-router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: "Handling get requests"
-        // TODO: να εμφανίσω user.covid_test να δω πως εμφανίζεται το date type
-    })
-});
+const UsersController = require("../controllers/user");
+const User = require("../models/user");
 
-// post request για τη δημιουργία ενός νέου χρήστη
-router.post('/signup', (req, res, next) => {
-    res.status(200).json({
-        message: "Handling post requests for users"
-    })
-});
+// get all users
+router.get('/', UsersController.get_all_users);
+
+// create user
+// todo: /signup
+router.post('/', UsersController.create_user);
+
 
 
 

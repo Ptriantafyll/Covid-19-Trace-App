@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
         required: true
     },
     covid_test: {
-        type: Date,
+        date: Date, //format: "YYYY-MM-DDTHH:MM:SS.SSSZ - e.g. 2020-10-25T23:15:10:300Z"
         result: Boolean
     }
 })
