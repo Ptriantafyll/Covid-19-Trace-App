@@ -9,7 +9,7 @@ router.get('/', UsersController.get_all_users);
 
 // create user
 // todo: /signup
-router.post('/', UsersController.create_user);
+router.post('/signup', UsersController.create_user);
 
 
 
