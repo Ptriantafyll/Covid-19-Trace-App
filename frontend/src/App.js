@@ -2,6 +2,8 @@
 import Layout from "./Components/Layout/Layout";
 import LoginPage from "./Pages/LoginPage";
 import SignupPage from "./Pages/SignupPage";
+import UserHomePage from "./Pages/UserHomePage";
+import StartPage from "./Pages/StartPage";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
@@ -9,9 +11,10 @@ function App() {
     <div>
       <Layout>
         <Routes>
-          {/* να τα φτιάξω να δείχνουν στις σωστές σελίδες */}
-          <Route exact path="/" element={<SignupPage />} />
+          <Route exact path="/" element={<StartPage />} />
+          <Route path="/UserHomePage" element={<UserHomePage />} />
           <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="/SignupPage" element={<SignupPage />} />
         </Routes>
       </Layout>
     </div>

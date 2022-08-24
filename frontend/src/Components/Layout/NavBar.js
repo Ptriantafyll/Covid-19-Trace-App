@@ -1,20 +1,32 @@
-import "w3css/w3.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function NavBar() {
   return (
-    <div className="w3-top">
-      <div className="w3-bar w3-white w3-wide w3-padding-jumbo w3-card">
-        Name of the site here
-        <div className="w3-right w3-hide-small">
-          <a href="/LogIn" className="w3-bar-item w3-padding w3-hover-blue">
-            LogIn
-          </a>
-          <a href="/" className="w3-bar-item w3-padding w3-hover-blue">
-            SignUp
-          </a>
-        </div>
+    <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+      <div className="container-fluid">
+        <a className="navbar-brand" href="/">
+          Logo
+        </a>
+
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <a className="nav-link" href="/LoginPage">
+              Log In
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/SignupPage">
+              Sign Up
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/UserHomePage">
+              UserHomePage
+            </a>
+          </li>
+        </ul>
       </div>
-    </div>
+    </nav>
   );
 }
 

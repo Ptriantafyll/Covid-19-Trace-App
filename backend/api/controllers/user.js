@@ -6,7 +6,7 @@ const user = require("../models/user");
 
 exports.get_all_users = (req, res, next) => {
   User.find()
-    .select("username _id covid_test")
+    .select("username _id email covid_test")
     .exec()
     .then((users) => {
       // response = result
@@ -15,6 +15,7 @@ exports.get_all_users = (req, res, next) => {
         users: users.map((user) => {
           return {
             username: user.username,
+            email: user.email,
             _id: user._id,
             covid_test: user.covid_test,
           };
@@ -63,6 +64,7 @@ exports.create_user = (req, res, next) => {
             const new_user = new User({
               _id: new mongoose.Types.ObjectId(),
               username: req.body.username,
+              email: req.body.email,
               password: hash,
               covid_test: req.body.covid_test,
             });
@@ -112,13 +114,13 @@ exports.user_login = (req, res, next) => {
             },
             process.env.JWT_KEY,
             {
-                expiresIn: "1h"
+              expiresIn: "1h",
             }
           );
 
           return res.status(200).json({
             message: "Authorization successful",
-            token: token
+            token: token,
           });
         }
 
