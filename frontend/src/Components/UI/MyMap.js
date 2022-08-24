@@ -2,8 +2,8 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "./MyMap.css";
 import L from "leaflet";
-import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useState, useEffect } from "react";
 
 // code for marker icon to work
 delete L.Icon.Default.prototype._getIconUrl;
@@ -14,25 +14,30 @@ L.Icon.Default.mergeOptions({
 });
 
 function MyMap(props) {
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+
   // code that logs my current position, probably will delete it later
-  React.useEffect(() => {
+  useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position);
+      const newpos = position;
+      setLatitude(newpos.coords.latitude);
+      setLongitude(newpos.coords.longitude);
     });
   }, []);
 
-  return (
-    <div className="p-5">
-      <MapContainer
-        center={[38.2465387, 21.7322099]}
-        zoom={15}
-        scrollWheelZoom={false}
-      >
+  const pos = [latitude, longitude];
+  return latitude === 0 ? null : (
+    <div className="w-50 mx-auto pt-5">
+      <h1>
+        {latitude} {longitude}
+      </h1>
+      <MapContainer center={pos} zoom={15} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[38.2465387, 21.7322099]}>
+        <Marker position={pos}>
           <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
