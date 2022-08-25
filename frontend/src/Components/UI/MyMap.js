@@ -17,7 +17,7 @@ function MyMap(props) {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
-  // code that logs my current position, probably will delete it later
+  // code that gets my current position
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       const newpos = position;
@@ -29,6 +29,7 @@ function MyMap(props) {
   const pos = [latitude, longitude];
   return latitude === 0 ? null : (
     <div className="w-50 mx-auto pt-5">
+      {/*this h1 will be deleted later*/}
       <h1>
         {latitude} {longitude}
       </h1>
@@ -46,5 +47,7 @@ function MyMap(props) {
     </div>
   );
 }
+
+//[38.2453608, 21.7367885]
 
 export default MyMap;
