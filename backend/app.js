@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const userRoutes = require("./api/routes/user");
+const POIRoutes = require("./api/routes/POI");
 
 require("dotenv").config(); // δεν ξέρω αν χρειάζεαι
 
@@ -37,6 +38,7 @@ app.use((req, res, next) => {
 
 // Routes which should handle requests
 app.use("/user", userRoutes);
+app.use("/POI", POIRoutes);
 
 // handle every request that reaches here (errors)
 app.use((req, res, next) => {

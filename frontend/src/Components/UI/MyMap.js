@@ -1,11 +1,11 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import "./MyMap.css";
+import "leaflet/dist/leaflet.css"; // needed for map
+import "./MyMap.css"; // just defines the height of a leaflet container
 import L from "leaflet";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 
-// code for marker icon to work
+// code for default marker icon to work
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),

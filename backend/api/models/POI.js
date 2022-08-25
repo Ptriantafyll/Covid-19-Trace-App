@@ -19,7 +19,7 @@ const POISchema = mongoose.Schema({
     type: Array,
   },
   coordinates: {
-    type: Float64Array,
+    type: Array,
   },
   rating: {
     type: Number,
@@ -32,4 +32,4 @@ const POISchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("User", POISchema);
+module.exports = mongoose.model("POI", POISchema);

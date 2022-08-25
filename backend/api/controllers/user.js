@@ -2,14 +2,12 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const user = require("../models/user");
 
 exports.get_all_users = (req, res, next) => {
   User.find()
     .select("username _id email covid_test")
     .exec()
     .then((users) => {
-      // response = result
       const response = {
         count: users.length,
         users: users.map((user) => {
