@@ -30,6 +30,9 @@ const POISchema = mongoose.Schema({
   populartimes: {
     type: Array,
   },
+  time_spent: {
+    type: Array,
+  },
 });
 
 module.exports = mongoose.model("POI", POISchema);

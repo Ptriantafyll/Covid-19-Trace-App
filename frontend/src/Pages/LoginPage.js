@@ -11,7 +11,6 @@ function LoginPage() {
     console.log(userdata);
 
     //TODO: να βάλω μία if για να τσεκάρει αν μπαίνει ο admin ή απλός user
-
     axios
       .post(BaseURL + "user/login", {
         username: userdata.username,

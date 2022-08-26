@@ -1,11 +1,12 @@
 import L from "leaflet";
 
 const orange_icon = L.icon({
-  iconUrl: require("./green-marker-icon.png"),
+  iconUrl: require("./orange-marker-icon.png"),
   iconSize: [25, 41],
-  iconAnchor: [0, 0],
+  iconAnchor: [12, 41],
   shadowUrl: require("./marker-shadow.png"),
   shadowSize: [41, 41],
+  popupAnchor: [0, -35],
   // shadowAnchor: [22, 94],
 });
 

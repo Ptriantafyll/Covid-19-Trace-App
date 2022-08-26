@@ -19,35 +19,37 @@ function MyMap(props) {
 
   // code that gets my current position
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const newpos = position;
-      setLatitude(newpos.coords.latitude);
-      setLongitude(newpos.coords.longitude);
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const newpos = position;
+        setLatitude(newpos.coords.latitude);
+        setLongitude(newpos.coords.longitude);
+      },
+      (error) => {
+        console.log(error);
+      },
+      {
+        enableHighAccuracy: true,
+      }
+    );
   }, []);
 
   const pos = [latitude, longitude];
   return latitude === 0 ? null : (
-    <div className="w-50 mx-auto pt-5">
-      {/*this h1 will be deleted later*/}
-      <h1>
-        {latitude} {longitude}
-      </h1>
-      <MapContainer center={pos} zoom={15} scrollWheelZoom={true}>
+    <div className="w-50 mx-auto pt-5 pb-5">
+      <MapContainer center={pos} zoom={13} scrollWheelZoom={true}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <Marker position={pos}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
+          <Popup>You are here</Popup>
         </Marker>
+        {/*the result of the search for POIs in the database*/}
+        {props.searchedPOIs}
       </MapContainer>
     </div>
   );
 }
-
-//[38.2453608, 21.7367885]
 
 export default MyMap;

@@ -2,7 +2,9 @@ const POI = require("../models/POI");
 
 exports.get_all_POIs = (req, res, next) => {
   POI.find()
-    .select("name address types coordinates rating rating_n populartimes")
+    .select(
+      "name address types coordinates rating rating_n populartimes time_spent"
+    )
     .exec()
     .then((POIs) => {
       const response = {
@@ -16,6 +18,7 @@ exports.get_all_POIs = (req, res, next) => {
             rating: POI.rating,
             rating_n: POI.rating_n,
             populartimes: POI.populartimes,
+            time_spent: POI.time_spent,
           };
         }),
       };
@@ -40,6 +43,7 @@ exports.create_POI = (req, res, next) => {
     rating: req.body.rating,
     rating_n: req.body.rating_n,
     populartimes: req.body.populartimes,
+    time_spent: req.body.time_spent,
   });
 
   // add POI to db
