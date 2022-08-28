@@ -1,9 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useRef } from "react";
 
-// TODO: change the whole function after i work out the search
-// so that after you click the button all the searched POIs get fetched
-
 function MapSearchBar(props) {
   const POIsearchRef = useRef();
   function searchHandler(event) {
