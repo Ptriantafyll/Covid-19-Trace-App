@@ -3,7 +3,7 @@ const POI = require("../models/POI");
 exports.get_all_POIs = (req, res, next) => {
   POI.find()
     .select(
-      "name address types coordinates rating rating_n populartimes time_spent"
+      "id name address types coordinates rating rating_n populartimes time_spent"
     )
     .exec()
     .then((POIs) => {
@@ -11,6 +11,7 @@ exports.get_all_POIs = (req, res, next) => {
         count: POIs.length,
         POIs: POIs.map((POI) => {
           return {
+            id: POI.id,
             name: POI.name,
             address: POI.address,
             types: POI.types,

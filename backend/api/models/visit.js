@@ -4,15 +4,22 @@ const mongoose = require("mongoose");
 const visitSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "User",
     required: true,
   },
   POI: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: "POI",
     required: true,
   },
+  time: {
+    type: String,
+    required: true,
+  },
+  peopleEstimate: {
+    type: Number,
+  },
 });
 
-module.exports = mongoose.model("User", visitSchema);
+module.exports = mongoose.model("Visit", visitSchema);

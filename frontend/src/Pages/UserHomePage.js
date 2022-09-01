@@ -1,40 +1,28 @@
 import MyMap from "../Components/UI/MyMap";
 import MapSearchBar from "../Components/UI/MapSearchBar";
-import axios from "axios";
-import { useState, useEffect } from "react";
 import { Marker, Popup } from "react-leaflet";
+import axios from "axios";
+
+import { useState, useContext } from "react";
+
+// todo find a way to pass user from login to userhomepage
+import UserContext from "../Store/CurrentUserContext";
+import PositionContext from "../Store/CurrentPositionContext";
 
 import green_icon from "../Icons/green-icon";
 import red_icon from "../Icons/red-icon";
 import orange_icon from "../Icons/orange-icon";
-import CalculateDistance from "../Components/CalculateDistance";
+import CalculateDistance from "../CalculateDistance";
 
 function UserHomePage() {
   const BaseURL = "http://localhost:3000/"; // api url
   const [returnedPOIs, setReturnedPOIs] = useState({});
   const [isloading, setIsloading] = useState(false);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
+  const currentUserContext = useContext(UserContext);
+  const currentPositioncontext = useContext(PositionContext);
+  console.log(currentPositioncontext);
 
-  // code that gets my current position and stores it in state
-  useEffect(() => {
-    setIsloading(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const newpos = position;
-        setLatitude(newpos.coords.latitude);
-        setLongitude(newpos.coords.longitude);
-        setIsloading(false);
-      },
-      (error) => {
-        console.log(error);
-      },
-      {
-        enableHighAccuracy: true,
-      }
-    );
-  }, []);
-
+  // searched in the db and returns POIs
   function POISearchHandler(enteredPOI) {
     // enteredPOI has the value of the text input field
     // TODO: search in DB
@@ -50,6 +38,7 @@ function UserHomePage() {
       });
   }
 
+  // make a post request to 3000/visit
   function addVisitHandler() {}
 
   var myMarkers = null;
@@ -70,6 +59,7 @@ function UserHomePage() {
         2; // ίσως χρειαστεί να αλλάξουν τα current_hour -> να γίνουν +1
       percentages.push(percentage);
 
+      // icon_colors has the icon for every POI returned
       if (percentage < 33) {
         icon_colors.push(green_icon);
       } else if (percentage >= 33 && percentage < 66) {
@@ -87,14 +77,15 @@ function UserHomePage() {
         // longitude
       );
 
-      // closer than 20 has true for every poi that is whithin 20 meters of the user
+      // closer_than_20 has true for every poi (of those returned from the search) that is whithin 20 meters of the user
       if (distance <= 20) closer_than_20.push(true);
       else closer_than_20.push(false);
-    } // end of for
+    }
 
     var i = 0;
     // TODO: να βάλω τις επισκέψεις που δηλώνουν οι άλλοι χρήστες
     // και να φτιάξω την αναζήτηση στη βάση
+    // myMarkers = markers on the positions of every POI returned from the search
     myMarkers = returnedPOIs.map((poi) => {
       return (
         <Marker
@@ -104,7 +95,7 @@ function UserHomePage() {
         >
           <Popup>
             <p className="text-center">
-              {poi.name} <br /> Estimated traffic for the next 2 hours:
+              {poi.name} <br /> Estimated traffic for the next 2 hours:{" "}
               {percentages[i]}% <br />
               {closer_than_20[i]
                 ? "Did you visit this POI?"
@@ -115,10 +106,10 @@ function UserHomePage() {
                   onClick={addVisitHandler}
                   className="btn btn-primary btn-sm"
                 >
-                  no
+                  yes
                 </button>
-              ) : null}
-              {/* εδώ θα βάλω την καταχώρηση επίσκεψης (4) */}
+              ) : // TODO: να φτιάξω το addvisithandler
+              null}
             </p>
           </Popup>
         </Marker>
@@ -133,12 +124,22 @@ function UserHomePage() {
       </section>
     );
   }
+  // todo: δεν δουλεύει σε mobile, να βρω καλύτερο τρόπο να το εμφανίζει
+  const pos = [
+    currentPositioncontext.latitude,
+    currentPositioncontext.longitude,
+  ];
+  console.log(pos);
 
-  return latitude === 0 ? null : (
+  return (
     <div>
-      <MyMap searchedPOIs={myMarkers} currentpos={[latitude, longitude]} />
+      <MyMap searchedPOIs={myMarkers} currentpos={pos} />
       <h2 className="text-center">
         Enter the type of POI you wish to see on the map
+        {" " +
+          currentUserContext.username +
+          " " +
+          currentPositioncontext.latitude}
       </h2>
       <MapSearchBar onEnteredSearch={POISearchHandler} />
     </div>

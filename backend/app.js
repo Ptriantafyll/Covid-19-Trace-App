@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 
 const userRoutes = require("./api/routes/user");
 const POIRoutes = require("./api/routes/POI");
+const visitRoutes = require("./api/routes/visit");
 
 require("dotenv").config(); // δεν ξέρω αν χρειάζεαι
 
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 // Routes which should handle requests
 app.use("/user", userRoutes);
 app.use("/POI", POIRoutes);
+app.use("/visit", visitRoutes);
 
 // handle every request that reaches here (errors)
 app.use((req, res, next) => {
