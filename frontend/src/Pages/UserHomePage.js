@@ -1,17 +1,20 @@
 import MyMap from "../Components/UI/MyMap";
 import MapSearchBar from "../Components/UI/MapSearchBar";
 import { Marker, Popup } from "react-leaflet";
+import { Button } from "react-bootstrap";
 import axios from "axios";
 
 import { useState, useContext } from "react";
 
-// todo find a way to pass user from login to userhomepage
 import UserContext from "../Store/CurrentUserContext";
 import PositionContext from "../Store/CurrentPositionContext";
+import ModalContext from "../Store/ModalContext";
 
 import green_icon from "../Icons/green-icon";
 import red_icon from "../Icons/red-icon";
 import orange_icon from "../Icons/orange-icon";
+
+import VisitModal from "../Components/UI/VisitModal";
 import CalculateDistance from "../CalculateDistance";
 
 function UserHomePage() {
@@ -20,10 +23,14 @@ function UserHomePage() {
   const [isloading, setIsloading] = useState(false);
   const currentUserContext = useContext(UserContext);
   const currentPositioncontext = useContext(PositionContext);
-  console.log(currentPositioncontext);
+  const modal_context = useContext(ModalContext);
+  const today = new Date();
+
+  console.log("people " + modal_context.people);
+  // console.log(currentPositioncontext);
 
   // searched in the db and returns POIs
-  function POISearchHandler(enteredPOI) {
+  function POISearchHandler() {
     // enteredPOI has the value of the text input field
     // TODO: search in DB
     setIsloading(true);
@@ -39,11 +46,30 @@ function UserHomePage() {
   }
 
   // make a post request to 3000/visit
-  function addVisitHandler() {}
+  // function addVisitHandler(poi_name) {
+  //TODO: να βάζει ο χρήστης το peopleEstimate και να βάλω μία if(υπάρχει το peopleEstimate)
+  //TODO: συναίνεση από χρήστη
+  // console.log("in handler: " + poi_name);
+  // setIsloading(true);
+  // axios
+  //   .post(BaseURL + "visit", {
+  //     user: currentUserContext.username,
+  //     POI: poi_name,
+  //     time: today.getTime(),
+  //     peopleEstimate: 50,
+  //   })
+  //   .then((response) => {
+  //     console.log(response);
+  //     setIsloading(false);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error.response);
+  //   });
+  //   console.log("here");
+  // }
 
   var myMarkers = null;
   if (returnedPOIs.length > 0) {
-    const today = new Date();
     const current_day = today.getDay() === 0 ? 7 : today.getDay();
     const current_hour = today.getHours();
     const icon_colors = [];
@@ -98,16 +124,19 @@ function UserHomePage() {
               {poi.name} <br /> Estimated traffic for the next 2 hours:{" "}
               {percentages[i]}% <br />
               {closer_than_20[i]
-                ? "Did you visit this POI?"
+                ? "Did you visit " + poi.name + " ?"
                 : "This POI is too far"}
               <br />
               {closer_than_20[i++] ? (
-                <button
-                  onClick={addVisitHandler}
-                  className="btn btn-primary btn-sm"
+                <Button
+                  variant="primary"
+                  className="btn-sm"
+                  onClick={() => {
+                    modal_context.openModal(poi.name);
+                  }}
                 >
-                  yes
-                </button>
+                  Yes
+                </Button>
               ) : // TODO: να φτιάξω το addvisithandler
               null}
             </p>
@@ -129,7 +158,6 @@ function UserHomePage() {
     currentPositioncontext.latitude,
     currentPositioncontext.longitude,
   ];
-  console.log(pos);
 
   return (
     <div>
@@ -142,6 +170,7 @@ function UserHomePage() {
           currentPositioncontext.latitude}
       </h2>
       <MapSearchBar onEnteredSearch={POISearchHandler} />
+      <VisitModal />
     </div>
   );
 }

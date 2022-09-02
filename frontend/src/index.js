@@ -5,14 +5,17 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { UserContextProvider } from "./Store/CurrentUserContext";
 import { PositionContextProvider } from "./Store/CurrentPositionContext";
+import { ModalContextProvider } from "./Store/ModalContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <PositionContextProvider>
     <UserContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ModalContextProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ModalContextProvider>
     </UserContextProvider>
   </PositionContextProvider>
 );
