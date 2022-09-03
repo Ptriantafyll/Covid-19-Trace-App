@@ -28,9 +28,6 @@ export function ModalContextProvider(props) {
   function enterVisitHandler(estimate, current_user) {
     setPeopleEstimate(estimate);
 
-    console.log(current_user);
-    console.log(currentPoi);
-    console.log(estimate);
     axios
       .post(BaseURL + "visit", {
         user: current_user,

@@ -26,16 +26,13 @@ function UserHomePage() {
   const modal_context = useContext(ModalContext);
   const today = new Date();
 
-  console.log("people " + modal_context.people);
-  // console.log(currentPositioncontext);
-
   // searched in the db and returns POIs
-  function POISearchHandler() {
+  function POISearchHandler(enteredPOIType) {
     // enteredPOI has the value of the text input field
-    // TODO: search in DB
+    // TODO: search in DB with enteredPOI
     setIsloading(true);
     axios
-      .get(BaseURL + "POI") // add the contents of the search
+      .get(BaseURL + "POI/" + enteredPOIType) // add the contents of the search
       .then((response) => {
         setReturnedPOIs(response.data.POIs);
         setIsloading(false);
@@ -44,29 +41,6 @@ function UserHomePage() {
         console.log(error.response);
       });
   }
-
-  // make a post request to 3000/visit
-  // function addVisitHandler(poi_name) {
-  //TODO: να βάζει ο χρήστης το peopleEstimate και να βάλω μία if(υπάρχει το peopleEstimate)
-  //TODO: συναίνεση από χρήστη
-  // console.log("in handler: " + poi_name);
-  // setIsloading(true);
-  // axios
-  //   .post(BaseURL + "visit", {
-  //     user: currentUserContext.username,
-  //     POI: poi_name,
-  //     time: today.getTime(),
-  //     peopleEstimate: 50,
-  //   })
-  //   .then((response) => {
-  //     console.log(response);
-  //     setIsloading(false);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error.response);
-  //   });
-  //   console.log("here");
-  // }
 
   var myMarkers = null;
   if (returnedPOIs.length > 0) {
@@ -110,7 +84,8 @@ function UserHomePage() {
 
     var i = 0;
     // TODO: να βάλω τις επισκέψεις που δηλώνουν οι άλλοι χρήστες
-    // και να φτιάξω την αναζήτηση στη βάση
+    // εμφανίζεται ο μέσος αριθμός των επισκεπτών με βάση τις καταχωρήσεις άλλων χρηστών, αν υπάρχουν ως και 2 ώρες πριν την τρέχουσα χρονική στιγμή
+
     // myMarkers = markers on the positions of every POI returned from the search
     myMarkers = returnedPOIs.map((poi) => {
       return (
@@ -126,6 +101,7 @@ function UserHomePage() {
               {closer_than_20[i]
                 ? "Did you visit " + poi.name + " ?"
                 : "This POI is too far"}
+              {/* να αλλάξω το πώς εμφανίζεται */}
               <br />
               {closer_than_20[i++] ? (
                 <Button
@@ -137,8 +113,7 @@ function UserHomePage() {
                 >
                   Yes
                 </Button>
-              ) : // TODO: να φτιάξω το addvisithandler
-              null}
+              ) : null}
             </p>
           </Popup>
         </Marker>
@@ -170,6 +145,7 @@ function UserHomePage() {
           currentPositioncontext.latitude}
       </h2>
       <MapSearchBar onEnteredSearch={POISearchHandler} />
+      {/*  */}
       <VisitModal />
     </div>
   );

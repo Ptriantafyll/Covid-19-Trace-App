@@ -31,7 +31,7 @@ function VisitModal(props) {
               );
             }}
           >
-            Save Changes
+            Add Visit
           </Button>
         </Modal.Footer>
       </Modal>

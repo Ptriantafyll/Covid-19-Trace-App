@@ -7,11 +7,7 @@ function MapSearchBar(props) {
     event.preventDefault();
     const enteredPOISearch = POIsearchRef.current.value;
 
-    const enteredPOI = {
-      enteredPOISearch,
-    };
-
-    props.onEnteredSearch(enteredPOI);
+    props.onEnteredSearch(enteredPOISearch);
   }
 
   return (

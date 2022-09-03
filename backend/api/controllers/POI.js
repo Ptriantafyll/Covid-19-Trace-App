@@ -33,6 +33,46 @@ exports.get_all_POIs = (req, res, next) => {
     });
 };
 
+// todo: να φτιάξω την αναζήτηση από το searchbar
+exports.get_type_of_POI = (req, res, next) => {
+  const type = req.params.poitype;
+  const pois_of_given_type = [];
+  POI.find()
+    .select(
+      "id name address types coordinates rating rating_n populartimes time_spent"
+    )
+    .exec()
+    .then((POIs) => {
+      for (poi in POIs) {
+        console.log(POIs[poi].types);
+
+        if (POIs[poi].types.includes(type)) {
+          pois_of_given_type.push(POIs[poi]);
+        } else {
+          console.log(type);
+        }
+      }
+
+      if (pois_of_given_type.length === 0) {
+        res.status(404).json({
+          message: "The type you entered does not exist",
+        });
+      } else {
+        const response = {
+          count: pois_of_given_type.length,
+          POIs: pois_of_given_type,
+        };
+        res.status(200).json(response);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
 exports.create_POI = (req, res, next) => {
   // create new POI
   const new_POI = new POI({
