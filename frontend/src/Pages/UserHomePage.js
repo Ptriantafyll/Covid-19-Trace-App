@@ -8,7 +8,7 @@ import { useState, useContext } from "react";
 
 import UserContext from "../Store/CurrentUserContext";
 import PositionContext from "../Store/CurrentPositionContext";
-import ModalContext from "../Store/ModalContext";
+import ModalContext from "../Store/VisitModalContext";
 
 import green_icon from "../Icons/green-icon";
 import red_icon from "../Icons/red-icon";
@@ -21,20 +21,21 @@ function UserHomePage() {
   const BaseURL = "http://localhost:3000/"; // api url
   const [returnedPOIs, setReturnedPOIs] = useState({});
   const [isloading, setIsloading] = useState(false);
+  const [average_for_every_poi, setaverage_for_every_poi] = useState([]);
   const currentUserContext = useContext(UserContext);
   const currentPositioncontext = useContext(PositionContext);
   const modal_context = useContext(ModalContext);
   const today = new Date();
 
-  // searched in the db and returns POIs
+  // searched in the db and returns POIs of a specific type
   function POISearchHandler(enteredPOIType) {
-    // enteredPOI has the value of the text input field
-    // TODO: search in DB with enteredPOI
+    // todo: να ψάξω όλα τα types και να το φτιάξω σαν combo box?
     setIsloading(true);
     axios
-      .get(BaseURL + "POI/" + enteredPOIType) // add the contents of the search
+      .get(BaseURL + "POI/" + enteredPOIType)
       .then((response) => {
         setReturnedPOIs(response.data.POIs);
+        getEstimates(response.data.POIs);
         setIsloading(false);
       })
       .catch((error) => {
@@ -42,13 +43,67 @@ function UserHomePage() {
       });
   }
 
+  function getEstimates(POIS) {
+    const pois_avg = [];
+    var totalpeople = 0;
+    var totalvisits = 0;
+    var average = 0;
+    if (POIS.length > 0) {
+      // ίσως να μεταφερθεί στην από κάτω ιφ
+      axios
+        .get(BaseURL + "visit/19" /*+ today.getHours()*/)
+        .then((response) => {
+          // console.log(response.data.visits_of_the_next_2_hours);
+          if (response.data.visits_of_the_next_2_hours.length > 0) {
+            // store average for every poi
+            for (const poi in POIS) {
+              totalpeople = 0;
+              totalvisits = 0;
+              for (const visit in response.data.visits_of_the_next_2_hours) {
+                if (
+                  POIS[poi].name ===
+                  response.data.visits_of_the_next_2_hours[visit].POI
+                ) {
+                  if (
+                    response.data.visits_of_the_next_2_hours[visit]
+                      .peopleEstimate
+                  ) {
+                    totalpeople +=
+                      response.data.visits_of_the_next_2_hours[visit]
+                        .peopleEstimate;
+
+                    totalvisits++;
+                  }
+                }
+              }
+              average = totalvisits === 0 ? 0 : totalpeople / totalvisits;
+              pois_avg.push(average);
+            }
+
+            // console.log("average for every poi: " + pois_avg);
+            // console.log(POIS);
+            setaverage_for_every_poi(pois_avg);
+          } else {
+            // there are no visits for the next 2 hours
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
+  // maybe make this a function
   var myMarkers = null;
   if (returnedPOIs.length > 0) {
+    // console.log("here " + getEstimates(returnedPOIs));
+    console.log("avg: " + average_for_every_poi);
     const current_day = today.getDay() === 0 ? 7 : today.getDay();
     const current_hour = today.getHours();
     const icon_colors = [];
     const percentages = [];
     const closer_than_20 = [];
+    const average_messages = [];
 
     for (const poi in returnedPOIs) {
       var percentage =
@@ -81,6 +136,20 @@ function UserHomePage() {
       if (distance <= 20) closer_than_20.push(true);
       else closer_than_20.push(false);
     }
+
+    for (const j in average_for_every_poi) {
+      if (average_for_every_poi[j] === 0) {
+        average_messages.push(
+          "there is no data for the people for the next 2 hours"
+        );
+      } else {
+        average_messages.push(
+          "average of peopel for the next 2 hours is: " +
+            average_for_every_poi[j]
+        );
+      }
+    }
+    console.log(average_messages); // todo: να το βάλω το ποπαπ
 
     var i = 0;
     // TODO: να βάλω τις επισκέψεις που δηλώνουν οι άλλοι χρήστες
@@ -123,9 +192,9 @@ function UserHomePage() {
 
   if (isloading) {
     return (
-      <section>
-        <p>Loading...</p>
-      </section>
+      <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+        <div className="spinner-border text-dark" />
+      </div>
     );
   }
   // todo: δεν δουλεύει σε mobile, να βρω καλύτερο τρόπο να το εμφανίζει
@@ -133,6 +202,10 @@ function UserHomePage() {
     currentPositioncontext.latitude,
     currentPositioncontext.longitude,
   ];
+
+  // const d = new Date(1662138578946);
+  // console.log(d);
+  // console.log(d.getTime());
 
   return (
     <div>

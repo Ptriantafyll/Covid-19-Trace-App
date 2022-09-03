@@ -43,13 +43,11 @@ exports.get_type_of_POI = (req, res, next) => {
     )
     .exec()
     .then((POIs) => {
-      for (poi in POIs) {
+      for (const poi in POIs) {
         console.log(POIs[poi].types);
 
         if (POIs[poi].types.includes(type)) {
           pois_of_given_type.push(POIs[poi]);
-        } else {
-          console.log(type);
         }
       }
 

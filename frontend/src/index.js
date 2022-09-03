@@ -5,17 +5,17 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { UserContextProvider } from "./Store/CurrentUserContext";
 import { PositionContextProvider } from "./Store/CurrentPositionContext";
-import { ModalContextProvider } from "./Store/ModalContext";
+import { VisitModalContextProvider } from "./Store/VisitModalContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <PositionContextProvider>
     <UserContextProvider>
-      <ModalContextProvider>
+      <VisitModalContextProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </ModalContextProvider>
+      </VisitModalContextProvider>
     </UserContextProvider>
   </PositionContextProvider>
 );

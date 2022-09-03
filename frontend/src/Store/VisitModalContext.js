@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import axios from "axios";
 
-const ModalContext = createContext({
+const VisitModalContext = createContext({
   open: false,
   people: 0,
   openModal: (name_of_poi) => {},
@@ -9,7 +9,7 @@ const ModalContext = createContext({
   enterVisit: (estimate, currentUserContext) => {},
 });
 
-export function ModalContextProvider(props) {
+export function VisitModalContextProvider(props) {
   const BaseURL = "http://localhost:3000/"; // api url
   const [modalIsOpen, setModalIsOpen] = useState();
   const [peopleEstimate, setPeopleEstimate] = useState();
@@ -28,6 +28,10 @@ export function ModalContextProvider(props) {
   function enterVisitHandler(estimate, current_user) {
     setPeopleEstimate(estimate);
 
+    console.log(current_user);
+    console.log(currentPoi);
+    console.log(today.getTime());
+    console.log(estimate);
     axios
       .post(BaseURL + "visit", {
         user: current_user,
@@ -54,10 +58,10 @@ export function ModalContextProvider(props) {
   };
 
   return (
-    <ModalContext.Provider value={context}>
+    <VisitModalContext.Provider value={context}>
       {props.children}
-    </ModalContext.Provider>
+    </VisitModalContext.Provider>
   );
 }
 
-export default ModalContext;
+export default VisitModalContext;
