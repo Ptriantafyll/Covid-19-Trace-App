@@ -1,5 +1,4 @@
 import MyMap from "../Components/UI/MyMap";
-import MapSearchBar from "../Components/UI/MapSearchBar";
 import { Marker, Popup } from "react-leaflet";
 import { Button } from "react-bootstrap";
 import axios from "axios";
@@ -39,7 +38,8 @@ function UserHomePage() {
         setIsloading(false);
       })
       .catch((error) => {
-        console.log(error.response);
+        console.log(error.response.data.message); // message sent from backend
+        setIsloading(false);
       });
   }
 
@@ -51,7 +51,7 @@ function UserHomePage() {
     if (POIS.length > 0) {
       // ίσως να μεταφερθεί στην από κάτω ιφ
       axios
-        .get(BaseURL + "visit/19" /*+ today.getHours()*/)
+        .get(BaseURL + "visit/" + today.getHours())
         .then((response) => {
           // console.log(response.data.visits_of_the_next_2_hours);
           if (response.data.visits_of_the_next_2_hours.length > 0) {
@@ -97,7 +97,7 @@ function UserHomePage() {
   var myMarkers = null;
   if (returnedPOIs.length > 0) {
     // console.log("here " + getEstimates(returnedPOIs));
-    console.log("avg: " + average_for_every_poi);
+    // console.log("avg: " + average_for_every_poi);
     const current_day = today.getDay() === 0 ? 7 : today.getDay();
     const current_hour = today.getHours();
     const icon_colors = [];
@@ -140,16 +140,16 @@ function UserHomePage() {
     for (const j in average_for_every_poi) {
       if (average_for_every_poi[j] === 0) {
         average_messages.push(
-          "there is no data for the people for the next 2 hours"
+          "There is no user data for the people for the next 2 hours"
         );
       } else {
         average_messages.push(
-          "average of peopel for the next 2 hours is: " +
+          "Average user of peopel for the next 2 hours is: " +
             average_for_every_poi[j]
         );
       }
     }
-    console.log(average_messages); // todo: να το βάλω το ποπαπ
+    // console.log(average_messages);
 
     var i = 0;
     // TODO: να βάλω τις επισκέψεις που δηλώνουν οι άλλοι χρήστες
@@ -168,11 +168,12 @@ function UserHomePage() {
               {poi.name} <br /> Estimated traffic for the next 2 hours:{" "}
               {percentages[i]}% <br />
               {closer_than_20[i]
-                ? "Did you visit " + poi.name + " ?"
+                ? "Click the button if you would like to add a visit to " +
+                  poi.name +
+                  " "
                 : "This POI is too far"}
               {/* να αλλάξω το πώς εμφανίζεται */}
-              <br />
-              {closer_than_20[i++] ? (
+              {closer_than_20[i] ? (
                 <Button
                   variant="primary"
                   className="btn-sm"
@@ -180,9 +181,11 @@ function UserHomePage() {
                     modal_context.openModal(poi.name);
                   }}
                 >
-                  Yes
+                  Add Visit
                 </Button>
               ) : null}
+              <br />
+              {average_messages[i++]}
             </p>
           </Popup>
         </Marker>
@@ -209,16 +212,19 @@ function UserHomePage() {
 
   return (
     <div>
-      <MyMap searchedPOIs={myMarkers} currentpos={pos} />
+      <MyMap
+        searchedPOIs={myMarkers}
+        currentpos={pos}
+        onEnteredSearch={POISearchHandler}
+      />
       <h2 className="text-center">
-        Enter the type of POI you wish to see on the map
+        User is
         {" " +
           currentUserContext.username +
-          " " +
+          " latitude is " +
           currentPositioncontext.latitude}
       </h2>
-      <MapSearchBar onEnteredSearch={POISearchHandler} />
-      {/*  */}
+      {/* <MapSearchBar onEnteredSearch={POISearchHandler} /> */}
       <VisitModal />
     </div>
   );

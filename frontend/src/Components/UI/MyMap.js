@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css"; // needed for map
 import "./MyMap.css"; // just defines the height of a leaflet container
 import L from "leaflet";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import { useState, useEffect } from "react";
+import MapSearchBar from "./MapSearchBar";
 
 // code for default marker icon to work
 delete L.Icon.Default.prototype._getIconUrl;
@@ -26,6 +26,7 @@ function MyMap(props) {
         </Marker>
         {/*the result of the search for POIs in the database*/}
         {props.searchedPOIs}
+        <MapSearchBar onEnteredSearch={props.onEnteredSearch} />
       </MapContainer>
     </div>
   );

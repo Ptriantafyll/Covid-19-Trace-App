@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Card, Form } from "react-bootstrap";
 
 function LoginForm(props) {
   const usernameloginref = useRef();
@@ -24,8 +25,8 @@ function LoginForm(props) {
 
   return (
     <div className="container mt-3">
-      <div className="card shadow">
-        <form onSubmit={loginHandler}>
+      <Card className="card shadow">
+        <Form onSubmit={loginHandler}>
           <div className="mb-3 mt-3">
             <label htmlFor="username">Username:</label>
             <input
@@ -65,8 +66,8 @@ function LoginForm(props) {
           <button type="submit" className="btn btn-primary">
             Log In
           </button>
-        </form>
-      </div>
+        </Form>
+      </Card>
     </div>
   );
 }
