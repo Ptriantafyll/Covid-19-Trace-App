@@ -15,6 +15,7 @@ import orange_icon from "../Icons/orange-icon";
 
 import VisitModal from "../Components/UI/VisitModal";
 import CalculateDistance from "../CalculateDistance";
+import CovidTestForm from "../Components/Forms/CovidTestForm";
 
 function UserHomePage() {
   const BaseURL = "http://localhost:3000/"; // api url
@@ -25,6 +26,31 @@ function UserHomePage() {
   const currentPositioncontext = useContext(PositionContext);
   const modal_context = useContext(ModalContext);
   const today = new Date();
+
+  function testFormSubmitHandler(testdata) {
+    console.log(testdata);
+    setIsloading(true);
+    // console.log(testdata.date);
+    // console.log(new Date(testdata.date));
+    axios
+      .patch(BaseURL + "user/6299e3aab0effaf555fe8455" /* + */, [
+        {
+          propName: "covid_test",
+          value: {
+            date: new Date(testdata.date),
+            result: testdata.result,
+          },
+        },
+      ])
+      .then((response) => {
+        console.log(response.data.message);
+        setIsloading(false);
+      })
+      .catch((error) => {
+        console.log(error.response.data.error.message); // message sent from backend
+        setIsloading(false);
+      });
+  }
 
   // searched in the db and returns POIs of a specific type
   function POISearchHandler(enteredPOIType) {
@@ -82,10 +108,13 @@ function UserHomePage() {
 
             // console.log("average for every poi: " + pois_avg);
             // console.log(POIS);
-            setaverage_for_every_poi(pois_avg);
           } else {
             // there are no visits for the next 2 hours
+            for (let i = 0; i < POIS.length; i++) {
+              pois_avg.push(0);
+            }
           }
+          setaverage_for_every_poi(pois_avg);
         })
         .catch((error) => {
           console.log(error);
@@ -98,6 +127,7 @@ function UserHomePage() {
   if (returnedPOIs.length > 0) {
     // console.log("here " + getEstimates(returnedPOIs));
     // console.log("avg: " + average_for_every_poi);
+    // console.log(returnedPOIs);
     const current_day = today.getDay() === 0 ? 7 : today.getDay();
     const current_hour = today.getHours();
     const icon_colors = [];
@@ -144,13 +174,14 @@ function UserHomePage() {
         );
       } else {
         average_messages.push(
-          "Average user of peopel for the next 2 hours is: " +
-            average_for_every_poi[j]
+          "Average people in this poi for the next 2 hours: " +
+            average_for_every_poi[j] +
+            " (user data)"
         );
       }
     }
     // console.log(average_messages);
-
+    // console.log(average_for_every_poi);
     var i = 0;
     // TODO: να βάλω τις επισκέψεις που δηλώνουν οι άλλοι χρήστες
     // εμφανίζεται ο μέσος αριθμός των επισκεπτών με βάση τις καταχωρήσεις άλλων χρηστών, αν υπάρχουν ως και 2 ώρες πριν την τρέχουσα χρονική στιγμή
@@ -206,10 +237,6 @@ function UserHomePage() {
     currentPositioncontext.longitude,
   ];
 
-  // const d = new Date(1662138578946);
-  // console.log(d);
-  // console.log(d.getTime());
-
   return (
     <div>
       <MyMap
@@ -224,7 +251,11 @@ function UserHomePage() {
           " latitude is " +
           currentPositioncontext.latitude}
       </h2>
-      {/* <MapSearchBar onEnteredSearch={POISearchHandler} /> */}
+
+      {/* TODO: make a container for the covid-19 test */}
+      <h2 className="text-center">Have you been diagnosed with COVID-19?</h2>
+
+      <CovidTestForm onTestSubmit={testFormSubmitHandler} />
       <VisitModal />
     </div>
   );

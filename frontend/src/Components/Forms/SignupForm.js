@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Form } from "react-bootstrap";
 
 // TODO: να δω το newmeetupform.js και να πάρω ιδέα για να φτιάξω το signup form και το login form
 // με τα σωστά props κλπ
@@ -28,7 +29,7 @@ function SignupForm(props) {
 
   return (
     <div className="container mt-3">
-      <form className="was-validated" onSubmit={signupSubmitHandler}>
+      <Form className="was-validated" onSubmit={signupSubmitHandler}>
         <div className="mb-3 mt-3">
           <label htmlFor="username">Username:</label>
           <input
@@ -74,7 +75,7 @@ function SignupForm(props) {
         <button type="submit" className="btn btn-primary">
           Sign Up
         </button>
-      </form>
+      </Form>
     </div>
   );
 }

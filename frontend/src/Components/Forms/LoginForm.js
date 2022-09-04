@@ -25,10 +25,9 @@ function LoginForm(props) {
 
   return (
     <div className="container mt-3">
-      <Card className="card shadow">
+      <Card className="shadow">
         <Form onSubmit={loginHandler}>
-          <div className="mb-3 mt-3">
-            <label htmlFor="username">Username:</label>
+          <div className="form-floating mb-3 mt-3">
             <input
               type="text"
               className="form-control"
@@ -38,6 +37,7 @@ function LoginForm(props) {
               ref={usernameloginref}
               required
             />
+            <label htmlFor="username">Username:</label>
           </div>
           <div className="mb-3">
             <label htmlFor="email">Email:</label>

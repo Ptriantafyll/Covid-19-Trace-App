@@ -3,6 +3,7 @@ const app = express();
 const morgan = require("morgan"); //
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const userRoutes = require("./api/routes/user");
 const POIRoutes = require("./api/routes/POI");
@@ -22,6 +23,7 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(cors());
 // Handling cors errors
 // append headers to the requests
 app.use((req, res, next) => {

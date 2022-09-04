@@ -21,8 +21,8 @@ function LoginPage() {
         password: userdata.password,
       })
       .then((response) => {
-        // console.log(response);
-        console.log(userdata.username);
+        // console.log(response.data.message);
+        // console.log(userdata.username);
         userLoggedInContext.keepUser(userdata.username);
         navigate("/UserHomePage", { replace: true });
       })

@@ -135,3 +135,57 @@ exports.user_login = (req, res, next) => {
       });
     });
 };
+
+exports.update_user = (req, res, next) => {
+  id = req.params.userid;
+  const updateOps = {};
+  var newtestdate = {};
+  var oldtestdate = {};
+  for (const ops of req.body) {
+    updateOps[ops.propName] = ops.value;
+
+    if (ops.propName === "covid_test") {
+      // console.log(ops.value.date);
+      newtestdate = new Date(ops.value.date);
+    }
+  }
+
+  User.findById(id)
+    .select("covid_test")
+    .exec()
+    .then((response) => {
+      oldtestdate = new Date(response.covid_test.date);
+      const oldtestresult = response.covid_test.result;
+
+      var difference = Math.abs(newtestdate.getTime() - oldtestdate.getTime());
+      const hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+      console.log("difference in hours: " + hoursDifference);
+
+      if (oldtestresult && hoursDifference < 336) {
+        // 336 hours = 14 days
+        return res.status(200).json({
+          message: "The 14 days needed have not passed",
+        });
+      }
+
+      User.updateOne({ _id: id }, { $set: updateOps })
+        .exec()
+        .then((result) => {
+          // console.log(result);
+          res.status(200).json({
+            message: "Updated user successfully",
+          });
+        })
+        .catch((err) => {
+          // console.log(err);
+          res.status(500).json({
+            error: err,
+          });
+        });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};

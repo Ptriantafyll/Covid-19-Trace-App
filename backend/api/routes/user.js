@@ -12,4 +12,7 @@ router.post("/signup", UsersController.create_user);
 // user login
 router.post("/login", UsersController.user_login);
 
+// update user
+router.patch("/:userid", UsersController.update_user);
+
 module.exports = router;
