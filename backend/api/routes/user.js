@@ -6,6 +6,9 @@ const UsersController = require("../controllers/user");
 // get all users
 router.get("/", UsersController.get_all_users);
 
+// get a user
+router.get("/:userid", UsersController.get_user);
+
 // create user
 router.post("/signup", UsersController.create_user);
 

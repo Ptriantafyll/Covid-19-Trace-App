@@ -6,7 +6,7 @@ const VisitModalContext = createContext({
   people: 0,
   openModal: (name_of_poi) => {},
   closeModal: () => {},
-  enterVisit: (estimate, currentUserContext) => {},
+  enterVisit: (estimate, currentUserContext, covid_tests) => {},
 });
 
 export function VisitModalContextProvider(props) {
@@ -25,19 +25,33 @@ export function VisitModalContextProvider(props) {
     setModalIsOpen(false);
   }
 
-  function enterVisitHandler(estimate, current_user) {
+  function enterVisitHandler(estimate, current_user, covid_tests) {
     setPeopleEstimate(estimate);
+    var positive = false;
 
-    console.log(current_user);
-    console.log(currentPoi);
-    console.log(today.getTime());
-    console.log(estimate);
+    for (const test in covid_tests) {
+      const diff = Math.abs(
+        today.getTime() - new Date(covid_tests[test].date).getTime()
+      );
+
+      if (covid_tests[test].result && diff < 604800000) {
+        console.log("im here");
+        positive = true;
+      }
+    }
+    // console.log(current_user);
+    // console.log(currentPoi);
+    // console.log(today.getTime());
+    // console.log(estimate);
+    // console.log(isCovidCase);
+
     axios
       .post(BaseURL + "visit", {
         user: current_user,
         POI: currentPoi,
         time: today.getTime(),
         peopleEstimate: estimate,
+        covid_case: positive,
       })
       .then((response) => {
         console.log(response);

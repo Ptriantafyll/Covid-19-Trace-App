@@ -89,7 +89,7 @@ function CovidTestForm(props) {
 
   return (
     <Form onSubmit={testSubmitHandler}>
-      <Container className="w-25">
+      <Container className="w-50">
         <Card>
           <div className="row">
             <div className="col-lg-6">
@@ -117,6 +117,8 @@ function CovidTestForm(props) {
                 <option>December</option>
               </FormSelect>
             </div>
+          </div>
+          <div className="row">
             <div className="col-lg-6">
               <FormLabel htmlFor="day">Day</FormLabel>
               <FormSelect id="day" ref={dayref}>

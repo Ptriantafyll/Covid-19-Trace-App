@@ -17,6 +17,10 @@ const visitSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  covid_case: {
+    type: Boolean,
+    required: true,
+  },
   peopleEstimate: {
     type: Number,
   },

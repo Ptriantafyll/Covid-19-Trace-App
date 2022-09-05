@@ -22,6 +22,9 @@ const userSchema = mongoose.Schema({
     date: Date, //format: "YYYY-MM-DDTHH:MM:SS.SSSZ - e.g. 2020-10-25T23:15:10:300Z"
     result: Boolean,
   },
+  past_covid_tests: {
+    type: Array,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

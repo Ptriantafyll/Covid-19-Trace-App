@@ -5,6 +5,8 @@ import SignupPage from "./Pages/SignupPage";
 import UserHomePage from "./Pages/UserHomePage";
 import StartPage from "./Pages/StartPage";
 import { Route, Routes } from "react-router-dom";
+import UserCovidTestSubmitPage from "./Pages/UserCovidTestSubmitPage";
+import CovidCaseStatsPage from "./Pages/CovidCaseStatsPage";
 
 function App() {
   return (
@@ -15,6 +17,14 @@ function App() {
           <Route path="/UserHomePage" element={<UserHomePage />} />
           <Route path="/LoginPage" element={<LoginPage />} />
           <Route path="/SignupPage" element={<SignupPage />} />
+          <Route
+            path="/UserCovidTestSubmitPage"
+            element={<UserCovidTestSubmitPage />}
+          />
+          <Route
+            path="/CovidCaseStatsPage"
+            element={<CovidCaseStatsPage />}
+          ></Route>
         </Routes>
       </Layout>
     </div>

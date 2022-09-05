@@ -15,7 +15,6 @@ import orange_icon from "../Icons/orange-icon";
 
 import VisitModal from "../Components/UI/VisitModal";
 import CalculateDistance from "../CalculateDistance";
-import CovidTestForm from "../Components/Forms/CovidTestForm";
 
 function UserHomePage() {
   const BaseURL = "http://localhost:3000/"; // api url
@@ -26,31 +25,6 @@ function UserHomePage() {
   const currentPositioncontext = useContext(PositionContext);
   const modal_context = useContext(ModalContext);
   const today = new Date();
-
-  function testFormSubmitHandler(testdata) {
-    console.log(testdata);
-    setIsloading(true);
-    // console.log(testdata.date);
-    // console.log(new Date(testdata.date));
-    axios
-      .patch(BaseURL + "user/6299e3aab0effaf555fe8455" /* + */, [
-        {
-          propName: "covid_test",
-          value: {
-            date: new Date(testdata.date),
-            result: testdata.result,
-          },
-        },
-      ])
-      .then((response) => {
-        console.log(response.data.message);
-        setIsloading(false);
-      })
-      .catch((error) => {
-        console.log(error.response.data.error.message); // message sent from backend
-        setIsloading(false);
-      });
-  }
 
   // searched in the db and returns POIs of a specific type
   function POISearchHandler(enteredPOIType) {
@@ -77,7 +51,7 @@ function UserHomePage() {
     if (POIS.length > 0) {
       // ίσως να μεταφερθεί στην από κάτω ιφ
       axios
-        .get(BaseURL + "visit/" + today.getHours())
+        .get(BaseURL + "visit/2hours/" + today.getHours())
         .then((response) => {
           // console.log(response.data.visits_of_the_next_2_hours);
           if (response.data.visits_of_the_next_2_hours.length > 0) {
@@ -252,10 +226,6 @@ function UserHomePage() {
           currentPositioncontext.latitude}
       </h2>
 
-      {/* TODO: make a container for the covid-19 test */}
-      <h2 className="text-center">Have you been diagnosed with COVID-19?</h2>
-
-      <CovidTestForm onTestSubmit={testFormSubmitHandler} />
       <VisitModal />
     </div>
   );

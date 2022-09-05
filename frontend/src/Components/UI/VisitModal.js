@@ -8,6 +8,11 @@ function VisitModal(props) {
   const modal_context = useContext(ModalContext);
   const user_context = useContext(UserContext);
   const peopleref = useRef();
+
+  console.log(modal_context);
+
+  // console.log(user_context.covid_tests);
+
   return (
     <div>
       <Modal show={modal_context.open} onHide={modal_context.closeModal}>
@@ -27,7 +32,8 @@ function VisitModal(props) {
             onClick={() => {
               modal_context.enterVisit(
                 peopleref.current.value,
-                user_context.username
+                user_context.username,
+                user_context.covid_tests
               );
             }}
           >

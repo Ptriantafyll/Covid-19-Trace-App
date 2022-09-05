@@ -5,7 +5,7 @@ const visit = require("../models/visit");
 
 exports.get_all_visits = (req, res, next) => {
   Visit.find()
-    .select("_id user POI time peopleEstimate")
+    .select("_id user POI time peopleEstimate covid_case")
     .exec()
     .then((visits) => {
       const response = {
@@ -16,6 +16,7 @@ exports.get_all_visits = (req, res, next) => {
             user: visit.user,
             POI: visit.POI,
             time: visit.time,
+            covid_case: visit.covid_case,
             peopleEstimate: visit.peopleEstimate,
           };
         }),
@@ -62,39 +63,44 @@ exports.get_visits_of_next_2_hours = (req, res, next) => {
     });
 };
 
-// exports.get_people_estimates = (req, res, next) => {
-//   const poi_name = req.params.poiname;
-//   const visits_of_this_poi = [];
-//   Visit.find()
-//     .select("_id user POI time peopleEstimate")
-//     .exec()
-//     .then((visits) => {
-//       for (const visit in visits) {
-//         if (visits[visit].POI === poi_name)
-//           visits_of_this_poi.push(visits[visit]);
-//       }
-
-//       const response = {
-//         count: visits_of_this_poi.length,
-//         visits: visits_of_this_poi,
-//       };
-//       res.status(200).json(response);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500).json({
-//         error: err,
-//       });
-//     });
-// };
+exports.get_visits_of_user = (req, res, next) => {
+  // console.log(req);
+  // console.log(req.params.username);
+  // 62f779d3cb1798871398312f
+  const username = req.params.username;
+  const visits_of_user = [];
+  Visit.find()
+    .select("user POI time")
+    .exec()
+    .then((visits) => {
+      // console.log(visits);
+      for (const visit in visits) {
+        // console.log(visits[visit].user);
+        if (visits[visit].user === username) {
+          visits_of_user.push(visits[visit]);
+        }
+      }
+      res.status(200).json({
+        username: username,
+        visits_of_user: visits_of_user,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
 
 exports.create_visit = (req, res, next) => {
   // create new visit
   const newVisit = new Visit({
     _id: new mongoose.Types.ObjectId(),
     user: req.body.user,
-    POI: req.body.POI, //ίσως χρειαστεί να τα αλλάξω στο model και να παίρνει ξέρω γω το id μόνο
+    POI: req.body.POI,
     time: req.body.time,
+    covid_case: req.body.covid_case,
     peopleEstimate: req.body.peopleEstimate,
   });
 
@@ -104,6 +110,40 @@ exports.create_visit = (req, res, next) => {
     .then(() => {
       res.status(201).json({
         message: "visit added successfully",
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.get_last_weeks_visits = (req, res, next) => {
+  const username = req.params.username;
+  const currenttime = new Date().getTime();
+  const lastweeks_visits = [];
+  Visit.find()
+    .select("user POI time")
+    .exec()
+    .then((visits) => {
+      for (const visit in visits) {
+        const diff = currenttime - visits[visit].time;
+        if (username === "allusers") {
+          if (diff < 604800000) {
+            // less than a week
+            lastweeks_visits.push(visits[visit]);
+          }
+        } else {
+          if (visits[visit].user === username && diff < 604800000) {
+            lastweeks_visits.push(visits[visit]);
+          }
+        }
+      }
+      res.status(200).json({
+        user: username,
+        count: lastweeks_visits.length,
+        lastweeks_visits: lastweeks_visits,
       });
     })
     .catch((err) => {

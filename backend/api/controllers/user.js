@@ -1,11 +1,13 @@
 const User = require("../models/user");
+const Visit = require("../models/visit");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const user = require("../models/user");
 
 exports.get_all_users = (req, res, next) => {
   User.find()
-    .select("username _id email covid_test")
+    .select("username _id email covid_test past_covid_tests")
     .exec()
     .then((users) => {
       const response = {
@@ -16,10 +18,35 @@ exports.get_all_users = (req, res, next) => {
             email: user.email,
             _id: user._id,
             covid_test: user.covid_test,
+            past_covid_tests: user.past_covid_tests,
           };
         }),
       };
       res.status(200).json(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.get_user = (req, res, next) => {
+  const userid = req.params.userid;
+  User.findById(userid)
+    .select("username _id email covid_test past_covid_tests")
+    .exec()
+    .then((user) => {
+      if (user) {
+        res.status(200).json({
+          user: user,
+        });
+      } else {
+        res.status(404).json({
+          message: "No user found with given ID",
+        });
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -65,6 +92,7 @@ exports.create_user = (req, res, next) => {
               email: req.body.email,
               password: hash,
               covid_test: req.body.covid_test,
+              past_covid_tests: req.body.past_covid_tests,
             });
 
             // add new user to db
@@ -116,8 +144,10 @@ exports.user_login = (req, res, next) => {
             }
           );
 
+          // console.log(user[0]._id);
           return res.status(200).json({
             message: "Authorization successful",
+            id: user[0]._id,
             token: token,
           });
         }
@@ -150,12 +180,23 @@ exports.update_user = (req, res, next) => {
     }
   }
 
+  // console.log(updateOps);
+
   User.findById(id)
-    .select("covid_test")
+    .select("covid_test past_covid_tests")
     .exec()
     .then((response) => {
-      oldtestdate = new Date(response.covid_test.date);
-      const oldtestresult = response.covid_test.result;
+      oldcovidetst = response.covid_test;
+      past_tests = response.past_covid_tests;
+      past_tests.push(oldcovidetst);
+      console.log(response.past_covid_tests);
+      console.log(oldcovidetst);
+      console.log(past_tests);
+      updateOps["past_covid_tests"] = past_tests;
+
+      console.log(updateOps);
+      oldtestdate = new Date(oldcovidetst.date);
+      const oldtestresult = oldcovidetst.result;
 
       var difference = Math.abs(newtestdate.getTime() - oldtestdate.getTime());
       const hoursDifference = Math.floor(difference / 1000 / 60 / 60);
