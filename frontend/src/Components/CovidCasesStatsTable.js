@@ -1,14 +1,11 @@
-import { useContext } from "react";
 import { Container, Table } from "react-bootstrap";
-import UserContext from "../Store/CurrentUserContext";
 
 function CovidCasesStatsTable(props) {
-  const user_context = useContext(UserContext);
-  const current_user = user_context.username;
-
   return (
     <div>
-      <h1 className="text-center">user is {current_user}</h1>
+      <h1 className="text-center">
+        You came in contact with a comfirmed Covid-19 case during these visits:
+      </h1>
 
       <Container className="mt-3 w-75">
         <Table className="table-striped table-bordered">

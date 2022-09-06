@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import CovidCasesStatsTable from "../Components/CovidCasesStatsTable";
-import UserContext from "../Store/CurrentUserContext";
-import VisitsContext from "../Store/VisitsContext";
+import CovidCasesStatsTable from "../../Components/CovidCasesStatsTable";
+import UserContext from "../../Store/CurrentUserContext";
+import VisitsContext from "../../Store/VisitsContext";
 
 function CovidCaseStatsPage() {
   const visits_context = useContext(VisitsContext);
@@ -19,44 +19,54 @@ function CovidCaseStatsPage() {
 
   function getTableData() {
     var tableVisits = [];
-    for (const visit in alluservisits) {
-      // iterate allusers visits for the last 2 weeks
+    for (const uservisit in currentuservisits) {
+      // iterate current user's visits of last week
+      for (const visit in alluservisits) {
+        // iterate allusers visits for the last 2 weeks
+        if (alluservisits[visit].user !== current_user) {
+          // ignore visits of the current user
+          // console.log("different users");
+          var timedifference = 0;
 
-      if (alluservisits[visit].user !== current_user) {
-        // ignore visits of the current user
-        console.log("different users");
-        var timedifference = 0;
+          if (alluservisits[visit].covid_case) {
+            // if there was a covid case during that visit
 
-        if (alluservisits[visit].covid_case) {
-          // if there was a covid case during that visit
-          for (const uservisit in currentuservisits) {
-            // iterate current user's visits of last week
+            // console.log(uservisit);
+            // console.log(currentuservisits[uservisit]);
+            // console.log(alluservisits[visit]);
+
             timedifference = Math.abs(
               alluservisits[visit].time - currentuservisits[uservisit].time
             );
 
-            if (timedifference < 7200000) {
+            // console.log("timediff: " + timedifference);
+
+            if (
+              timedifference < 7200000 &&
+              alluservisits[visit].POI === currentuservisits[uservisit].POI
+            ) {
               // +- 2 hours difference from the covid case
-              console.log("push");
+              // console.log("push POI " + currentuservisits[uservisit].POI);
               tableVisits.push(currentuservisits[uservisit]);
-              break;
+              continue;
             }
           }
         }
       }
     }
 
-    console.log(tableVisits);
+    // console.log(tableVisits);
 
     if (tableVisits.length > 0) {
-      console.log(tableVisits[0].time);
-      console.log(new Date(parseInt(tableVisits[0].time)));
-      console.log(new Date(1607110465663));
-      console.log("here");
-      console.log(tableVisits[0]);
+      // console.log(tableVisits[0].time);
+      // console.log(new Date(parseInt(tableVisits[0].time)));
+      // console.log(new Date(1607110465663));
+      // console.log("here");
+      // console.log(tableVisits[0]);
 
       setMyTableData(
         tableVisits.map((tablevisit) => {
+          // console.log(tablevisit);
           const tablevisitdate = new Date(parseInt(tablevisit.time));
           const year = tablevisitdate.getFullYear();
           const month = tablevisitdate.getMonth();

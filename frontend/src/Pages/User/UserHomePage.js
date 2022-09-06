@@ -1,20 +1,20 @@
-import MyMap from "../Components/UI/MyMap";
+import MyMap from "../../Components/UI/MyMap";
 import { Marker, Popup } from "react-leaflet";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
 import { useState, useContext } from "react";
 
-import UserContext from "../Store/CurrentUserContext";
-import PositionContext from "../Store/CurrentPositionContext";
-import ModalContext from "../Store/VisitModalContext";
+import UserContext from "../../Store/CurrentUserContext";
+import PositionContext from "../../Store/CurrentPositionContext";
+import ModalContext from "../../Store/VisitModalContext";
 
-import green_icon from "../Icons/green-icon";
-import red_icon from "../Icons/red-icon";
-import orange_icon from "../Icons/orange-icon";
+import green_icon from "../../Icons/green-icon";
+import red_icon from "../../Icons/red-icon";
+import orange_icon from "../../Icons/orange-icon";
 
-import VisitModal from "../Components/UI/VisitModal";
-import CalculateDistance from "../CalculateDistance";
+import VisitModal from "../../Components/UI/VisitModal";
+import CalculateDistance from "../../CalculateDistance";
 
 function UserHomePage() {
   const BaseURL = "http://localhost:3000/"; // api url
