@@ -7,6 +7,7 @@ function CovidCaseStatsPage() {
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
   const current_user = user_context.username;
+  console.log(visits_context);
   // console.log(visits_context.last_2weeks_visits_of_allusers);
   // console.log(visits_context.last_weeks_visits_of_current_user);
   const alluservisits = visits_context.last_2weeks_visits_of_allusers;
@@ -63,7 +64,7 @@ function CovidCaseStatsPage() {
       // console.log(new Date(1607110465663));
       // console.log("here");
       // console.log(tableVisits[0]);
-
+      tableVisits.sort((a, b) => a.time - b.time);
       setMyTableData(
         tableVisits.map((tablevisit) => {
           // console.log(tablevisit);

@@ -68,8 +68,29 @@ function NavBar() {
                 {" " + user_context.username}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item href="/ProfilePage">Edit Profile</Dropdown.Item>
-                <Dropdown.Divider></Dropdown.Divider>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate("/EditProfilePage", { replace: true });
+                  }}
+                >
+                  Edit Profile
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    navigate("/CovidTestHistoryPage", { replace: true });
+                  }}
+                >
+                  Covid Test History
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => {
+                    visits_context.storeUserVisits();
+                    navigate("/VisitHistoryPage", { replace: true });
+                  }}
+                >
+                  Visit History
+                </Dropdown.Item>
+                <Dropdown.Divider />
                 <Dropdown.Item href="/">Log Out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

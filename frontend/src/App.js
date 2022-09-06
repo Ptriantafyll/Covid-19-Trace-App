@@ -7,7 +7,9 @@ import StartPage from "./Pages/StartPage";
 import UserHomePage from "./Pages/User/UserHomePage";
 import UserCovidTestSubmitPage from "./Pages/User/UserCovidTestSubmitPage";
 import CovidCaseStatsPage from "./Pages/User/CovidCaseStatsPage";
-import ProfilePage from "./Pages/User/ProfilePage";
+import EditProfilePage from "./Pages/User/EditProfilePage";
+import VisitHistoryPage from "./Pages/User/VisitHistoryPage";
+import CovidTestHistoryPage from "./Pages/User/CovidTestHistoryPage";
 
 function App() {
   return (
@@ -23,7 +25,12 @@ function App() {
             element={<UserCovidTestSubmitPage />}
           />
           <Route path="/CovidCaseStatsPage" element={<CovidCaseStatsPage />} />
-          <Route path="/ProfilePage" element={<ProfilePage />}></Route>
+          <Route path="/EditProfilePage" element={<EditProfilePage />} />
+          <Route path="/VisitHistoryPage" element={<VisitHistoryPage />} />
+          <Route
+            path="/CovidTestHistoryPage"
+            element={<CovidTestHistoryPage />}
+          />
         </Routes>
       </Layout>
     </div>
