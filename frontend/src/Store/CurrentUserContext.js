@@ -21,7 +21,7 @@ export function UserContextProvider(props) {
     const covidtests = [];
 
     axios
-      .get(BaseURL + "user/62fa1c2308d85b214df7fce2" /*+ username*/)
+      .get(BaseURL + "user/" + id)
       .then((response) => {
         covidtests.push(response.data.user.covid_test);
 

@@ -9,7 +9,7 @@ function VisitModal(props) {
   const user_context = useContext(UserContext);
   const peopleref = useRef();
 
-  console.log(modal_context);
+  // console.log(modal_context);
 
   // console.log(user_context.covid_tests);
 

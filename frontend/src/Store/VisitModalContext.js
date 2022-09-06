@@ -27,7 +27,7 @@ export function VisitModalContextProvider(props) {
 
   function enterVisitHandler(estimate, current_user, covid_tests) {
     setPeopleEstimate(estimate);
-    var positive = false;
+    var isPositive = false;
 
     for (const test in covid_tests) {
       const diff = Math.abs(
@@ -36,7 +36,7 @@ export function VisitModalContextProvider(props) {
 
       if (covid_tests[test].result && diff < 604800000) {
         console.log("im here");
-        positive = true;
+        isPositive = true;
       }
     }
     // console.log(current_user);
@@ -51,7 +51,7 @@ export function VisitModalContextProvider(props) {
         POI: currentPoi,
         time: today.getTime(),
         peopleEstimate: estimate,
-        covid_case: positive,
+        covid_case: isPositive,
       })
       .then((response) => {
         console.log(response);

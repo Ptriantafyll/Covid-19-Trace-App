@@ -1,8 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import VisitsContext from "../../Store/VisitsContext";
 
 function NavBar() {
   const navigate = useNavigate();
+  const visits_context = useContext(VisitsContext);
+
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
       <div className="container-fluid">
@@ -42,6 +46,7 @@ function NavBar() {
               role="button"
               className="nav-link"
               onClick={() => {
+                visits_context.storeVisits();
                 navigate("/CovidCaseStatsPage", { replace: true });
               }}
             >

@@ -6,15 +6,18 @@ import { BrowserRouter } from "react-router-dom";
 import { UserContextProvider } from "./Store/CurrentUserContext";
 import { PositionContextProvider } from "./Store/CurrentPositionContext";
 import { VisitModalContextProvider } from "./Store/VisitModalContext";
+import { VisitsContextProvider } from "./Store/VisitsContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <PositionContextProvider>
     <UserContextProvider>
       <VisitModalContextProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <VisitsContextProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </VisitsContextProvider>
       </VisitModalContextProvider>
     </UserContextProvider>
   </PositionContextProvider>

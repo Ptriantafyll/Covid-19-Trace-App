@@ -124,14 +124,14 @@ exports.get_last_weeks_visits = (req, res, next) => {
   const currenttime = new Date().getTime();
   const lastweeks_visits = [];
   Visit.find()
-    .select("user POI time")
+    .select("user POI time covid_case")
     .exec()
     .then((visits) => {
       for (const visit in visits) {
         const diff = currenttime - visits[visit].time;
         if (username === "allusers") {
-          if (diff < 604800000) {
-            // less than a week
+          if (diff < 2 * 604800000) {
+            // for allusers we need the visits for 2 weeks
             lastweeks_visits.push(visits[visit]);
           }
         } else {
