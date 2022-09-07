@@ -1,7 +1,7 @@
 function AdminHomePage() {
   return (
     <div>
-      <p>HOME</p>
+      <p>Admin is logged in </p>
     </div>
   );
 }

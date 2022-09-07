@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import VisitsContext from "../../Store/VisitsContext";
-import VisitHistoryTable from "../../Components/VisitHistoryTable";
+import VisitHistoryTable from "../../Components/Tables/VisitHistoryTable";
 
 function VisitHistoryPage() {
   const visits_context = useContext(VisitsContext);
   const [myTableData, setMyTableData] = useState(null);
-  console.log(visits_context);
+  // console.log(visits_context);
 
   if (myTableData === null) {
     getVisits();
@@ -20,7 +20,7 @@ function VisitHistoryPage() {
 
       setMyTableData(
         tableVisits.map((visit) => {
-          // console.log(tablevisit);
+          // console.log(visit);
           const tablevisitdate = new Date(parseInt(visit.time));
           const year = tablevisitdate.getFullYear();
           const month = tablevisitdate.getMonth();
@@ -31,11 +31,11 @@ function VisitHistoryPage() {
           const seconds = tablevisitdate.getSeconds();
 
           const tabledate =
+            day.toLocaleString("en-US", { minimumIntegerDigits: 2 }) +
+            "-" +
+            month.toLocaleString("en-US", { minimumIntegerDigits: 2 }) +
+            "-" +
             year +
-            "-" +
-            month +
-            "-" +
-            day +
             " " +
             hour +
             ":" +
@@ -43,7 +43,7 @@ function VisitHistoryPage() {
             ":" +
             seconds.toLocaleString("en-US", { minimumIntegerDigits: 3 });
           return (
-            <tr key={visit.user + visit.time}>
+            <tr key={visit.user + visit.time + visit._id}>
               <td>{visit.POI}</td>
               <td>{tabledate}</td>
             </tr>
@@ -53,7 +53,18 @@ function VisitHistoryPage() {
     }
   }
 
-  return <VisitHistoryTable tableData={myTableData} />;
+  return myTableData === undefined ? (
+    <div>
+      <h1 className="text-center">
+        You have never visited any points of interest
+      </h1>
+    </div>
+  ) : (
+    <div>
+      <h1 className="text-center">Your visits:</h1>
+      <VisitHistoryTable tableData={myTableData} />;
+    </div>
+  );
 }
 
 export default VisitHistoryPage;

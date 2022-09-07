@@ -7,7 +7,7 @@ import UserContext from "../../Store/CurrentUserContext";
 import VisitsContext from "../../Store/VisitsContext";
 import { Dropdown } from "react-bootstrap";
 
-function NavBar() {
+function UserNavBar() {
   const navigate = useNavigate();
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
@@ -20,16 +20,6 @@ function NavBar() {
         </a>
 
         <ul className="navbar-nav">
-          <li className="nav-item">
-            <a className="nav-link" href="/LoginPage">
-              Log In
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/SignupPage">
-              Sign Up
-            </a>
-          </li>
           <li className="nav-item">
             <a className="nav-link" href="/UserHomePage">
               UserHomePage
@@ -101,4 +91,4 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+export default UserNavBar;

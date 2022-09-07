@@ -88,9 +88,9 @@ function CovidTestForm(props) {
   }
 
   return (
-    <Form onSubmit={testSubmitHandler}>
-      <Container className="w-50">
-        <Card>
+    <Container className="w-50">
+      <Card>
+        <Form onSubmit={testSubmitHandler}>
           <div className="row">
             <div className="col-lg-6">
               <FormLabel htmlFor="year">Year</FormLabel>
@@ -200,10 +200,10 @@ function CovidTestForm(props) {
               Submit
             </Button>
           </div>
-        </Card>
-        <div className="mb-5"></div>
-      </Container>
-    </Form>
+          <div className="mb-5"></div>
+        </Form>
+      </Card>
+    </Container>
   );
 }
 

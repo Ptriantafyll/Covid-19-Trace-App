@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import CovidTestHistoryTable from "../../Components/CovidTestHistoryTable";
+import CovidTestHistoryTable from "../../Components/Tables/CovidTestHistoryTable";
 import UserContext from "../../Store/CurrentUserContext";
 
 function CovidTestHistoryPage() {
@@ -14,9 +14,9 @@ function CovidTestHistoryPage() {
 
   function getCovidTests() {
     const tests = user_context.covid_tests;
-    // tests.sort(
-    //   (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    // );
+    tests.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
     // console.log(tests);
 
     if (tests.length > 0) {
@@ -37,7 +37,15 @@ function CovidTestHistoryPage() {
       );
     }
   }
-  return <CovidTestHistoryTable tableData={myTableData} />;
+  return myTableData === null ? (
+    <div>
+      <h1 className="text-center">
+        You have never submitted a test for Covid-19
+      </h1>
+    </div>
+  ) : (
+    <CovidTestHistoryTable tableData={myTableData} />
+  );
 }
 
 export default CovidTestHistoryPage;

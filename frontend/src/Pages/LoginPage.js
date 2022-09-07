@@ -8,7 +8,7 @@ import UserContext from "../Store/CurrentUserContext";
 function LoginPage() {
   const navigate = useNavigate();
   const BaseURL = "http://localhost:3000/"; // api url
-  const userLoggedInContext = useContext(UserContext);
+  const user_context = useContext(UserContext);
 
   function userLoginHandler(userdata) {
     // console.log(userdata);
@@ -24,8 +24,13 @@ function LoginPage() {
         // console.log(response.data.id);
         // console.log(userdata.username);
         // store username and user id
-        userLoggedInContext.keepUser(userdata.username, response.data.id);
-        navigate("/UserHomePage", { replace: true });
+        user_context.keepUser(userdata.username, response.data.id);
+        user_context.keepUsername(userdata.username);
+        if (userdata.username === "Admin") {
+          navigate("/AdminHomePage", { replace: true });
+        } else {
+          navigate("/UserHomePage", { replace: true });
+        }
       })
       .catch((error) => {
         console.log(error.response);

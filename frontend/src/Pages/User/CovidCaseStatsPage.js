@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import CovidCasesStatsTable from "../../Components/CovidCasesStatsTable";
+import CovidCasesStatsTable from "../../Components/Tables/CovidCasesStatsTable";
 import UserContext from "../../Store/CurrentUserContext";
 import VisitsContext from "../../Store/VisitsContext";
 
@@ -78,11 +78,11 @@ function CovidCaseStatsPage() {
           const seconds = tablevisitdate.getSeconds();
 
           const tabledate =
+            day.toLocaleString("en-US", { minimumIntegerDigits: 2 }) +
+            "-" +
+            month.toLocaleString("en-US", { minimumIntegerDigits: 2 }) +
+            "-" +
             year +
-            "-" +
-            month +
-            "-" +
-            day +
             " " +
             hour +
             ":" +
@@ -100,7 +100,20 @@ function CovidCaseStatsPage() {
     }
   }
 
-  return <CovidCasesStatsTable tableData={myTableData} />;
+  return myTableData === null ? (
+    <div>
+      <h1 className="text-center">
+        You have not come in contact with a confirmed Covid-19 case
+      </h1>
+    </div>
+  ) : (
+    <div>
+      <h1 className="text-center">
+        You came in contact with a comfirmed Covid-19 case during these visits:
+      </h1>
+      <CovidCasesStatsTable tableData={myTableData} />;
+    </div>
+  );
 }
 
 export default CovidCaseStatsPage;

@@ -6,6 +6,7 @@ const UserContext = createContext({
   id: "",
   covid_tests: {},
   keepUser: (currentuser, id) => {},
+  keepUsername: (currentuser) => {},
 });
 
 export function UserContextProvider(props) {
@@ -42,11 +43,16 @@ export function UserContextProvider(props) {
       });
   }
 
+  function keepUsernameHandler(currentuser) {
+    setUser(currentuser);
+  }
+
   const context = {
     username: user,
     id: userid,
     covid_tests: tests,
     keepUser: keepUserHandler,
+    keepUsername: keepUsernameHandler,
   };
 
   return (

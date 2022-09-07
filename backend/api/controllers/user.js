@@ -3,7 +3,6 @@ const Visit = require("../models/visit");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
-const user = require("../models/user");
 
 exports.get_all_users = (req, res, next) => {
   User.find()
@@ -124,7 +123,11 @@ exports.user_login = (req, res, next) => {
           message: "Authorization failed",
         });
       }
+      // console.log(user[0].password);
+      // console.log(req.body.password);
+
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        console.log(result);
         if (err) {
           return res.status(401).json({
             message: "Authorization failed",
@@ -154,7 +157,7 @@ exports.user_login = (req, res, next) => {
 
         // if we reach this place given password didn't match hased password
         res.status(401).json({
-          message: "Authorization failed",
+          message: "Authorization failed password",
         });
       });
     })
@@ -183,50 +186,106 @@ exports.update_user = (req, res, next) => {
   // console.log(updateOps);
 
   User.findById(id)
-    .select("covid_test past_covid_tests")
+    .select("username password covid_test past_covid_tests")
     .exec()
     .then((response) => {
-      oldcovidetst = response.covid_test;
-      past_tests = response.past_covid_tests;
-      past_tests.push(oldcovidetst);
-      console.log(response.past_covid_tests);
-      console.log(oldcovidetst);
-      console.log(past_tests);
-      updateOps["past_covid_tests"] = past_tests;
+      if (Object.keys(updateOps).includes("covid_test")) {
+        oldcovidetst = response.covid_test;
+        past_tests = response.past_covid_tests;
+        past_tests.push(oldcovidetst);
+        // console.log(response.past_covid_tests);
+        // console.log(oldcovidetst);
+        // console.log(past_tests);
+        updateOps["past_covid_tests"] = past_tests;
 
-      console.log(updateOps);
-      oldtestdate = new Date(oldcovidetst.date);
-      const oldtestresult = oldcovidetst.result;
+        console.log(updateOps);
+        oldtestdate = new Date(oldcovidetst.date);
+        const oldtestresult = oldcovidetst.result;
 
-      var difference = Math.abs(newtestdate.getTime() - oldtestdate.getTime());
-      const hoursDifference = Math.floor(difference / 1000 / 60 / 60);
-      console.log("difference in hours: " + hoursDifference);
+        var difference = Math.abs(
+          newtestdate.getTime() - oldtestdate.getTime()
+        );
+        const hoursDifference = Math.floor(difference / 1000 / 60 / 60);
+        console.log("difference in hours: " + hoursDifference);
 
-      if (oldtestresult && hoursDifference < 336) {
-        // 336 hours = 14 days
-        return res.status(200).json({
-          message: "The 14 days needed have not passed",
-        });
+        if (oldtestresult && hoursDifference < 336) {
+          // 336 hours = 14 days
+          return res.status(200).json({
+            message: "The 14 days needed have not passed",
+          });
+        }
       }
 
-      User.updateOne({ _id: id }, { $set: updateOps })
-        .exec()
-        .then((result) => {
-          // console.log(result);
-          res.status(200).json({
-            message: "Updated user successfully",
+      // console.log(response.username);
+      console.log("oldpassword: " + response.password);
+      // updateOps.username = "myusername";
+      // console.log(updateOps.username);
+      // console.log(Object.keys(updateOps));
+      // console.log(Object.keys(updateOps).includes("username"));
+      // console.log(Object.keys(updateOps).includes("covid_test"));
+
+      if (Object.keys(updateOps).includes("password")) {
+        console.log("password before hash " + updateOps.password + "aaa");
+
+        // check if password matches the requirements
+        // MAYBE THIS NEEDS TO BE DONE AT THE FRONTEND - NOT SURE
+        const pw_requirements =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!pw_requirements.test(updateOps.password)) {
+          return res.status(400).json({
+            message:
+              "Password needs to be at least 8 characters with 1 lowercase and 1 upercase letter, 1 digit and 1 special character",
           });
-        })
-        .catch((err) => {
-          // console.log(err);
-          res.status(500).json({
-            error: err,
-          });
+        }
+
+        // salt = 10 - adds random strings to hashed password
+        console.log("response " + response.password);
+        bcrypt.hash(updateOps.password, 10, (err, hash) => {
+          if (err) {
+            console.log("im here");
+            console.log(err);
+            return res.status(500).json({
+              error: err,
+            });
+          } else {
+            updateOps.password = hash;
+            // console.log(updateOps);
+            // console.log("hash: " + hash);
+            // console.log(updateOps);
+            console.log("new password: " + updateOps.password);
+            User.updateOne({ _id: id }, { $set: updateOps })
+              .exec()
+              .then(() => {
+                // console.log(result);
+                return res.status(200).json({
+                  message: "Updated user successfully",
+                });
+              })
+              .catch((err) => {
+                // console.log("errrrrrrorrrooror");
+                res.status(500).json({
+                  error: err,
+                });
+              });
+          }
         });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
+      } else {
+        // console.log(updateOps);
+
+        User.updateOne({ _id: id }, { $set: updateOps })
+          .exec()
+          .then(() => {
+            // console.log(result);
+            res.status(200).json({
+              message: "Updated user successfully",
+            });
+          })
+          .catch((err) => {
+            // console.log("errrrrrrorrrooror");
+            res.status(500).json({
+              error: err,
+            });
+          });
+      }
     });
 };

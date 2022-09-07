@@ -10,6 +10,7 @@ import CovidCaseStatsPage from "./Pages/User/CovidCaseStatsPage";
 import EditProfilePage from "./Pages/User/EditProfilePage";
 import VisitHistoryPage from "./Pages/User/VisitHistoryPage";
 import CovidTestHistoryPage from "./Pages/User/CovidTestHistoryPage";
+import AdminHomePage from "./Pages/Admin/AdminHomePage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             path="/CovidTestHistoryPage"
             element={<CovidTestHistoryPage />}
           />
+          <Route path="/AdminHomePage" element={<AdminHomePage />} />
         </Routes>
       </Layout>
     </div>
