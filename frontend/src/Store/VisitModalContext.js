@@ -10,7 +10,7 @@ const VisitModalContext = createContext({
 });
 
 export function VisitModalContextProvider(props) {
-  const BaseURL = "http://localhost:3000/"; // api url
+  const BaseURL = "http://localhost:8000/"; // api url
   const [modalIsOpen, setModalIsOpen] = useState();
   const [peopleEstimate, setPeopleEstimate] = useState();
   const [currentPoi, setCurrentPoi] = useState();

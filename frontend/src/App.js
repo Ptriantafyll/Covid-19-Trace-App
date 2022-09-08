@@ -11,6 +11,7 @@ import EditProfilePage from "./Pages/User/EditProfilePage";
 import VisitHistoryPage from "./Pages/User/VisitHistoryPage";
 import CovidTestHistoryPage from "./Pages/User/CovidTestHistoryPage";
 import AdminHomePage from "./Pages/Admin/AdminHomePage";
+import StatisticsPage from "./Pages/Admin/StatisticsPage";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             element={<CovidTestHistoryPage />}
           />
           <Route path="/AdminHomePage" element={<AdminHomePage />} />
+          <Route path="/StatisticsPage" element={<StatisticsPage />} />
         </Routes>
       </Layout>
     </div>

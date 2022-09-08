@@ -13,4 +13,6 @@ router.get("/", VisitsController.get_all_visits);
 
 router.post("/:userid", VisitsController.create_visit);
 
+router.delete("/", VisitsController.delete_collection);
+
 module.exports = router;

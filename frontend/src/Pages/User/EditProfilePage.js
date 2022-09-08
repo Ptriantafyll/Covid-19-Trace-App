@@ -6,7 +6,7 @@ import UserContext from "../../Store/CurrentUserContext";
 function EditProfilePage() {
   const [isloading, setIsloading] = useState();
   const user_context = useContext(UserContext);
-  const BaseURL = "http://localhost:3000/"; // api url
+  const BaseURL = "http://localhost:8000/"; // api url
 
   console.log(user_context);
 

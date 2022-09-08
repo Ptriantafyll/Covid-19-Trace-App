@@ -21,4 +21,7 @@ router.get("/:poitype", POIController.get_type_of_POI);
 // get all POIs
 router.get("/", POIController.get_all_POIs);
 
+// delete all pois
+router.delete("/", POIController.delete_collection);
+
 module.exports = router;

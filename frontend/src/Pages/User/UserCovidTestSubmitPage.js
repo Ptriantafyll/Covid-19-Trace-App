@@ -5,7 +5,7 @@ import CovidTestForm from "../../Components/Forms/CovidTestForm";
 import UserContext from "../../Store/CurrentUserContext";
 
 function UserCovidTestSubmitPage() {
-  const BaseURL = "http://localhost:3000/"; // api url
+  const BaseURL = "http://localhost:8000/"; // api url
   const [isloading, setIsloading] = useState(false);
   const user_context = useContext(UserContext);
 

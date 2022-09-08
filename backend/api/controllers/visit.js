@@ -185,3 +185,18 @@ exports.get_last_weeks_visits = (req, res, next) => {
       });
     });
 };
+
+exports.delete_collection = (req, res, next) => {
+  Visit.collection
+    .drop()
+    .then((response) => {
+      res.status(200).json({
+        message: "Visit collection deleted",
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};

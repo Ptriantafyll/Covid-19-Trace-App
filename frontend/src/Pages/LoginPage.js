@@ -7,7 +7,7 @@ import UserContext from "../Store/CurrentUserContext";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const BaseURL = "http://localhost:3000/"; // api url
+  const BaseURL = "http://localhost:8000/"; // api url
   const user_context = useContext(UserContext);
 
   function userLoginHandler(userdata) {

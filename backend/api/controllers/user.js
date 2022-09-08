@@ -289,3 +289,18 @@ exports.update_user = (req, res, next) => {
       }
     });
 };
+
+exports.delete_collection = (req, res, next) => {
+  User.collection
+    .drop()
+    .then((response) => {
+      res.status(200).json({
+        message: "User collection deleted",
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+};

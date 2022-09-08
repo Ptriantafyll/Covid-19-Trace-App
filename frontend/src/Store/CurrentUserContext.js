@@ -10,7 +10,7 @@ const UserContext = createContext({
 });
 
 export function UserContextProvider(props) {
-  const BaseURL = "http://localhost:3000/"; // api url
+  const BaseURL = "http://localhost:8000/"; // api url
   const [user, setUser] = useState();
   const [userid, setUserid] = useState();
   const [tests, setTests] = useState([]);

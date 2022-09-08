@@ -33,7 +33,7 @@ function AdminNavBar() {
           >
             <NavDropdown.Item
               onClick={() => {
-                navigate("/EditProfilePage", { replace: true });
+                navigate("/StatisticsPage", { replace: true });
               }}
             >
               All statistisc

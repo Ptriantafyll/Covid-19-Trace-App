@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function SignupPage() {
   const navigate = useNavigate();
-  const BaseURL = "http://localhost:3000/"; // api url
+  const BaseURL = "http://localhost:8000/"; // api url
 
   function userSignupHandler(newuserdata) {
     console.log(newuserdata);

@@ -18,4 +18,7 @@ router.post("/login", UsersController.user_login);
 // update user
 router.patch("/:userid", UsersController.update_user);
 
+// delete all users
+router.delete("/", UsersController.delete_collection);
+
 module.exports = router;

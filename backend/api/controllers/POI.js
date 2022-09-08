@@ -1,6 +1,5 @@
 const POI = require("../models/POI");
-// const specific = require("../specific.json");
-// const starting = require("../starting_pois.json");
+const mongoose = require("mongoose");
 
 exports.get_all_POIs = (req, res, next) => {
   POI.find()
@@ -192,25 +191,6 @@ exports.bulk_update = (req, res, next) => {
 
   console.log(new_array);
 
-  // const i = 0;
-  // POI.collection.updateMany(
-  //   { id: { $in: ids_to_update } },
-  //   { $set: poisfile[i++] },
-  //   (err, docs) => {
-  //     if (err) {
-  //       console.log(err);
-  //       res.status(500).json({
-  //         error: err,
-  //       });
-  //     } else {
-  //       console.log(docs);
-  //       res.status(202).json({
-  //         message: "multiple pois updated successfully",
-  //       });
-  //     }
-  //   }
-  // );
-
   POI.bulkWrite(new_array, (err, docs) => {
     if (err) {
       console.log(err);
@@ -224,4 +204,19 @@ exports.bulk_update = (req, res, next) => {
       });
     }
   });
+};
+
+exports.delete_collection = (req, res, next) => {
+  POI.collection
+    .drop()
+    .then((response) => {
+      res.status(200).json({
+        message: "POI collection deleted",
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
 };

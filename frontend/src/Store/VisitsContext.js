@@ -11,7 +11,7 @@ const VisitsContext = createContext({
 });
 
 export function VisitsContextProvider(props) {
-  const BaseURL = "http://localhost:3000/"; // api url
+  const BaseURL = "http://localhost:8000/"; // api url
   const [allUsersVisits, setAllUsersVisits] = useState();
   const [currentUserVisists, setCurrentUSerVisits] = useState();
   const [userAllVisits, setUserAllVisits] = useState();

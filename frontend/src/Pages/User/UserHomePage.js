@@ -14,10 +14,10 @@ import red_icon from "../../Icons/red-icon";
 import orange_icon from "../../Icons/orange-icon";
 
 import VisitModal from "../../Components/UI/VisitModal";
-import CalculateDistance from "../../CalculateDistance";
+import CalculateDistance from "../../Components/CalculateDistance";
 
 function UserHomePage() {
-  const BaseURL = "http://localhost:3000/"; // api url
+  const BaseURL = "http://localhost:8000/"; // api url
   const [returnedPOIs, setReturnedPOIs] = useState({});
   const [isloading, setIsloading] = useState(false);
   const [average_for_every_poi, setaverage_for_every_poi] = useState([]);
