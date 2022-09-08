@@ -13,6 +13,7 @@
     "leaflet-geosearch": "^3.6.1",
     "react": "^18.1.0",
     "react-bootstrap": "^2.5.0",
+    "react-bootstrap-range-slider": "^3.0.8",
     "react-dom": "^18.1.0",
     "react-geolocated": "^4.0.3",
     "react-leaflet": "^4.0.2",

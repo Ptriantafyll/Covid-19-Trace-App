@@ -20,11 +20,15 @@ const POISchema = mongoose.Schema({
   },
   coordinates: {
     type: Array,
+    required: true,
   },
   rating: {
     type: Number,
   },
   rating_n: {
+    type: Number,
+  },
+  current_popularity: {
     type: Number,
   },
   populartimes: {

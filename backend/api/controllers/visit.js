@@ -1,7 +1,6 @@
 const Visit = require("../models/visit");
+const User = require("../models/user");
 const mongoose = require("mongoose");
-const { response } = require("express");
-const visit = require("../models/visit");
 
 exports.get_all_visits = (req, res, next) => {
   Visit.find()
@@ -94,25 +93,59 @@ exports.get_visits_of_user = (req, res, next) => {
 };
 
 exports.create_visit = (req, res, next) => {
-  // create new visit
-  const newVisit = new Visit({
-    _id: new mongoose.Types.ObjectId(),
-    user: req.body.user,
-    POI: req.body.POI,
-    time: req.body.time,
-    covid_case: req.body.covid_case,
-    peopleEstimate: req.body.peopleEstimate,
-  });
+  const userid = req.params.userid;
+  const positive_covid_tests = [];
+  var userWasCovidCase = false;
+  const visittime = req.body.time;
+  User.findById(userid)
+    .select("covid_test past_covid_tests")
+    .exec()
+    .then((user) => {
+      if (user.covid_test.result) {
+        positive_covid_tests.push(user.covid_test);
+      }
 
-  // add to db
-  newVisit
-    .save()
-    .then(() => {
-      res.status(201).json({
-        message: "visit added successfully",
+      for (test in user.past_covid_tests) {
+        if (user.past_covid_tests[test].result) {
+          positive_covid_tests.push(user.past_covid_tests[test]);
+        }
+      }
+
+      for (positive_test in positive_covid_tests) {
+        const diff =
+          visittime -
+          new Date(positive_covid_tests[positive_test].date).getTime();
+
+        if (diff > 2 * 604800000 && diff > -604800000) {
+          userWasCovidCase = true;
+        }
+      }
+
+      // create new visit
+      const newVisit = new Visit({
+        _id: new mongoose.Types.ObjectId(),
+        user: req.body.user,
+        POI: req.body.POI,
+        time: req.body.time,
+        covid_case: userWasCovidCase,
+        peopleEstimate: req.body.peopleEstimate,
       });
+      // add to db
+      newVisit
+        .save()
+        .then(() => {
+          return res.status(201).json({
+            message: "visit added successfully",
+          });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            error: err,
+          });
+        });
     })
     .catch((err) => {
+      console.log(err);
       res.status(500).json({
         error: err,
       });

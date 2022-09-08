@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../../Store/CurrentUserContext";
 import VisitsContext from "../../Store/VisitsContext";
-import { Dropdown } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 
 function UserNavBar() {
   const navigate = useNavigate();
@@ -13,81 +13,80 @@ function UserNavBar() {
   const user_context = useContext(UserContext);
 
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="/">
-          Logo
-        </a>
+    <Navbar expand="sm" bg="dark" variant="dark" sticky="top">
+      <Container fluid>
+        <Navbar.Brand href="/">Logo</Navbar.Brand>
 
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <a className="nav-link" href="/UserHomePage">
-              UserHomePage
-            </a>
-          </li>
-          <li className="nav-item">
-            <div
-              role="button"
-              className="nav-link"
-              onClick={() => {
-                navigate("/UserCovidTestSubmitPage", { replace: true });
-              }}
+        <Nav>
+          <Nav.Link
+            className="nav-link"
+            onClick={() => {
+              navigate("/UserHomePage", { replace: true });
+            }}
+          >
+            UserHomePage
+          </Nav.Link>
+          <Nav.Link
+            role="button"
+            className="nav-link"
+            onClick={() => {
+              navigate("/UserCovidTestSubmitPage", { replace: true });
+            }}
+          >
+            Submit Covid Test
+          </Nav.Link>
+          <Nav.Link
+            role="button"
+            className="nav-link"
+            onClick={() => {
+              visits_context.storeVisits();
+              navigate("/CovidCaseStatsPage", { replace: true });
+            }}
+          >
+            Covid Case Contact
+          </Nav.Link>
+
+          <Nav.Item>
+            <NavDropdown
+              id="nav-dropdown-dark-example"
+              title={
+                <>
+                  <i className="bi bi-person" />
+                  {user_context.username}
+                </>
+              }
+              menuVariant="dark"
+              drop="start"
             >
-              Submit Covid Test
-            </div>
-          </li>
-          <li>
-            <div
-              role="button"
-              className="nav-link"
-              onClick={() => {
-                visits_context.storeVisits();
-                navigate("/CovidCaseStatsPage", { replace: true });
-              }}
-            >
-              Covid Case Contact
-            </div>
-          </li>
-          <li>
-            <Dropdown>
-              <Dropdown.Toggle
-                className="nav-link btn-dark border-0"
-                id="dropdown-basic"
+              <NavDropdown.Item
+                onClick={() => {
+                  navigate("/EditProfilePage", { replace: true });
+                }}
               >
-                <i className="bi bi-person"></i>
-                {" " + user_context.username}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => {
-                    navigate("/EditProfilePage", { replace: true });
-                  }}
-                >
-                  Edit Profile
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    navigate("/CovidTestHistoryPage", { replace: true });
-                  }}
-                >
-                  Covid Test History
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    visits_context.storeUserVisits();
-                    navigate("/VisitHistoryPage", { replace: true });
-                  }}
-                >
-                  Visit History
-                </Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item href="/">Log Out</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </li>
-        </ul>
-      </div>
-    </nav>
+                Edit Profile
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => {
+                  navigate("/CovidTestHistoryPage", { replace: true });
+                }}
+              >
+                Covid Test History
+              </NavDropdown.Item>
+              <NavDropdown.Item
+                onClick={() => {
+                  visits_context.storeUserVisits();
+                  navigate("/VisitHistoryPage", { replace: true });
+                }}
+              >
+                Visit History
+              </NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="/">Log Out</NavDropdown.Item>
+            </NavDropdown>
+          </Nav.Item>
+        </Nav>
+      </Container>
+    </Navbar>
   );
 }
 

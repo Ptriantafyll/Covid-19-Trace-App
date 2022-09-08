@@ -1,7 +1,12 @@
+import FileForm from "../../Components/Forms/FileForm";
+
 function AdminHomePage() {
+  const BaseURL = "http://localhost:3000/"; // api url
+  console.log(BaseURL);
   return (
     <div>
-      <p>Admin is logged in </p>
+      <h4 className="text-center">Choose file</h4>
+      <FileForm />
     </div>
   );
 }

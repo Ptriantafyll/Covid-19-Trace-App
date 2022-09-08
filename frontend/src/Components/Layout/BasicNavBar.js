@@ -1,28 +1,23 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { Container, Nav, Navbar } from "react-bootstrap";
 
 function BasicNavBar() {
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="/">
-          Logo
-        </a>
+    <Navbar expand="sm" bg="dark" variant="dark" sticky="top">
+      <Container fluid>
+        <Navbar.Brand href="/">Logo</Navbar.Brand>
 
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <a className="nav-link" href="/LoginPage">
-              Log In
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/SignupPage">
-              Sign Up
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+        <Nav>
+          <Nav.Link className="nav-link" href="/LoginPage">
+            Log In
+          </Nav.Link>
+          <Nav.Link className="nav-link" href="/SignupPage">
+            Sign Up
+          </Nav.Link>
+        </Nav>
+      </Container>
+    </Navbar>
   );
 }
 

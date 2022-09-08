@@ -11,6 +11,6 @@ router.get("/lastweek/:username", VisitsController.get_last_weeks_visits);
 
 router.get("/", VisitsController.get_all_visits);
 
-router.post("/", VisitsController.create_visit);
+router.post("/:userid", VisitsController.create_visit);
 
 module.exports = router;
