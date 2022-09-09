@@ -36,7 +36,7 @@ exports.get_all_POIs = (req, res, next) => {
 };
 
 // todo: να φτιάξω την αναζήτηση από το searchbar
-exports.get_type_of_POI = (req, res, next) => {
+exports.get_POIs_of_type = (req, res, next) => {
   const type = req.params.poitype;
   const pois_of_given_type = [];
   POI.find()
@@ -71,6 +71,22 @@ exports.get_type_of_POI = (req, res, next) => {
         error: err,
       });
     });
+};
+
+exports.get_types_of_POI = (req, res, next) => {
+  const poiname = req.params.poiname;
+  POI.findOne({ name: poiname }, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    } else {
+      res.status(200).json({
+        types: result.types,
+      });
+    }
+  });
 };
 
 exports.create_POI = (req, res, next) => {

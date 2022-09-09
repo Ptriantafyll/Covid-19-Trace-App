@@ -6,11 +6,13 @@ import { Nav, NavDropdown } from "react-bootstrap";
 import { useContext } from "react";
 import VisitsContext from "../../Store/VisitsContext";
 import UserContext from "../../Store/UserContext";
+import POIContext from "../../Store/POIContext";
 
 function AdminNavBar() {
   const navigate = useNavigate();
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
+  const poi_context = useContext(POIContext);
 
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
@@ -40,6 +42,7 @@ function AdminNavBar() {
               onClick={() => {
                 user_context.storeUsers();
                 visits_context.storeAllVisits();
+                poi_context.storePOIs();
                 navigate("/StatisticsPage", { replace: true });
               }}
             >

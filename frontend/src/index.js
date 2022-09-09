@@ -10,7 +10,7 @@ import { UserContextProvider } from "./Store/UserContext";
 import { PositionContextProvider } from "./Store/CurrentPositionContext";
 import { VisitModalContextProvider } from "./Store/VisitModalContext";
 import { VisitsContextProvider } from "./Store/VisitsContext";
-// import { CovidTestsContextProvider } from "./Store/CovidTestsContext";
+import { POIContextProvider } from "./Store/POIContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -18,11 +18,11 @@ root.render(
     <UserContextProvider>
       <VisitModalContextProvider>
         <VisitsContextProvider>
-          {/* <CovidTestsContextProvider> */}
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-          {/* </CovidTestsContextProvider> */}
+          <POIContextProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </POIContextProvider>
         </VisitsContextProvider>
       </VisitModalContextProvider>
     </UserContextProvider>
