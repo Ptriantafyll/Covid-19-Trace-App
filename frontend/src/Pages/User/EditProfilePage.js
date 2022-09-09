@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useState } from "react";
 import EditProfileForm from "../../Components/Forms/EditProfileForm";
-import UserContext from "../../Store/CurrentUserContext";
+import UserContext from "../../Store/UserContext";
 
 function EditProfilePage() {
   const [isloading, setIsloading] = useState();

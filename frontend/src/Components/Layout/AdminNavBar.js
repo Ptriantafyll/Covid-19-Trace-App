@@ -3,9 +3,14 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 import { useNavigate } from "react-router-dom";
 import { Nav, NavDropdown } from "react-bootstrap";
+import { useContext } from "react";
+import VisitsContext from "../../Store/VisitsContext";
+import UserContext from "../../Store/UserContext";
 
 function AdminNavBar() {
   const navigate = useNavigate();
+  const visits_context = useContext(VisitsContext);
+  const user_context = useContext(UserContext);
 
   return (
     <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
@@ -33,6 +38,8 @@ function AdminNavBar() {
           >
             <NavDropdown.Item
               onClick={() => {
+                user_context.storeUsers();
+                visits_context.storeAllVisits();
                 navigate("/StatisticsPage", { replace: true });
               }}
             >

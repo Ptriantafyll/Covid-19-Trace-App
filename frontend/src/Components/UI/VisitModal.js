@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal, Button } from "react-bootstrap";
 import { useContext, useRef } from "react";
 import ModalContext from "../../Store/VisitModalContext";
-import UserContext from "../../Store/CurrentUserContext";
+import UserContext from "../../Store/UserContext";
 
 function VisitModal(props) {
   const modal_context = useContext(ModalContext);

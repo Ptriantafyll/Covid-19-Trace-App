@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import CovidTestForm from "../../Components/Forms/CovidTestForm";
 
-import UserContext from "../../Store/CurrentUserContext";
+import UserContext from "../../Store/UserContext";
 
 function UserCovidTestSubmitPage() {
   const BaseURL = "http://localhost:8000/"; // api url

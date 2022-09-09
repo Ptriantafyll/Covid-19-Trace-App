@@ -3,7 +3,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import UserContext from "../../Store/CurrentUserContext";
+import UserContext from "../../Store/UserContext";
 import VisitsContext from "../../Store/VisitsContext";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 

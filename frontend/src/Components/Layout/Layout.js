@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import UserContext from "../../Store/CurrentUserContext";
+import UserContext from "../../Store/UserContext";
 import AdminNavBar from "./AdminNavBar";
 import BasicNavBar from "./BasicNavBar";
 import UserNavBar from "./UserNavBar";

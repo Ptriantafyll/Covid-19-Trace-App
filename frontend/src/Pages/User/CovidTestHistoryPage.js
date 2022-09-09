@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import CovidTestHistoryTable from "../../Components/Tables/CovidTestHistoryTable";
-import UserContext from "../../Store/CurrentUserContext";
+import UserContext from "../../Store/UserContext";
 
 function CovidTestHistoryPage() {
   const user_context = useContext(UserContext);

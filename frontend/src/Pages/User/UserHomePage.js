@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { useState, useContext } from "react";
 
-import UserContext from "../../Store/CurrentUserContext";
+import UserContext from "../../Store/UserContext";
 import PositionContext from "../../Store/CurrentPositionContext";
 import ModalContext from "../../Store/VisitModalContext";
 

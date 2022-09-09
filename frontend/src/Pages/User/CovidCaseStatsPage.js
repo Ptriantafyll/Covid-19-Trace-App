@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import CovidCasesStatsTable from "../../Components/Tables/CovidCasesStatsTable";
-import UserContext from "../../Store/CurrentUserContext";
+import UserContext from "../../Store/UserContext";
 import VisitsContext from "../../Store/VisitsContext";
 
 function CovidCaseStatsPage() {
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
   const current_user = user_context.username;
-  console.log(visits_context);
+  // console.log(visits_context);
   // console.log(visits_context.last_2weeks_visits_of_allusers);
   // console.log(visits_context.last_weeks_visits_of_current_user);
   const alluservisits = visits_context.last_2weeks_visits_of_allusers;
