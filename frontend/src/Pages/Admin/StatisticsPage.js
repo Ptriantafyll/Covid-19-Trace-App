@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Container, Form } from "react-bootstrap";
+import { Alert, Col, Container, Dropdown, Form, Row } from "react-bootstrap";
 import TotalCovidCasesStats from "../../Components/Statistics/TotalCovidCasesStats";
 import TotalVisitStats from "../../Components/Statistics/TotalVisitStats";
 import CaseVisitStats from "../../Components/Statistics/CaseVisitStats";
@@ -7,20 +7,59 @@ import VisitsContext from "../../Store/VisitsContext";
 import UserContext from "../../Store/UserContext";
 import POIContext from "../../Store/POIContext";
 import POIVisitStats from "../../Components/Statistics/POIVisitStats";
+import DailyStats from "../../Components/Statistics/DailyStats";
 
 function StatisticsPage() {
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
   const poi_context = useContext(POIContext);
-  const [isloading, setIsloading] = useState(false);
   const [viewdata, setviewdata] = useState();
+  const [mytitle, setmytitle] = useState("Total Visits");
+  const [chartView, setChartView] = useState(null);
+  const [startDate, setStartDate] = useState("2022-09-01");
+  const [endDate, setEndDate] = useState("2022-10-01");
+  const [alertShow, setAlertShow] = useState(false);
 
   function checkBoxHandler(event) {
     console.log(event.target.checked);
     if (event.target.checked) {
       setviewdata(poivisitdata);
+      setmytitle("Total Visits");
     } else {
       setviewdata(poicasedata);
+      setmytitle("Total Visits by covid-19 cases");
+    }
+  }
+
+  function startdaySelectHandler(event) {
+    console.log(event.target.value);
+    if (endDate < event.target.value) {
+      console.log("we got a problem");
+      setAlertShow(true);
+    } else {
+      setStartDate(event.target.value);
+      setAlertShow(false);
+    }
+  }
+
+  function enddaySelectHandler(event) {
+    console.log(event.target.value);
+    if (event.target.value < startDate) {
+      console.log("we got a problem");
+      setAlertShow(true);
+    } else {
+      setEndDate(event.target.value);
+      setAlertShow(false);
+    }
+  }
+
+  function dropdownSelectHandler(eventKey, event) {
+    if (eventKey === "totalvisits") {
+      setChartView(dailyvisitdata);
+    } else if (eventKey === "casevisits") {
+      setChartView(dailycasedata);
+    } else {
+      setChartView(dailydata);
     }
   }
 
@@ -130,8 +169,7 @@ function StatisticsPage() {
     casevisitdata.push(element);
   }
 
-  // all types of pois
-  // const types = require("./types.json").all_types;
+  // get rank of pois by visit
   mydata = {};
   var mydata2 = {};
   var poivisitdata = [];
@@ -139,8 +177,8 @@ function StatisticsPage() {
 
   if (visits_context.all_visits !== undefined) {
     for (const visit of visits_context.all_visits.visits) {
-      console.log(visit);
-      console.log(visit.covid_case);
+      // console.log(visit);
+      // console.log(visit.covid_case);
       if (poi_context.poidata !== undefined) {
         // console.log(poi_context.poidata);
         // console.log(poi_context.poidata[visit.POI]);
@@ -164,8 +202,8 @@ function StatisticsPage() {
       }
     }
 
-    console.log(mydata2); // poi visits of cases
-    console.log(mydata); //poi all visits
+    // console.log(mydata2); // poi visits of cases
+    // console.log(mydata); //poi all visits
 
     poivisitdata.push(["poiname", "# of visits"]);
     for (const element of Object.entries(mydata)) {
@@ -176,16 +214,110 @@ function StatisticsPage() {
     for (const element of Object.entries(mydata2)) {
       poicasedata.push(element);
     }
-    console.log(poivisitdata);
-    console.log(poicasedata);
+    // console.log(poivisitdata);
+    // console.log(poicasedata);
   }
 
-  if (isloading) {
-    return (
-      <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center">
-        <div className="spinner-border text-dark" />
-      </div>
-    );
+  // get daily data
+  mydata = {};
+  mydata2 = {};
+  var dailydata = [["Day of the week", "# of visits", "# of case visits"]];
+  var dailycasedata = [["Day of the week", "# of case visits"]];
+  var dailyvisitdata = [["Day of the week", "# of visits"]];
+
+  if (visits_context.all_visits !== undefined) {
+    mydata["Monday"] = 0;
+    mydata["Tuesday"] = 0;
+    mydata["Wednesday"] = 0;
+    mydata["Thursday"] = 0;
+    mydata["Friday"] = 0;
+    mydata["Saturday"] = 0;
+    mydata["Sunday"] = 0;
+    mydata2["Monday"] = 0;
+    mydata2["Tuesday"] = 0;
+    mydata2["Wednesday"] = 0;
+    mydata2["Thursday"] = 0;
+    mydata2["Friday"] = 0;
+    mydata2["Saturday"] = 0;
+    mydata2["Sunday"] = 0;
+
+    console.log(startDate);
+    console.log(endDate);
+
+    const offset = new Date(startDate).getTimezoneOffset() * 60000;
+    const starttimestamp = new Date(startDate).getTime() + offset;
+    const endtimestamp = new Date(endDate).getTime() + offset;
+
+    console.log(starttimestamp);
+    console.log(endtimestamp);
+    for (const visit of visits_context.all_visits.visits) {
+      // console.log(visit.time);
+      console.log(new Date(parseInt(visit.time)));
+      console.log(visit.covid_case);
+
+      if (visit.time > starttimestamp && visit.time < endtimestamp) {
+        console.log(new Date(parseInt(visit.time)));
+
+        var visitDay =
+          new Date(parseInt(visit.time)).getDay() === 0
+            ? 7
+            : new Date(parseInt(visit.time)).getDay();
+        // console.log(new Date(parseInt(visit.time)));
+        // console.log("visit day: " + visitDay);
+        // console.log(new Date(parseInt(visit.time)).getDay());
+
+        switch (visitDay) {
+          case 1:
+            visitDay = "Monday";
+            break;
+          case 2:
+            visitDay = "Tuesday";
+            break;
+          case 3:
+            visitDay = "Wednesday";
+            break;
+          case 4:
+            visitDay = "Thursday";
+            break;
+          case 5:
+            visitDay = "Friday";
+            break;
+          case 6:
+            visitDay = "Saturday";
+            break;
+          case 7:
+            visitDay = "Sunday";
+            break;
+
+          default:
+            break;
+        }
+
+        mydata[visitDay]++;
+
+        if (visit.covid_case) mydata2[visitDay]++;
+      }
+    }
+    // console.log(mydata);
+    // console.log(mydata2);
+
+    for (const element of Object.entries(mydata)) {
+      // console.log(element);
+      dailyvisitdata.push(element);
+      for (const element2 of Object.entries(mydata2)) {
+        if (element[0] === element2[0]) {
+          // console.log([element[0], element[1], element2[1]]);
+          dailydata.push([element[0], element[1], element2[1]]);
+        }
+      }
+    }
+    for (const element of Object.entries(mydata2)) {
+      dailycasedata.push(element);
+    }
+
+    // console.log(dailydata);
+    // console.log(dailyvisitdata);
+    // console.log(dailycasedata);
   }
 
   return (
@@ -205,8 +337,8 @@ function StatisticsPage() {
 
         <CaseVisitStats casevisits={casevisits} data={casevisitdata} />
       </Container>
-      <Container className="w-100 mx-auto p-2 my-5">
-        <h1 className="text-white text-center">Visits by Covid-19 Cases</h1>
+      <Container className="w-100 mx-auto bg-dark p-2 my-5">
+        <h1 className="text-white text-center">POIs ranked by visit</h1>
         <Form.Check
           type="checkbox"
           label="visits by case"
@@ -215,6 +347,63 @@ function StatisticsPage() {
         />
         <POIVisitStats
           data={viewdata === undefined ? poivisitdata : viewdata}
+          vaxistitle={mytitle}
+        />
+      </Container>
+      <Container className="w-100 mx-auto bg-danger p-2 my-5">
+        <h1 className="text-white text-center">Daily # of visits</h1>
+        <Row className="justify-content-center">
+          <Col md="4">
+            <Form.Group controlId="startdate" className="mb-2">
+              <Form.Label>Start Day</Form.Label>
+              <Form.Control
+                type="date"
+                name="startdate"
+                onChange={startdaySelectHandler}
+              />
+            </Form.Group>
+          </Col>
+          <Col md="4">
+            <Form.Group controlId="enddate" className="mb-2">
+              <Form.Label>End Day</Form.Label>
+              <Form.Control
+                type="date"
+                name="enddate"
+                onChange={enddaySelectHandler}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="justify-content-center">
+          <Col md="7">
+            {alertShow && (
+              <Alert show={alertShow} variant="danger">
+                Start date must be at least a day before end date
+              </Alert>
+            )}
+          </Col>
+        </Row>
+        <Row className="justify-content-center mb-2">
+          <Col md="3">
+            <Dropdown onSelect={dropdownSelectHandler}>
+              <Dropdown.Toggle variant="success">Select Data</Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="totalvisits">
+                  Total Visits
+                </Dropdown.Item>
+                <Dropdown.Item eventKey="casevisits">
+                  Total Visits of Covid cases
+                </Dropdown.Item>
+                <Dropdown.Item eventKey="bothvisits">Both</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Col>
+        </Row>
+
+        <DailyStats
+          data={chartView === null ? dailydata : chartView}
+          title={"Visits from " + startDate + " to " + endDate}
         />
       </Container>
     </div>

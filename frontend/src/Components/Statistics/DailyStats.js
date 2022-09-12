@@ -1,21 +1,19 @@
 import { Chart } from "react-google-charts";
 
-function POIVisitStats(props) {
+function DailyStats(props) {
   const options = {
-    legend: "none",
-    title: "Types of pois ranked by visits",
+    title: props.title,
     // sliceVisibilityThreshold: 0.2, // 20%
-    vAxis: {
-      title: props.vaxistitle,
+    hAxis: {
       minValue: 0,
     },
-    hAxis: {
-      title: "Points of Interest",
+    vAxis: {
+      title: "Day of the week",
     },
   };
   return (
     <Chart
-      chartType="ColumnChart"
+      chartType="BarChart"
       options={options}
       width="100%"
       height="400px"
@@ -24,4 +22,4 @@ function POIVisitStats(props) {
   );
 }
 
-export default POIVisitStats;
+export default DailyStats;

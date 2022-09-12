@@ -34,7 +34,7 @@ function AdminNavBar() {
             </div>
           </li>
           <NavDropdown
-            id="nav-dropdown-dark-example"
+            id="nav-dropdown-dark"
             title="Statistics"
             menuVariant="dark"
           >
