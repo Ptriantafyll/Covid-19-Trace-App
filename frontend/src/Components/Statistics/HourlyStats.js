@@ -1,24 +1,23 @@
 import { Chart } from "react-google-charts";
 
-function DailyStats(props) {
+function HourlyStats(props) {
   const options = {
     title: props.title,
     // sliceVisibilityThreshold: 0.2, // 20%
-    hAxis: {
+    vAxis: {
       minValue: 0,
     },
-    vAxis: {
-      title: "Day",
+    hAxis: {
+      title: "Hour",
     },
     legend: {
-      position: "bottom",
+      position: "top",
     },
-    // legend: "none",
     colors: props.colors,
   };
   return (
     <Chart
-      chartType="BarChart"
+      chartType="LineChart"
       options={options}
       width="100%"
       height="400px"
@@ -27,4 +26,4 @@ function DailyStats(props) {
   );
 }
 
-export default DailyStats;
+export default HourlyStats;

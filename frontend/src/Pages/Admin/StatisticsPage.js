@@ -8,6 +8,7 @@ import UserContext from "../../Store/UserContext";
 import POIContext from "../../Store/POIContext";
 import POIVisitStats from "../../Components/Statistics/POIVisitStats";
 import DailyStats from "../../Components/Statistics/DailyStats";
+import HourlyStats from "../../Components/Statistics/HourlyStats";
 
 function StatisticsPage() {
   const visits_context = useContext(VisitsContext);
@@ -18,7 +19,11 @@ function StatisticsPage() {
   const [chartView, setChartView] = useState(null);
   const [startDate, setStartDate] = useState("2022-09-01");
   const [endDate, setEndDate] = useState("2022-10-01");
+  const [legendColor, setlegendColor] = useState();
   const [alertShow, setAlertShow] = useState(false);
+  const [hourChartView, setHourChartView] = useState(null);
+  const [hourChartDay, setHourChartDay] = useState("2022-09-06");
+  const [hourlegendColor, setHourlegendColor] = useState();
 
   function checkBoxHandler(event) {
     console.log(event.target.checked);
@@ -56,10 +61,32 @@ function StatisticsPage() {
   function dropdownSelectHandler(eventKey, event) {
     if (eventKey === "totalvisits") {
       setChartView(dailyvisitdata);
+      setlegendColor(null);
     } else if (eventKey === "casevisits") {
+      setlegendColor(["#b0120a"]);
       setChartView(dailycasedata);
     } else {
+      setlegendColor(null);
       setChartView(dailydata);
+    }
+  }
+
+  function selectDayHandler(event) {
+    console.log(event.target.value);
+    setHourChartDay(event.target.value);
+  }
+
+  function hourdropdownHandler(eventKey, event) {
+    console.log(eventKey);
+    if (eventKey === "totalvisits") {
+      setHourlegendColor(null);
+      setHourChartView(hourlyVisitData);
+    } else if (eventKey === "casevisits") {
+      setHourlegendColor(["#b0120a"]);
+      setHourChartView(hourlyCaseData);
+    } else {
+      setHourlegendColor(null);
+      setHourChartView(hourlyData);
     }
   }
 
@@ -222,7 +249,9 @@ function StatisticsPage() {
   mydata = {};
   mydata2 = {};
   var dailydata = [["Day of the week", "# of visits", "# of case visits"]];
-  var dailycasedata = [["Day of the week", "# of case visits"]];
+  var dailycasedata = [
+    ["Day of the week", "# of case visits", { role: "style" }],
+  ];
   var dailyvisitdata = [["Day of the week", "# of visits"]];
 
   if (visits_context.all_visits !== undefined) {
@@ -248,15 +277,15 @@ function StatisticsPage() {
     const starttimestamp = new Date(startDate).getTime() + offset;
     const endtimestamp = new Date(endDate).getTime() + offset;
 
-    console.log(starttimestamp);
-    console.log(endtimestamp);
+    // console.log(starttimestamp);
+    // console.log(endtimestamp);
     for (const visit of visits_context.all_visits.visits) {
       // console.log(visit.time);
-      console.log(new Date(parseInt(visit.time)));
-      console.log(visit.covid_case);
+      // console.log(new Date(parseInt(visit.time)));
+      // console.log(visit.covid_case);
 
       if (visit.time > starttimestamp && visit.time < endtimestamp) {
-        console.log(new Date(parseInt(visit.time)));
+        // console.log(new Date(parseInt(visit.time)));
 
         var visitDay =
           new Date(parseInt(visit.time)).getDay() === 0
@@ -312,12 +341,58 @@ function StatisticsPage() {
       }
     }
     for (const element of Object.entries(mydata2)) {
-      dailycasedata.push(element);
+      dailycasedata.push([element[0], element[1], "#b0120a"]);
     }
 
     // console.log(dailydata);
     // console.log(dailyvisitdata);
     // console.log(dailycasedata);
+  }
+
+  // set hour data
+  mydata = {};
+  mydata2 = {};
+  var hourlyData = [["Hour", "# of visits", "# of case visits"]];
+  var hourlyVisitData = [["Hour", "# of visits"]];
+  var hourlyCaseData = [["Hour", "# of case visits", { role: "style" }]];
+
+  if (visits_context.all_visits !== undefined) {
+    for (let i = 0; i < 24; i++) {
+      let temphour =
+        i.toLocaleString("en-US", { minimumIntegerDigits: 2 }) + ":00";
+
+      mydata[temphour] = 0;
+      mydata2[temphour] = 0;
+    }
+
+    for (const visit of visits_context.all_visits.visits) {
+      console.log(visit.time);
+
+      let visitHour =
+        new Date(parseInt(visit.time))
+          .getHours()
+          .toLocaleString("en-US", { minimumIntegerDigits: 2 }) + ":00";
+      console.log(visitHour);
+
+      mydata[visitHour]++;
+      if (visit.covid_case) mydata2[visitHour]++;
+    }
+
+    for (const element of Object.entries(mydata)) {
+      // console.log(element);
+      hourlyVisitData.push(element);
+      for (const element2 of Object.entries(mydata2)) {
+        if (element[0] === element2[0]) {
+          // console.log([element[0], element[1], element2[1]]);
+          hourlyData.push([element[0], element[1], element2[1]]);
+        }
+      }
+    }
+    for (const element of Object.entries(mydata2)) {
+      hourlyCaseData.push([element[0], element[1], "#b0120a"]);
+    }
+    console.log(mydata);
+    console.log(mydata2);
   }
 
   return (
@@ -351,7 +426,7 @@ function StatisticsPage() {
         />
       </Container>
       <Container className="w-100 mx-auto bg-danger p-2 my-5">
-        <h1 className="text-white text-center">Daily # of visits</h1>
+        <h1 className="text-white text-center">Hourly # of visits</h1>
         <Row className="justify-content-center">
           <Col md="4">
             <Form.Group controlId="startdate" className="mb-2">
@@ -404,6 +479,45 @@ function StatisticsPage() {
         <DailyStats
           data={chartView === null ? dailydata : chartView}
           title={"Visits from " + startDate + " to " + endDate}
+          colors={legendColor}
+        />
+      </Container>
+      <Container className="w-100 mx-auto bg-danger p-2 my-5">
+        <h1 className="text-white text-center">Daily # of visits</h1>
+        <Row className="justify-content-center">
+          <Col md="4">
+            <Form.Group controlId="chosendate" className="mb-2">
+              <Form.Label>Select a Day</Form.Label>
+              <Form.Control
+                type="date"
+                name="chosendate"
+                onChange={selectDayHandler}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="justify-content-center mb-2">
+          <Col md="3">
+            <Dropdown onSelect={hourdropdownHandler}>
+              <Dropdown.Toggle variant="success">Select Data</Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item eventKey="totalvisits">
+                  Total Visits
+                </Dropdown.Item>
+                <Dropdown.Item eventKey="casevisits">
+                  Total Visits of Covid cases
+                </Dropdown.Item>
+                <Dropdown.Item eventKey="bothvisits">Both</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Col>
+        </Row>
+
+        <HourlyStats
+          data={hourChartView === null ? hourlyData : hourChartView}
+          title={"Visits of " + hourChartDay}
+          colors={hourlegendColor}
         />
       </Container>
     </div>
