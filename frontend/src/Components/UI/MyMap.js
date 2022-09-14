@@ -22,7 +22,6 @@ function MyMap(props) {
       <Marker position={props.currentpos}>
         <Popup>You are here</Popup>
       </Marker>
-      {/*the result of the search for POIs in the database*/}
       {props.searchedPOIs}
       <MapSearchBar onEnteredSearch={props.onEnteredSearch} />
     </MapContainer>

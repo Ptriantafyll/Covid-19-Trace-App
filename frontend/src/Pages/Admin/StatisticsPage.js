@@ -51,7 +51,6 @@ function StatisticsPage() {
   // console.log(scroll_context.reference.current.value);
 
   function checkBoxHandler(event) {
-    // console.log(event.target.checked);
     if (event.target.checked) {
       setviewdata(poivisitdata);
       setmytitle("Total Visits");
@@ -62,7 +61,6 @@ function StatisticsPage() {
   }
 
   function startdaySelectHandler(event) {
-    // console.log(event.target.value);
     if (endDate < event.target.value) {
       setAlertShow(true);
     } else {
@@ -72,7 +70,6 @@ function StatisticsPage() {
   }
 
   function enddaySelectHandler(event) {
-    // console.log(event.target.value);
     if (event.target.value < startDate) {
       setAlertShow(true);
     } else {
@@ -141,7 +138,7 @@ function StatisticsPage() {
     visitdata.push(element);
   }
 
-  //get covid data
+  //get covid case data
   mydata = {};
   var i = 0;
   var totalcases = 0;
@@ -192,8 +189,8 @@ function StatisticsPage() {
   var mintime = 0;
   if (visits_context.all_visits !== undefined) {
     for (const visit of visits_context.all_visits.visits) {
-      maxtime = parseInt(visit.time) + 2 * 604800000;
-      mintime = parseInt(visit.time) - 604800000;
+      maxtime = parseInt(visit.time) + 2 * 604800000; // 2 weeks
+      mintime = parseInt(visit.time) - 604800000; // 1 week
       if (!visit.covid_case) {
         for (const test of all_tests) {
           if (test.result && test.user === visit.user) {
@@ -234,11 +231,7 @@ function StatisticsPage() {
 
   if (visits_context.all_visits !== undefined) {
     for (const visit of visits_context.all_visits.visits) {
-      // console.log(visit);
-      // console.log(visit.covid_case);
       if (poi_context.poidata !== undefined) {
-        // console.log(poi_context.poidata);
-        // console.log(poi_context.poidata[visit.POI]);
         for (const type of poi_context.poidata[visit.POI]) {
           if (type === "point_of_interest") continue;
 
@@ -259,20 +252,14 @@ function StatisticsPage() {
       }
     }
 
-    // console.log(mydata2); // poi visits of cases
-    // console.log(mydata); //poi all visits
-
     poivisitdata.push(["poiname", "# of visits"]);
     for (const element of Object.entries(mydata)) {
-      // console.log(element);
       poivisitdata.push(element);
     }
     poicasedata.push(["poiname", "# of case visits"]);
     for (const element of Object.entries(mydata2)) {
       poicasedata.push(element);
     }
-    // console.log(poivisitdata);
-    // console.log(poicasedata);
   }
 
   // get daily data
@@ -305,23 +292,12 @@ function StatisticsPage() {
     const starttimestamp = new Date(startDate).getTime() + offset;
     const endtimestamp = new Date(endDate).getTime() + offset;
 
-    // console.log(starttimestamp);
-    // console.log(endtimestamp);
     for (const visit of visits_context.all_visits.visits) {
-      // console.log(visit.time);
-      // console.log(new Date(parseInt(visit.time)));
-      // console.log(visit.covid_case);
-
       if (visit.time > starttimestamp && visit.time < endtimestamp) {
-        // console.log(new Date(parseInt(visit.time)));
-
         var visitDay =
           new Date(parseInt(visit.time)).getDay() === 0
             ? 7
             : new Date(parseInt(visit.time)).getDay();
-        // console.log(new Date(parseInt(visit.time)));
-        // console.log("visit day: " + visitDay);
-        // console.log(new Date(parseInt(visit.time)).getDay());
 
         switch (visitDay) {
           case 1:
@@ -355,19 +331,13 @@ function StatisticsPage() {
         if (visit.covid_case) mydata2[visitDay]++;
       }
     }
-    // console.log(mydata);
-    // console.log(mydata2);
-    // console.log(Object.values(mydata));
 
     dailyMaxValue = Math.max(...Object.values(mydata));
-    // console.log(Math.max(...Object.values(mydata).map((o) => o.y)));
 
     for (const element of Object.entries(mydata)) {
-      // console.log(element);
       dailyvisitdata.push(element);
       for (const element2 of Object.entries(mydata2)) {
         if (element[0] === element2[0]) {
-          // console.log([element[0], element[1], element2[1]]);
           dailydata.push([element[0], element[1], element2[1]]);
         }
       }
@@ -375,10 +345,6 @@ function StatisticsPage() {
     for (const element of Object.entries(mydata2)) {
       dailycasedata.push([element[0], element[1], "#b0120a"]);
     }
-
-    // console.log(dailydata);
-    // console.log(dailyvisitdata);
-    // console.log(dailycasedata);
   }
 
   // set hour data
@@ -400,21 +366,14 @@ function StatisticsPage() {
 
     let houroffset = new Date(hourChartDay).getTimezoneOffset() * 60000;
     let starttime = new Date(hourChartDay).getTime() + houroffset;
-
     let endtime = starttime + 86400000;
-    // console.log(new Date(starttime));
-    // console.log(new Date(endtime));
 
     for (const visit of visits_context.all_visits.visits) {
-      // console.log(new Date(hourChartDay) + houroffset);
-      console.log(visit.time);
-
       if (visit.time > starttime && visit.time < endtime) {
         let visitHour =
           new Date(parseInt(visit.time))
             .getHours()
             .toLocaleString("en-US", { minimumIntegerDigits: 2 }) + ":00";
-        // console.log(visitHour);
 
         mydata[visitHour]++;
         if (visit.covid_case) mydata2[visitHour]++;
@@ -423,11 +382,9 @@ function StatisticsPage() {
 
     hourlyMaxValue = Math.max(...Object.values(mydata));
     for (const element of Object.entries(mydata)) {
-      // console.log(element);
       hourlyVisitData.push(element);
       for (const element2 of Object.entries(mydata2)) {
         if (element[0] === element2[0]) {
-          // console.log([element[0], element[1], element2[1]]);
           hourlyData.push([element[0], element[1], element2[1]]);
         }
       }
@@ -435,8 +392,6 @@ function StatisticsPage() {
     for (const element of Object.entries(mydata2)) {
       hourlyCaseData.push([element[0], element[1], "#b0120a"]);
     }
-    // console.log(mydata);
-    // console.log(mydata2);
   }
 
   return (

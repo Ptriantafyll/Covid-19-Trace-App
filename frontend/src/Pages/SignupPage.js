@@ -9,7 +9,6 @@ function SignupPage() {
   const BaseURL = "http://localhost:8000/"; // api url
 
   function userSignupHandler(newuserdata) {
-    console.log(newuserdata);
     axios
       .post(BaseURL + "user/signup", {
         username: newuserdata.username,
@@ -27,6 +26,14 @@ function SignupPage() {
 
   return (
     <Container fluid="md" className="mt-5">
+      <div className="text-center my-4">
+        <img
+          width={170}
+          height={170}
+          src={require("../Icons/earth-logo.png")}
+          alt="hello"
+        />
+      </div>
       <Card style={{ width: "23rem" }} className="shadow mx-auto">
         <h2 className="mt-3 text-center">Sign Up</h2>
         <SignupForm onUserSignUp={userSignupHandler} />

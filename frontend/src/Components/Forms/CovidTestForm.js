@@ -21,6 +21,7 @@ function CovidTestForm(props) {
       result: selectedtestresult,
     };
 
+    // covidtestform will have a property "onTestSubmit"
     props.onTestSubmit(testdata);
   }
 

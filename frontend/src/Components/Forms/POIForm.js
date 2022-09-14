@@ -11,9 +11,6 @@ function POIForm(props) {
 
   function newPOISubmitHandler(event) {
     event.preventDefault();
-
-    console.log("clicked");
-    console.log(myref.current.value);
   }
 
   return (
@@ -30,12 +27,6 @@ function POIForm(props) {
               />
             </Col>
           </Row>
-          {/* <Row className="justify-content-center">
-            <Col lg="8">
-              <Form.Label htmlFor="poifile">Enter json file</Form.Label>
-              <Form.Control type="file" id="poifile" />
-            </Col>
-          </Row> */}
           <Row className="justify-content-center">
             <Col lg="8">
               <Form.Label htmlFor="newpoiaddress">Enter address</Form.Label>

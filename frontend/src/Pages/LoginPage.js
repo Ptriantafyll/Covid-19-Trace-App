@@ -12,9 +12,6 @@ function LoginPage() {
   const user_context = useContext(UserContext);
 
   function userLoginHandler(userdata) {
-    // console.log(userdata);
-
-    //TODO: να βάλω μία if για να τσεκάρει αν μπαίνει ο admin ή απλός user
     axios
       .post(BaseURL + "user/login", {
         username: userdata.username,
@@ -22,8 +19,6 @@ function LoginPage() {
         password: userdata.password,
       })
       .then((response) => {
-        // console.log(response.data.id);
-        // console.log(userdata.username);
         // store username and user id
         user_context.keepUser(userdata.username, response.data.id);
         user_context.keepUsername(userdata.username);
@@ -34,33 +29,20 @@ function LoginPage() {
         }
       })
       .catch((error) => {
-        console.log(error.response);
+        console.log(error.response.data.message);
       });
   }
 
   return (
     <Container fluid className="mt-5">
-      <Row className="my-2 justify-content-center">
-        <Col xs="1">
-          {/* <div className="text-center"> */}
-          <img
-            // className="bg-warning"
-            width={170}
-            height={170}
-            src={require("../Icons/logo.png")}
-            alt="hello"
-          />
-          {/* </div> */}
-        </Col>
-        <Col xs="2">
-          <p className="ms-5">
-            random text random text random text random text random text random
-            text random text random text random text random text random text
-            random text random text random text
-          </p>
-        </Col>
-      </Row>
-
+      <div className="text-center my-4">
+        <img
+          width={170}
+          height={170}
+          src={require("../Icons/earth-logo.png")}
+          alt="hello"
+        />
+      </div>
       <Card style={{ width: "23rem" }} className="shadow bg-cyan mx-auto">
         <h2 className="mt-3 text-center">Log in</h2>
 

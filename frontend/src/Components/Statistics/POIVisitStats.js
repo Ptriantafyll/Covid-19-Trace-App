@@ -4,7 +4,6 @@ function POIVisitStats(props) {
   const options = {
     legend: "none",
     title: "Types of pois ranked by visits",
-    // sliceVisibilityThreshold: 0.2, // 20%
     vAxis: {
       title: props.vaxistitle,
       minValue: 0,

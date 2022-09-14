@@ -2,16 +2,12 @@ import MyMap from "../../Components/UI/MyMap";
 import { Marker, Popup } from "react-leaflet";
 import { Button, Container } from "react-bootstrap";
 import axios from "axios";
-
 import { useState, useContext } from "react";
-
 import PositionContext from "../../Store/CurrentPositionContext";
 import ModalContext from "../../Store/VisitModalContext";
-
 import green_icon from "../../Icons/green-icon";
 import red_icon from "../../Icons/red-icon";
 import orange_icon from "../../Icons/orange-icon";
-
 import VisitModal from "../../Components/UI/VisitModal";
 import CalculateDistance from "../../Components/CalculateDistance";
 
@@ -51,7 +47,6 @@ function UserHomePage() {
       axios
         .get(BaseURL + "visit/2hours/" + today.getHours())
         .then((response) => {
-          // console.log(response.data.visits_of_the_next_2_hours);
           if (response.data.visits_of_the_next_2_hours.length > 0) {
             // store average for every poi
             for (const poi in POIS) {
@@ -77,9 +72,6 @@ function UserHomePage() {
               average = totalvisits === 0 ? 0 : totalpeople / totalvisits;
               pois_avg.push(average);
             }
-
-            // console.log("average for every poi: " + pois_avg);
-            // console.log(POIS);
           } else {
             // there are no visits for the next 2 hours
             for (let i = 0; i < POIS.length; i++) {
@@ -97,9 +89,6 @@ function UserHomePage() {
   // maybe make this a function
   var myMarkers = null;
   if (returnedPOIs.length > 0) {
-    // console.log("here " + getEstimates(returnedPOIs));
-    // console.log("avg: " + average_for_every_poi);
-    // console.log(returnedPOIs);
     const current_day = today.getDay() === 0 ? 7 : today.getDay();
     const current_hour = today.getHours();
     const icon_colors = [];
@@ -152,12 +141,7 @@ function UserHomePage() {
         );
       }
     }
-    // console.log(average_messages);
-    // console.log(average_for_every_poi);
     var i = 0;
-    // TODO: να βάλω τις επισκέψεις που δηλώνουν οι άλλοι χρήστες
-    // εμφανίζεται ο μέσος αριθμός των επισκεπτών με βάση τις καταχωρήσεις άλλων χρηστών, αν υπάρχουν ως και 2 ώρες πριν την τρέχουσα χρονική στιγμή
-
     // myMarkers = markers on the positions of every POI returned from the search
     myMarkers = returnedPOIs.map((poi) => {
       return (

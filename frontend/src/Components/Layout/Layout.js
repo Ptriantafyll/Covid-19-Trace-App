@@ -10,7 +10,6 @@ function Layout(props) {
   if (user_context.username === undefined) {
     return (
       <div>
-        {/* <BasicNavBar /> */}
         <main>{props.children}</main>
       </div>
     );

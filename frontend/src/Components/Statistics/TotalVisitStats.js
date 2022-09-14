@@ -5,7 +5,6 @@ function TotalVisitStats(props) {
 
   const options = {
     title: "Total Visits: " + totalvisits,
-    // sliceVisibilityThreshold: 0.2, // 20%
   };
   return (
     <Chart

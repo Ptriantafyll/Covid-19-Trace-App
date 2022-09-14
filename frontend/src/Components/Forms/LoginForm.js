@@ -4,19 +4,16 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 
 function LoginForm(props) {
   const usernameloginref = useRef();
-  const emailloginref = useRef();
   const passwordloginref = useRef();
 
   function loginHandler(event) {
     event.preventDefault();
 
     const enterdusername = usernameloginref.current.value;
-    const enteredemail = emailloginref.current.value;
     const enteredpassword = passwordloginref.current.value;
 
     const userdata = {
       username: enterdusername,
-      email: enteredemail,
       password: enteredpassword,
     };
 
@@ -42,22 +39,6 @@ function LoginForm(props) {
         </Col>
       </Row>
 
-      <Row className="justify-content-center">
-        <Col xs="10">
-          <Form.Floating className="mb-3 mt-3">
-            <Form.Control
-              type="email"
-              className="form-control"
-              id="email"
-              placeholder="Enter email"
-              name="email"
-              ref={emailloginref}
-              required
-            />
-            <Form.Label htmlFor="email">Email:</Form.Label>
-          </Form.Floating>
-        </Col>
-      </Row>
       <Row className="justify-content-center">
         <Col xs="10">
           <Form.Floating className="mb-3 mt-3">

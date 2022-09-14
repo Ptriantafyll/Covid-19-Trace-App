@@ -84,8 +84,9 @@ function UserNavBar() {
               </NavDropdown.Item>
               <NavDropdown.Item
                 onClick={() => {
-                  visits_context.storeUserVisits();
-                  navigate("/VisitHistoryPage", { replace: true });
+                  visits_context.storeUserVisits(() => {
+                    navigate("/VisitHistoryPage", { replace: true });
+                  });
                 }}
               >
                 Visit History

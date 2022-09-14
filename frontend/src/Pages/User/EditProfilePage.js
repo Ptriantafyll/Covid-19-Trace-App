@@ -9,11 +9,7 @@ function EditProfilePage() {
   const user_context = useContext(UserContext);
   const BaseURL = "http://localhost:8000/"; // api url
 
-  console.log(user_context);
-
   function editProfileSubmitHandler(usernewdata) {
-    console.log(usernewdata);
-
     setIsloading(true);
     axios
       .patch(BaseURL + "user/" + user_context.id, [

@@ -55,7 +55,7 @@ exports.get_user = (req, res, next) => {
     });
 };
 
-// todo: add hashing for password (and authorization?)
+// todo: authorization?
 exports.create_user = (req, res, next) => {
   User.find({ username: req.body.username })
     .exec()
@@ -67,7 +67,6 @@ exports.create_user = (req, res, next) => {
         });
       } else {
         // check if password matches the requirements
-        // MAYBE THIS NEEDS TO BE DONE AT THE FRONTEND - NOT SURE
         const pw_requirements =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (!pw_requirements.test(req.body.password)) {
@@ -97,7 +96,7 @@ exports.create_user = (req, res, next) => {
             // add new user to db
             new_user
               .save()
-              .then((/*result*/) => {
+              .then(() => {
                 res.status(201).json({
                   message: "User signed up successfully",
                 });
@@ -114,7 +113,7 @@ exports.create_user = (req, res, next) => {
 };
 
 exports.user_login = (req, res, next) => {
-  User.find({ username: req.body.username }) //request body should have a username field
+  User.find({ username: req.body.username })
     .exec()
     .then((user) => {
       if (user.length < 1) {
@@ -123,11 +122,8 @@ exports.user_login = (req, res, next) => {
           message: "Authorization failed",
         });
       }
-      // console.log(user[0].password);
-      // console.log(req.body.password);
 
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-        console.log(result);
         if (err) {
           return res.status(401).json({
             message: "Authorization failed",
@@ -147,7 +143,6 @@ exports.user_login = (req, res, next) => {
             }
           );
 
-          // console.log(user[0]._id);
           return res.status(200).json({
             message: "Authorization successful",
             id: user[0]._id,
@@ -155,9 +150,9 @@ exports.user_login = (req, res, next) => {
           });
         }
 
-        // if we reach this place given password didn't match hased password
+        // given password didn't match hased password
         res.status(401).json({
-          message: "Authorization failed password",
+          message: "Authorization failed",
         });
       });
     })
@@ -178,27 +173,26 @@ exports.update_user = (req, res, next) => {
     updateOps[ops.propName] = ops.value;
 
     if (ops.propName === "covid_test") {
-      // console.log(ops.value.date);
-      newtestdate = new Date(ops.value.date);
+      if (typeof ops.value.date === String) {
+        newtestdate = new Date(parseInt(ops.value.date));
+      } else {
+        newtestdate = new Date(ops.value.date);
+      }
     }
   }
-
-  // console.log(updateOps);
 
   User.findById(id)
     .select("username password covid_test past_covid_tests")
     .exec()
     .then((response) => {
       if (Object.keys(updateOps).includes("covid_test")) {
+        // if the covid_test needs to be updated thens
+        // push old covid test to past_tests and make the new one the covid_test field
         oldcovidetst = response.covid_test;
         past_tests = response.past_covid_tests;
         past_tests.push(oldcovidetst);
-        // console.log(response.past_covid_tests);
-        // console.log(oldcovidetst);
-        // console.log(past_tests);
         updateOps["past_covid_tests"] = past_tests;
 
-        console.log(updateOps);
         oldtestdate = new Date(oldcovidetst.date);
         const oldtestresult = oldcovidetst.result;
 
@@ -206,29 +200,57 @@ exports.update_user = (req, res, next) => {
           newtestdate.getTime() - oldtestdate.getTime()
         );
         const hoursDifference = Math.floor(difference / 1000 / 60 / 60);
-        console.log("difference in hours: " + hoursDifference);
 
+        // 336 hours = 14 days
         if (oldtestresult && hoursDifference < 336) {
-          // 336 hours = 14 days
+          // if the user has submitted another positive test 14 days before or earlier
           return res.status(200).json({
             message: "The 14 days needed have not passed",
           });
         }
+
+        const testtime = newtestdate.getTime();
+        const mintime = testtime - 604800000; // a week before
+        const maxtime = testtime + 2 * 604800000; // 2 weeks after
+
+        if (updateOps["covid_test"].result) {
+          // if user is a covid -> case update his visits a week before and 2 weeks after
+
+          Visit.find({
+            user: response.username,
+            covid_case: false,
+            time: {
+              $gte: mintime,
+              $lte: maxtime,
+            },
+          }).then((myres) => {
+            const bulkupdate = myres.map((visit) => {
+              return {
+                updateOne: {
+                  filter: {
+                    _id: visit._id,
+                  },
+                  update: {
+                    $set: {
+                      covid_case: true,
+                    },
+                  },
+                  upsert: true,
+                },
+              };
+            });
+
+            Visit.bulkWrite(bulkupdate, (err, docs) => {
+              if (err) {
+                console.log(err);
+              }
+            });
+          });
+        }
       }
 
-      // console.log(response.username);
-      console.log("oldpassword: " + response.password);
-      // updateOps.username = "myusername";
-      // console.log(updateOps.username);
-      // console.log(Object.keys(updateOps));
-      // console.log(Object.keys(updateOps).includes("username"));
-      // console.log(Object.keys(updateOps).includes("covid_test"));
-
       if (Object.keys(updateOps).includes("password")) {
-        console.log("password before hash " + updateOps.password + "aaa");
-
         // check if password matches the requirements
-        // MAYBE THIS NEEDS TO BE DONE AT THE FRONTEND - NOT SURE
         const pw_requirements =
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (!pw_requirements.test(updateOps.password)) {
@@ -238,31 +260,23 @@ exports.update_user = (req, res, next) => {
           });
         }
 
-        // salt = 10 - adds random strings to hashed password
-        console.log("response " + response.password);
+        // make a new hased password
         bcrypt.hash(updateOps.password, 10, (err, hash) => {
           if (err) {
-            console.log("im here");
             console.log(err);
             return res.status(500).json({
               error: err,
             });
           } else {
             updateOps.password = hash;
-            // console.log(updateOps);
-            // console.log("hash: " + hash);
-            // console.log(updateOps);
-            console.log("new password: " + updateOps.password);
             User.updateOne({ _id: id }, { $set: updateOps })
               .exec()
               .then(() => {
-                // console.log(result);
                 return res.status(200).json({
                   message: "Updated user successfully",
                 });
               })
               .catch((err) => {
-                // console.log("errrrrrrorrrooror");
                 res.status(500).json({
                   error: err,
                 });
@@ -270,18 +284,15 @@ exports.update_user = (req, res, next) => {
           }
         });
       } else {
-        // console.log(updateOps);
-
+        // update the user
         User.updateOne({ _id: id }, { $set: updateOps })
           .exec()
           .then(() => {
-            // console.log(result);
             res.status(200).json({
               message: "Updated user successfully",
             });
           })
           .catch((err) => {
-            // console.log("errrrrrrorrrooror");
             res.status(500).json({
               error: err,
             });
@@ -293,7 +304,7 @@ exports.update_user = (req, res, next) => {
 exports.delete_collection = (req, res, next) => {
   User.collection
     .drop()
-    .then((response) => {
+    .then(() => {
       res.status(200).json({
         message: "User collection deleted",
       });

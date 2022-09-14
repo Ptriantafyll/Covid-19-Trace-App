@@ -5,8 +5,6 @@ import DeleteDBModal from "../../Components/UI/DeleteDBModal";
 import VisitModalContext from "../../Store/VisitModalContext";
 
 function AdminHomePage() {
-  const BaseURL = "http://localhost:8000/"; // api url
-  console.log(BaseURL);
   const modal_context = useContext(VisitModalContext);
 
   function deleteDBHandler() {

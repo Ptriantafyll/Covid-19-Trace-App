@@ -8,17 +8,23 @@ function EditProfileForm(props) {
   const [passwordsMatch, setPasswordsMatch] = useState(false);
   const [passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false);
 
-  function handleKeyDown(event) {
-    // console.log(event.key);
+  function clearForm() {
+    // make every field blank
+    newusernameref.current.value = "";
+    newpasswordref.current.value = "";
+    newpasswordconfirmref.current.value = "";
+  }
+
+  function handleKeyDown() {
+    // check if passwords match
     if (newpasswordref.current.value !== "") {
       if (
         newpasswordref.current.value === newpasswordconfirmref.current.value
       ) {
+        // set invalid text
         setPasswordsMatch(true);
         setPasswordsDoNotMatch(false);
       } else {
-        // console.log("new pw: " + newpasswordref.current.value);
-        // console.log("new pw conf: " + newpasswordconfirmref.current.value);
         setPasswordsMatch(false);
         setPasswordsDoNotMatch(true);
       }
@@ -84,14 +90,14 @@ function EditProfileForm(props) {
               onKeyDown={handleKeyDown}
               onClick={handleKeyDown}
             />
+            <Form.Control.Feedback type="valid">
+              Passwords match
+            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Passwords need to match
+            </Form.Control.Feedback>
             <Form.Label htmlFor="newpassword">New password</Form.Label>
           </Form.Floating>
-          <Form.Control.Feedback type="valid">
-            Passwords match
-          </Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Passwords need to match
-          </Form.Control.Feedback>
         </Col>
       </Row>
       <Row className="justify-content-center my-4">
@@ -107,20 +113,24 @@ function EditProfileForm(props) {
               onKeyDown={handleKeyDown}
               onClick={handleKeyDown}
             />
+            <Form.Control.Feedback type="valid">
+              Passwords match
+            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Passwords need to match
+            </Form.Control.Feedback>
             <Form.Label htmlFor="newpasswordconfirm">
               Confirm new password
             </Form.Label>
           </Form.Floating>
-          <Form.Control.Feedback type="valid">
-            Passwords match
-          </Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Passwords need to match
-          </Form.Control.Feedback>
         </Col>
       </Row>
-      <Row className="justify-content-center my-3">
-        <Col xs="4">
+      <Row className="my-3">
+        <Col xs="2"></Col>
+        <Col xs="5">
+          <Button onClick={clearForm}>Clear</Button>
+        </Col>
+        <Col xs="1">
           <Button type="submit">Submit</Button>
         </Col>
       </Row>

@@ -1,5 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import axios from "axios";
+import UserContext from "./UserContext";
+import VisitsContext from "./VisitsContext";
 
 const VisitModalContext = createContext({
   open: false,
@@ -15,6 +17,8 @@ export function VisitModalContextProvider(props) {
   const [peopleEstimate, setPeopleEstimate] = useState();
   const [currentPoi, setCurrentPoi] = useState();
   const today = new Date();
+  const user_context = useContext(UserContext);
+  const visits_context = useContext(VisitsContext);
 
   function openModalHandler(poi) {
     setCurrentPoi(poi);
@@ -46,7 +50,7 @@ export function VisitModalContextProvider(props) {
     // console.log(isCovidCase);
 
     axios
-      .post(BaseURL + "visit", {
+      .post(BaseURL + "visit/" + user_context.id, {
         user: current_user,
         POI: currentPoi,
         time: today.getTime(),
@@ -55,6 +59,8 @@ export function VisitModalContextProvider(props) {
       })
       .then((response) => {
         console.log(response);
+        console.log("after post visit");
+        visits_context.storeUserVisits();
       })
       .catch((error) => {
         console.log(error.response);

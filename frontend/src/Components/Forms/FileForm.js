@@ -5,15 +5,12 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useRef } from "react";
 import axios from "axios";
 
-function FileForm(props) {
+function FileForm() {
   const fileref = useRef();
   const BaseURL = "http://localhost:8000/"; // api url
 
   function fileSubmitAddHandler(event) {
     event.preventDefault();
-
-    console.log("clicked add");
-    console.log(fileref.current.files[0].name);
 
     axios
       .post(BaseURL + "POI/bulk", {
@@ -23,15 +20,12 @@ function FileForm(props) {
         console.log(response);
       })
       .catch((err) => {
-        console.log(err.response.data.message);
+        console.log(err);
       });
   }
 
   function fileSubmitUpdateHandler(event) {
     event.preventDefault();
-    console.log("clicked update");
-
-    console.log(fileref.current.files[0].name);
 
     axios
       .patch(BaseURL + "POI/bulk/" + fileref.current.files[0].name)
@@ -45,7 +39,6 @@ function FileForm(props) {
 
   function fileSubmitDeleteHandler(event) {
     event.preventDefault();
-    console.log("clicked delete");
 
     axios
       .delete(BaseURL + "POI/bulk/" + fileref.current.files[0].name)

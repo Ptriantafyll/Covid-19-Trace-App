@@ -63,18 +63,13 @@ exports.get_visits_of_next_2_hours = (req, res, next) => {
 };
 
 exports.get_visits_of_user = (req, res, next) => {
-  // console.log(req);
-  // console.log(req.params.username);
-  // 62f779d3cb1798871398312f
   const username = req.params.username;
   const visits_of_user = [];
   Visit.find()
-    .select("user POI time")
+    .select("user POI time covid_case")
     .exec()
     .then((visits) => {
-      // console.log(visits);
       for (const visit in visits) {
-        // console.log(visits[visit].user);
         if (visits[visit].user === username) {
           visits_of_user.push(visits[visit]);
         }
@@ -112,11 +107,13 @@ exports.create_visit = (req, res, next) => {
       }
 
       for (positive_test in positive_covid_tests) {
-        const diff =
-          visittime -
-          new Date(positive_covid_tests[positive_test].date).getTime();
+        const testtime = new Date(
+          positive_covid_tests[positive_test].date
+        ).getTime();
+        const mintime = testtime - 604800000;
+        const maxtime = testtime + 2 * 604800000;
 
-        if (diff > 2 * 604800000 && diff > -604800000) {
+        if (visittime < maxtime && visittime > mintime) {
           userWasCovidCase = true;
         }
       }
@@ -189,7 +186,7 @@ exports.get_last_weeks_visits = (req, res, next) => {
 exports.delete_collection = (req, res, next) => {
   Visit.collection
     .drop()
-    .then((response) => {
+    .then(() => {
       res.status(200).json({
         message: "Visit collection deleted",
       });

@@ -1,15 +1,30 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Col, Form, Row } from "react-bootstrap";
 
-// TODO: να δω το newmeetupform.js και να πάρω ιδέα για να φτιάξω το signup form και το login form
-// με τα σωστά props κλπ
-// να περάσω τα αποτελέσματα από το φορμ στο άλλο
-// Να φτιάξω τα valid/invalid texts
 function SignupForm(props) {
   const usernameinputref = useRef();
   const emailinputref = useRef();
   const passwordinputref = useRef();
+  const [validEmail, setValidEmail] = useState(false);
+  const [invalidEmail, setInvalidEmail] = useState(false);
+
+  // /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  //  this is the regex for password to check
+
+  function handleEmailkey() {
+    if (
+      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+        emailinputref.current.value
+      )
+    ) {
+      setInvalidEmail(false);
+      setValidEmail(true);
+    } else {
+      setInvalidEmail(true);
+      setValidEmail(false);
+    }
+  }
 
   function signupSubmitHandler(event) {
     event.preventDefault();
@@ -42,11 +57,6 @@ function SignupForm(props) {
               required
             />
             <Form.Label htmlFor="username">Username:</Form.Label>
-
-            <Form.Control.Feedback type="valid">Valid.</Form.Control.Feedback>
-            <Form.Control.Feedback tpye="invalid">
-              Please fill out this field.
-            </Form.Control.Feedback>
           </Form.Floating>
         </Col>
       </Row>
@@ -55,20 +65,21 @@ function SignupForm(props) {
         <Col xs="10">
           <Form.Floating className="mb-3 mt-3">
             <Form.Control
-              type="email"
-              className="form-control"
+              isInvalid={invalidEmail}
+              isValid={validEmail}
+              type="text"
               id="email"
               placeholder="Enter email"
               name="email"
               ref={emailinputref}
+              onKeyDown={handleEmailkey}
               required
             />
-            <Form.Label htmlFor="email">Email:</Form.Label>
-
-            <Form.Control.Feedback type="valid">Valid.</Form.Control.Feedback>
+            <Form.Control.Feedback type="valid"></Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
-              Please fill out this field.
+              Email address is wrong
             </Form.Control.Feedback>
+            <Form.Label htmlFor="email">Email:</Form.Label>
           </Form.Floating>
         </Col>
       </Row>
@@ -86,12 +97,11 @@ function SignupForm(props) {
               required
             />
             <Form.Label htmlFor="pwd">Password:</Form.Label>
-
-            <Form.Control.Feedback type="valid">Valid.</Form.Control.Feedback>
-            <Form.Control.Feedback type="invalid">
-              Please fill out this field.
-            </Form.Control.Feedback>
           </Form.Floating>
+          <Form.Control.Feedback type="valid">Valid.</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            Wrong email address
+          </Form.Control.Feedback>
         </Col>
       </Row>
 

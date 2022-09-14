@@ -9,7 +9,7 @@ const userRoutes = require("./api/routes/user");
 const POIRoutes = require("./api/routes/POI");
 const visitRoutes = require("./api/routes/visit");
 
-require("dotenv").config(); // δεν ξέρω αν χρειάζεαι
+require("dotenv").config();
 
 // connect to db
 mongoose.connect(
@@ -17,7 +17,7 @@ mongoose.connect(
     +process.env.MONGODB_ATLAS_PW +
     "@poidb.gojkx.mongodb.net/?retryWrites=true&w=majority"
 );
-mongoose.Promise = global.Promise; // να θυμηθώ τι κάνει αυτό
+mongoose.Promise = global.Promise; // make mongoose a global promise to use from other files
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));

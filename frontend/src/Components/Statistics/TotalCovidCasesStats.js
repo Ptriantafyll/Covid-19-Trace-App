@@ -5,7 +5,6 @@ function TotalCovidCasesStats(props) {
 
   const options = {
     title: "Total Cases: " + totalcases,
-    // sliceVisibilityThreshold: 0.2, // 20%
   };
   return (
     <Chart

@@ -9,10 +9,6 @@ function VisitModal(props) {
   const user_context = useContext(UserContext);
   const peopleref = useRef();
 
-  // console.log(modal_context);
-
-  // console.log(user_context.covid_tests);
-
   return (
     <div>
       <Modal show={modal_context.open} onHide={modal_context.closeModal}>

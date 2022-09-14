@@ -3,7 +3,6 @@ import { Chart } from "react-google-charts";
 function HourlyStats(props) {
   const options = {
     title: props.title,
-    // sliceVisibilityThreshold: 0.2, // 20%
     vAxis: {
       minValue: 0,
       maxValue: props.maxValue,

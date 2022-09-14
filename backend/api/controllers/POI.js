@@ -35,7 +35,6 @@ exports.get_all_POIs = (req, res, next) => {
     });
 };
 
-// todo: να φτιάξω την αναζήτηση από το searchbar
 exports.get_POIs_of_type = (req, res, next) => {
   const type = req.params.poitype;
   const pois_of_given_type = [];
@@ -46,8 +45,6 @@ exports.get_POIs_of_type = (req, res, next) => {
     .exec()
     .then((POIs) => {
       for (const poi in POIs) {
-        // console.log(POIs[poi].types);
-
         if (POIs[poi].types.includes(type)) {
           pois_of_given_type.push(POIs[poi]);
         }
@@ -121,11 +118,7 @@ exports.create_POI = (req, res, next) => {
 
 exports.bulk_import = (req, res, next) => {
   const given_file = req.body.filename;
-  console.log(req.body);
-  console.log("../" + given_file);
-
   const poisfile = require("../" + given_file);
-  console.log(poisfile.length);
 
   POI.collection.insertMany(poisfile, (err, docs) => {
     if (err) {
@@ -134,7 +127,6 @@ exports.bulk_import = (req, res, next) => {
         message: "there pois you are trying to add already exist",
       });
     } else {
-      console.log(docs);
       res.status(201).json({
         message: "multiple pois added successfully",
       });
@@ -151,7 +143,6 @@ exports.bulk_delete = (req, res, next) => {
   for (const poi in poisfile) {
     ids_to_delete.push(poisfile[poi].id);
   }
-  console.log(ids_to_delete);
 
   POI.collection.deleteMany({ id: { $in: ids_to_delete } }, (err, docs) => {
     if (err) {
@@ -177,8 +168,6 @@ exports.bulk_update = (req, res, next) => {
   for (const poi in poisfile) {
     ids_to_update.push(poisfile[poi].id);
   }
-  console.log(ids_to_update);
-  // console.log(Object.getOwnPropertyNames(poisfile[0]));
 
   const new_array = poisfile.map((poi) => {
     return {
@@ -205,8 +194,6 @@ exports.bulk_update = (req, res, next) => {
     };
   });
 
-  console.log(new_array);
-
   POI.bulkWrite(new_array, (err, docs) => {
     if (err) {
       console.log(err);
@@ -214,7 +201,6 @@ exports.bulk_update = (req, res, next) => {
         error: err,
       });
     } else {
-      console.log(docs);
       res.status(200).json({
         message: "multiple pois updated successfully",
       });
@@ -225,7 +211,7 @@ exports.bulk_update = (req, res, next) => {
 exports.delete_collection = (req, res, next) => {
   POI.collection
     .drop()
-    .then((response) => {
+    .then(() => {
       res.status(200).json({
         message: "POI collection deleted",
       });
