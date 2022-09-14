@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useContext, useState } from "react";
+import { Card, Container } from "react-bootstrap";
 import CovidTestForm from "../../Components/Forms/CovidTestForm";
 
 import UserContext from "../../Store/UserContext";
@@ -10,15 +11,11 @@ function UserCovidTestSubmitPage() {
   const user_context = useContext(UserContext);
 
   function testFormSubmitHandler(testdata) {
-    // console.log(testdata);
-    // console.log(user_context.id);
-
     const time = new Date(testdata.date).getTime();
-    const correcttime = new Date(time + 7200000);
+    const offest = new Date(testdata.date).getTimezoneOffset();
+    const correcttime = new Date(time - offest * 60000);
 
     setIsloading(true);
-    // console.log(testdata.date);
-    // console.log(new Date(testdata.date));
     axios
       .patch(BaseURL + "user/" + user_context.id, [
         {
@@ -48,10 +45,14 @@ function UserCovidTestSubmitPage() {
   }
 
   return (
-    <div>
-      <h2 className="text-center">Have you been diagnosed with COVID-19?</h2>
-      <CovidTestForm onTestSubmit={testFormSubmitHandler} />
-    </div>
+    <Container className="mt-5 w-50">
+      <Card className="p-3">
+        <h2 className="text-center">
+          Enter the details of your latest covid-19 test
+        </h2>
+        <CovidTestForm onTestSubmit={testFormSubmitHandler} />
+      </Card>
+    </Container>
   );
 }
 

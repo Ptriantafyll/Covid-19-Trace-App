@@ -1,41 +1,52 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-
 import { useNavigate } from "react-router-dom";
-import { Nav, NavDropdown } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useContext } from "react";
 import VisitsContext from "../../Store/VisitsContext";
 import UserContext from "../../Store/UserContext";
 import POIContext from "../../Store/POIContext";
+import ScrollContext from "../../Store/ScrollContext";
+import "../../Icons/logo.png";
 
-function AdminNavBar() {
+function AdminNavBar(props) {
   const navigate = useNavigate();
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
   const poi_context = useContext(POIContext);
+  const scroll_context = useContext(ScrollContext);
 
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="/">
-          Logo
-        </a>
+    <Navbar expand="sm" bg="dark" variant="dark" sticky="top">
+      <Container fluid>
+        <Navbar.Brand href="/">
+          <img
+            width={30}
+            height={30}
+            src={require("../../Icons/logo.png")}
+            alt="hello"
+          />
+          My app name
+        </Navbar.Brand>
 
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <div
-              role="button"
-              className="nav-link"
-              onClick={() => {
-                navigate("/AdminHomePage", { replace: true });
-              }}
-            >
-              AdminHomePage
-            </div>
-          </li>
+        <Nav className="navbar-nav">
+          <Nav.Link
+            role="button"
+            onClick={() => {
+              navigate("/AdminHomePage", { replace: true });
+            }}
+          >
+            <i className="bi bi-house-door" />
+            Home Page
+          </Nav.Link>
           <NavDropdown
             id="nav-dropdown-dark"
-            title="Statistics"
+            title={
+              <>
+                <i className="bi bi-file-bar-graph" />
+                Statistics
+              </>
+            }
             menuVariant="dark"
           >
             <NavDropdown.Item
@@ -46,15 +57,31 @@ function AdminNavBar() {
                 navigate("/StatisticsPage", { replace: true });
               }}
             >
-              All statistisc
+              All statistics
+            </NavDropdown.Item>
+            <NavDropdown.Item
+              onClick={(event) => {
+                // console.log(event.target.text);
+                scroll_context.setReference(event.target.text);
+              }}
+            >
+              Last stat
+            </NavDropdown.Item>
+            <NavDropdown.Item
+              onClick={(event) => {
+                // console.log(event.target.text);
+                scroll_context.setReference(event.target.text);
+              }}
+            >
+              Random stat
             </NavDropdown.Item>
           </NavDropdown>
           <Nav.Link className="nav-link" href="/">
             Log Out
           </Nav.Link>
-        </ul>
-      </div>
-    </nav>
+        </Nav>
+      </Container>
+    </Navbar>
   );
 }
 

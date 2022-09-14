@@ -6,6 +6,7 @@ function DailyStats(props) {
     // sliceVisibilityThreshold: 0.2, // 20%
     hAxis: {
       minValue: 0,
+      maxValue: props.maxValue,
     },
     vAxis: {
       title: "Day",
@@ -13,7 +14,6 @@ function DailyStats(props) {
     legend: {
       position: "bottom",
     },
-    // legend: "none",
     colors: props.colors,
   };
   return (

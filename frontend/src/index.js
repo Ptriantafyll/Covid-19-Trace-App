@@ -11,6 +11,7 @@ import { PositionContextProvider } from "./Store/CurrentPositionContext";
 import { VisitModalContextProvider } from "./Store/VisitModalContext";
 import { VisitsContextProvider } from "./Store/VisitsContext";
 import { POIContextProvider } from "./Store/POIContext";
+import { ScrollContextProvider } from "./Store/ScrollContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,9 +20,11 @@ root.render(
       <VisitModalContextProvider>
         <VisitsContextProvider>
           <POIContextProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <ScrollContextProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </ScrollContextProvider>
           </POIContextProvider>
         </VisitsContextProvider>
       </VisitModalContextProvider>

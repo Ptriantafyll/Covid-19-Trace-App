@@ -1,11 +1,10 @@
-import { Button, Card, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { useRef, useState } from "react";
 
 function EditProfileForm(props) {
   const newusernameref = useRef();
   const newpasswordref = useRef();
   const newpasswordconfirmref = useRef();
-  // const [validated, setValidated] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(false);
   const [passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false);
 
@@ -58,76 +57,74 @@ function EditProfileForm(props) {
   }
 
   return (
-    <Container className="w-50 mx-auto">
-      <Card>
-        <Form onSubmit={profileSubmitHandler} noValidate>
-          <Row className="justify-content-center">
-            <div className="col-lg-8">
-              <Form.Label htmlFor="newusername">Enter new username</Form.Label>
-              <Form.Control
-                ref={newusernameref}
-                type="text"
-                placeholder="Username"
-                id="newusername"
-              />
-              <div className="valid-feedback">Good</div>
-              <div className="invalid-feedback">
-                Please fill out this field.
-              </div>
-            </div>
-          </Row>
-          <div className="row justify-content-center">
-            <div className="col-lg-8">
-              <Form.Label htmlFor="newpassword">Enter new password</Form.Label>
-              <Form.Control
-                isInvalid={passwordsDoNotMatch}
-                isValid={passwordsMatch}
-                ref={newpasswordref}
-                type="password"
-                placeholder="Username"
-                id="newpassword"
-                onKeyDown={handleKeyDown}
-                onClick={handleKeyDown}
-              />
-              <Form.Control.Feedback type="valid">
-                Passwords match
-              </Form.Control.Feedback>
-              <Form.Control.Feedback type="invalid">
-                Passwords need to match
-              </Form.Control.Feedback>
-            </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-lg-8">
-              <Form.Label htmlFor="newpasswordconfirm">
-                Confirm new password
-              </Form.Label>
-              <Form.Control
-                isInvalid={passwordsDoNotMatch}
-                isValid={passwordsMatch}
-                ref={newpasswordconfirmref}
-                type="password"
-                placeholder="Username"
-                id="newpasswordconfirm"
-                onKeyDown={handleKeyDown}
-                onClick={handleKeyDown}
-              />
-              <Form.Control.Feedback type="valid">
-                Passwords match
-              </Form.Control.Feedback>
-              <Form.Control.Feedback type="invalid">
-                Passwords need to match
-              </Form.Control.Feedback>
-            </div>
-          </div>
-          <div className="row justify-content-center">
-            <Button type="submit" className="my-2 col-lg-4">
-              Submit
-            </Button>
-          </div>
-        </Form>
-      </Card>
-    </Container>
+    <Form onSubmit={profileSubmitHandler} noValidate>
+      <Row className="justify-content-center my-4">
+        <Col xs="8">
+          <Form.Floating>
+            <Form.Control
+              ref={newusernameref}
+              type="text"
+              placeholder="Username"
+              id="newusername"
+            />
+            <Form.Label htmlFor="newusername">New username</Form.Label>
+          </Form.Floating>
+        </Col>
+      </Row>
+      <Row className="justify-content-center my-4">
+        <Col xs="8">
+          <Form.Floating>
+            <Form.Control
+              isInvalid={passwordsDoNotMatch}
+              isValid={passwordsMatch}
+              ref={newpasswordref}
+              type="password"
+              placeholder="Password"
+              id="newpassword"
+              onKeyDown={handleKeyDown}
+              onClick={handleKeyDown}
+            />
+            <Form.Label htmlFor="newpassword">New password</Form.Label>
+          </Form.Floating>
+          <Form.Control.Feedback type="valid">
+            Passwords match
+          </Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            Passwords need to match
+          </Form.Control.Feedback>
+        </Col>
+      </Row>
+      <Row className="justify-content-center my-4">
+        <Col xs="8">
+          <Form.Floating>
+            <Form.Control
+              isInvalid={passwordsDoNotMatch}
+              isValid={passwordsMatch}
+              ref={newpasswordconfirmref}
+              type="password"
+              placeholder="Password"
+              id="newpasswordconfirm"
+              onKeyDown={handleKeyDown}
+              onClick={handleKeyDown}
+            />
+            <Form.Label htmlFor="newpasswordconfirm">
+              Confirm new password
+            </Form.Label>
+          </Form.Floating>
+          <Form.Control.Feedback type="valid">
+            Passwords match
+          </Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            Passwords need to match
+          </Form.Control.Feedback>
+        </Col>
+      </Row>
+      <Row className="justify-content-center my-3">
+        <Col xs="4">
+          <Button type="submit">Submit</Button>
+        </Col>
+      </Row>
+    </Form>
   );
 }
 

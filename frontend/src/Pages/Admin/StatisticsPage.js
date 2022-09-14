@@ -1,5 +1,13 @@
-import { useContext, useState } from "react";
-import { Alert, Col, Container, Dropdown, Form, Row } from "react-bootstrap";
+import { useContext, useRef, useState } from "react";
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Dropdown,
+  Form,
+  Row,
+} from "react-bootstrap";
 import TotalCovidCasesStats from "../../Components/Statistics/TotalCovidCasesStats";
 import TotalVisitStats from "../../Components/Statistics/TotalVisitStats";
 import CaseVisitStats from "../../Components/Statistics/CaseVisitStats";
@@ -9,11 +17,13 @@ import POIContext from "../../Store/POIContext";
 import POIVisitStats from "../../Components/Statistics/POIVisitStats";
 import DailyStats from "../../Components/Statistics/DailyStats";
 import HourlyStats from "../../Components/Statistics/HourlyStats";
+import ScrollContext from "../../Store/ScrollContext";
 
 function StatisticsPage() {
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
   const poi_context = useContext(POIContext);
+  const scroll_context = useContext(ScrollContext);
   const [viewdata, setviewdata] = useState();
   const [mytitle, setmytitle] = useState("Total Visits");
   const [chartView, setChartView] = useState(null);
@@ -24,9 +34,24 @@ function StatisticsPage() {
   const [hourChartView, setHourChartView] = useState(null);
   const [hourChartDay, setHourChartDay] = useState("2022-09-06");
   const [hourlegendColor, setHourlegendColor] = useState();
+  const [mydailytitle, setmydailytitle] = useState(
+    "Visits from " + startDate + " to " + endDate
+  );
+
+  const lastref = useRef();
+  const randomref = useRef();
+  console.log(scroll_context.reference);
+  if (scroll_context.reference === "Last stat") {
+    lastref.current?.scrollIntoView({ behavior: "smooth" });
+  } else if (scroll_context.reference === "Random stat") {
+    randomref.current?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  // scroll_context.setReference(lastref);
+  // console.log(scroll_context.reference.current.value);
 
   function checkBoxHandler(event) {
-    console.log(event.target.checked);
+    // console.log(event.target.checked);
     if (event.target.checked) {
       setviewdata(poivisitdata);
       setmytitle("Total Visits");
@@ -37,9 +62,8 @@ function StatisticsPage() {
   }
 
   function startdaySelectHandler(event) {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     if (endDate < event.target.value) {
-      console.log("we got a problem");
       setAlertShow(true);
     } else {
       setStartDate(event.target.value);
@@ -48,14 +72,18 @@ function StatisticsPage() {
   }
 
   function enddaySelectHandler(event) {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     if (event.target.value < startDate) {
-      console.log("we got a problem");
       setAlertShow(true);
     } else {
       setEndDate(event.target.value);
       setAlertShow(false);
     }
+  }
+
+  function showDayDataHandler() {
+    setChartView(dailydata);
+    setmydailytitle("Visits from " + startDate + " to " + endDate);
   }
 
   function dropdownSelectHandler(eventKey, event) {
@@ -72,12 +100,14 @@ function StatisticsPage() {
   }
 
   function selectDayHandler(event) {
-    console.log(event.target.value);
     setHourChartDay(event.target.value);
   }
 
+  function showHourDataHandler() {
+    setHourChartView(hourlyData);
+  }
+
   function hourdropdownHandler(eventKey, event) {
-    console.log(eventKey);
     if (eventKey === "totalvisits") {
       setHourlegendColor(null);
       setHourChartView(hourlyVisitData);
@@ -253,6 +283,7 @@ function StatisticsPage() {
     ["Day of the week", "# of case visits", { role: "style" }],
   ];
   var dailyvisitdata = [["Day of the week", "# of visits"]];
+  var dailyMaxValue = 0;
 
   if (visits_context.all_visits !== undefined) {
     mydata["Monday"] = 0;
@@ -269,9 +300,6 @@ function StatisticsPage() {
     mydata2["Friday"] = 0;
     mydata2["Saturday"] = 0;
     mydata2["Sunday"] = 0;
-
-    console.log(startDate);
-    console.log(endDate);
 
     const offset = new Date(startDate).getTimezoneOffset() * 60000;
     const starttimestamp = new Date(startDate).getTime() + offset;
@@ -329,6 +357,10 @@ function StatisticsPage() {
     }
     // console.log(mydata);
     // console.log(mydata2);
+    // console.log(Object.values(mydata));
+
+    dailyMaxValue = Math.max(...Object.values(mydata));
+    // console.log(Math.max(...Object.values(mydata).map((o) => o.y)));
 
     for (const element of Object.entries(mydata)) {
       // console.log(element);
@@ -355,6 +387,7 @@ function StatisticsPage() {
   var hourlyData = [["Hour", "# of visits", "# of case visits"]];
   var hourlyVisitData = [["Hour", "# of visits"]];
   var hourlyCaseData = [["Hour", "# of case visits", { role: "style" }]];
+  var hourlyMaxValue = 0;
 
   if (visits_context.all_visits !== undefined) {
     for (let i = 0; i < 24; i++) {
@@ -365,19 +398,30 @@ function StatisticsPage() {
       mydata2[temphour] = 0;
     }
 
+    let houroffset = new Date(hourChartDay).getTimezoneOffset() * 60000;
+    let starttime = new Date(hourChartDay).getTime() + houroffset;
+
+    let endtime = starttime + 86400000;
+    // console.log(new Date(starttime));
+    // console.log(new Date(endtime));
+
     for (const visit of visits_context.all_visits.visits) {
+      // console.log(new Date(hourChartDay) + houroffset);
       console.log(visit.time);
 
-      let visitHour =
-        new Date(parseInt(visit.time))
-          .getHours()
-          .toLocaleString("en-US", { minimumIntegerDigits: 2 }) + ":00";
-      console.log(visitHour);
+      if (visit.time > starttime && visit.time < endtime) {
+        let visitHour =
+          new Date(parseInt(visit.time))
+            .getHours()
+            .toLocaleString("en-US", { minimumIntegerDigits: 2 }) + ":00";
+        // console.log(visitHour);
 
-      mydata[visitHour]++;
-      if (visit.covid_case) mydata2[visitHour]++;
+        mydata[visitHour]++;
+        if (visit.covid_case) mydata2[visitHour]++;
+      }
     }
 
+    hourlyMaxValue = Math.max(...Object.values(mydata));
     for (const element of Object.entries(mydata)) {
       // console.log(element);
       hourlyVisitData.push(element);
@@ -391,8 +435,8 @@ function StatisticsPage() {
     for (const element of Object.entries(mydata2)) {
       hourlyCaseData.push([element[0], element[1], "#b0120a"]);
     }
-    console.log(mydata);
-    console.log(mydata2);
+    // console.log(mydata);
+    // console.log(mydata2);
   }
 
   return (
@@ -412,7 +456,7 @@ function StatisticsPage() {
 
         <CaseVisitStats casevisits={casevisits} data={casevisitdata} />
       </Container>
-      <Container className="w-100 mx-auto bg-dark p-2 my-5">
+      <Container className="w-100 mx-auto bg-dark p-2 my-5" ref={randomref}>
         <h1 className="text-white text-center">POIs ranked by visit</h1>
         <Form.Check
           type="checkbox"
@@ -426,7 +470,7 @@ function StatisticsPage() {
         />
       </Container>
       <Container className="w-100 mx-auto bg-danger p-2 my-5">
-        <h1 className="text-white text-center">Hourly # of visits</h1>
+        <h1 className="text-white text-center">Daily # of visits</h1>
         <Row className="justify-content-center">
           <Col md="4">
             <Form.Group controlId="startdate" className="mb-2">
@@ -447,6 +491,11 @@ function StatisticsPage() {
                 onChange={enddaySelectHandler}
               />
             </Form.Group>
+          </Col>
+          <Col sm="3">
+            <Button variant="success" onClick={showDayDataHandler}>
+              show data
+            </Button>
           </Col>
         </Row>
         <Row className="justify-content-center">
@@ -478,16 +527,19 @@ function StatisticsPage() {
 
         <DailyStats
           data={chartView === null ? dailydata : chartView}
-          title={"Visits from " + startDate + " to " + endDate}
+          title={mydailytitle}
+          maxValue={dailyMaxValue}
           colors={legendColor}
         />
       </Container>
-      <Container className="w-100 mx-auto bg-danger p-2 my-5">
-        <h1 className="text-white text-center">Daily # of visits</h1>
+      <Container className="w-100 mx-auto bg-danger p-2 my-5" ref={lastref}>
+        <h1 className="text-white text-center">Hourly # of visits</h1>
         <Row className="justify-content-center">
-          <Col md="4">
+          <Col md="2" className="mt-2">
+            Select Day:
+          </Col>
+          <Col sm="4">
             <Form.Group controlId="chosendate" className="mb-2">
-              <Form.Label>Select a Day</Form.Label>
               <Form.Control
                 type="date"
                 name="chosendate"
@@ -495,10 +547,15 @@ function StatisticsPage() {
               />
             </Form.Group>
           </Col>
+          <Col md="3">
+            <Button variant="success" onClick={showHourDataHandler}>
+              show data
+            </Button>
+          </Col>
         </Row>
         <Row className="justify-content-center mb-2">
           <Col md="3">
-            <Dropdown onSelect={hourdropdownHandler}>
+            <Dropdown onSelect={hourdropdownHandler} id="hourdropdown">
               <Dropdown.Toggle variant="success">Select Data</Dropdown.Toggle>
 
               <Dropdown.Menu>
@@ -517,6 +574,7 @@ function StatisticsPage() {
         <HourlyStats
           data={hourChartView === null ? hourlyData : hourChartView}
           title={"Visits of " + hourChartDay}
+          maxValue={hourlyMaxValue}
           colors={hourlegendColor}
         />
       </Container>

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "../Store/UserContext";
+import { Card, Col, Container, Row } from "react-bootstrap";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -38,10 +39,39 @@ function LoginPage() {
   }
 
   return (
-    <section>
-      <h2 className="mt-3 text-center">Log in</h2>
-      <LoginForm onUserLogin={userLoginHandler} />
-    </section>
+    <Container fluid className="mt-5">
+      <Row className="my-2 justify-content-center">
+        <Col xs="1">
+          {/* <div className="text-center"> */}
+          <img
+            // className="bg-warning"
+            width={170}
+            height={170}
+            src={require("../Icons/logo.png")}
+            alt="hello"
+          />
+          {/* </div> */}
+        </Col>
+        <Col xs="2">
+          <p className="ms-5">
+            random text random text random text random text random text random
+            text random text random text random text random text random text
+            random text random text random text
+          </p>
+        </Col>
+      </Row>
+
+      <Card style={{ width: "23rem" }} className="shadow bg-cyan mx-auto">
+        <h2 className="mt-3 text-center">Log in</h2>
+
+        <LoginForm onUserLogin={userLoginHandler} />
+      </Card>
+      <Row className="justify-content-center mt-3">
+        <Col className="text-center">
+          Do you not have an account? <a href="/SignupPage">sign up</a>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

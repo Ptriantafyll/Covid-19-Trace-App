@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useContext, useState } from "react";
+import { Card, Container } from "react-bootstrap";
 import EditProfileForm from "../../Components/Forms/EditProfileForm";
 import UserContext from "../../Store/UserContext";
 
@@ -45,10 +46,12 @@ function EditProfilePage() {
   }
 
   return (
-    <div>
-      <h1 className="text-center">Edit your profile</h1>
-      <EditProfileForm onEditProfileSubmit={editProfileSubmitHandler} />
-    </div>
+    <Container fluid className="mt-5">
+      <Card style={{ width: "23rem" }} className="shadow bg-cyan mx-auto">
+        <h2 className="text-center mt-2">Edit your profile</h2>
+        <EditProfileForm onEditProfileSubmit={editProfileSubmitHandler} />
+      </Card>
+    </Container>
   );
 }
 

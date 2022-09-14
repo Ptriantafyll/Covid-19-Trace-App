@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import UserContext from "../../Store/UserContext";
 import AdminNavBar from "./AdminNavBar";
-import BasicNavBar from "./BasicNavBar";
+// import BasicNavBar from "./BasicNavBar";
 import UserNavBar from "./UserNavBar";
 
 function Layout(props) {
@@ -10,7 +10,7 @@ function Layout(props) {
   if (user_context.username === undefined) {
     return (
       <div>
-        <BasicNavBar />
+        {/* <BasicNavBar /> */}
         <main>{props.children}</main>
       </div>
     );

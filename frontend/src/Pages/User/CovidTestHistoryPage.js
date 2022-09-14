@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { Container } from "react-bootstrap";
 import CovidTestHistoryTable from "../../Components/Tables/CovidTestHistoryTable";
 import UserContext from "../../Store/UserContext";
 
@@ -39,12 +40,17 @@ function CovidTestHistoryPage() {
   }
   return myTableData === null ? (
     <div>
-      <h1 className="text-center">
+      <h1 className="text-center mt-3">
         You have never submitted a test for Covid-19
       </h1>
     </div>
   ) : (
-    <CovidTestHistoryTable tableData={myTableData} />
+    <>
+      <h2 className="text-center mt-3">Your Tests:</h2>
+      <Container className="mt-3 w-50 mx-auto p-3">
+        <CovidTestHistoryTable tableData={myTableData} />
+      </Container>
+    </>
   );
 }
 

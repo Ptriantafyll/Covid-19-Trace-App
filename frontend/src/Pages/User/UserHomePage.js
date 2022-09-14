@@ -1,11 +1,10 @@
 import MyMap from "../../Components/UI/MyMap";
 import { Marker, Popup } from "react-leaflet";
-import { Button } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 import axios from "axios";
 
 import { useState, useContext } from "react";
 
-import UserContext from "../../Store/UserContext";
 import PositionContext from "../../Store/CurrentPositionContext";
 import ModalContext from "../../Store/VisitModalContext";
 
@@ -21,7 +20,6 @@ function UserHomePage() {
   const [returnedPOIs, setReturnedPOIs] = useState({});
   const [isloading, setIsloading] = useState(false);
   const [average_for_every_poi, setaverage_for_every_poi] = useState([]);
-  const currentUserContext = useContext(UserContext);
   const currentPositioncontext = useContext(PositionContext);
   const modal_context = useContext(ModalContext);
   const today = new Date();
@@ -213,19 +211,13 @@ function UserHomePage() {
 
   return (
     <div>
-      <MyMap
-        searchedPOIs={myMarkers}
-        currentpos={pos}
-        onEnteredSearch={POISearchHandler}
-      />
-      <h2 className="text-center">
-        User is
-        {" " +
-          currentUserContext.username +
-          " latitude is " +
-          currentPositioncontext.latitude}
-      </h2>
-
+      <Container className="w-75 mx-auto mt-5">
+        <MyMap
+          searchedPOIs={myMarkers}
+          currentpos={pos}
+          onEnteredSearch={POISearchHandler}
+        />
+      </Container>
       <VisitModal />
     </div>
   );

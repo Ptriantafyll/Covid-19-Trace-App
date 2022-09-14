@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { Container } from "react-bootstrap";
 import CovidCasesStatsTable from "../../Components/Tables/CovidCasesStatsTable";
 import UserContext from "../../Store/UserContext";
 import VisitsContext from "../../Store/VisitsContext";
@@ -101,18 +102,18 @@ function CovidCaseStatsPage() {
   }
 
   return myTableData === null ? (
-    <div>
-      <h1 className="text-center">
-        You have not come in contact with a confirmed Covid-19 case
-      </h1>
-    </div>
+    <h1 className="text-center mt-3">
+      You have not come in contact with a confirmed Covid-19 case
+    </h1>
   ) : (
-    <div>
-      <h1 className="text-center">
+    <>
+      <h2 className="text-center mt-3">
         You came in contact with a comfirmed Covid-19 case during these visits:
-      </h1>
-      <CovidCasesStatsTable tableData={myTableData} />;
-    </div>
+      </h2>
+      <Container className="mt-3 w-50 mx-auto p-3">
+        <CovidCasesStatsTable tableData={myTableData} />
+      </Container>
+    </>
   );
 }
 

@@ -14,7 +14,7 @@ function MapSearchBar(props) {
       <div className="leaflet-control leaflet-bar">
         <input
           type="text"
-          placeholder="search"
+          placeholder="search for type of poi"
           ref={POIsearchRef}
           onKeyDown={handleKeyDown}
         ></input>

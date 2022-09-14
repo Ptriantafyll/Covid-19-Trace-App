@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Card, Form } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 
 function LoginForm(props) {
   const usernameloginref = useRef();
@@ -24,11 +24,11 @@ function LoginForm(props) {
   }
 
   return (
-    <div className="container mt-3">
-      <Card className="shadow">
-        <Form onSubmit={loginHandler}>
-          <div className="form-floating mb-3 mt-3">
-            <input
+    <Form onSubmit={loginHandler}>
+      <Row className="justify-content-center">
+        <Col xs="10">
+          <Form.Floating className="mb-3 mt-3">
+            <Form.Control
               type="text"
               className="form-control"
               id="username"
@@ -37,11 +37,15 @@ function LoginForm(props) {
               ref={usernameloginref}
               required
             />
-            <label htmlFor="username">Username:</label>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="email">Email:</label>
-            <input
+            <Form.Label htmlFor="username">Username:</Form.Label>
+          </Form.Floating>
+        </Col>
+      </Row>
+
+      <Row className="justify-content-center">
+        <Col xs="10">
+          <Form.Floating className="mb-3 mt-3">
+            <Form.Control
               type="email"
               className="form-control"
               id="email"
@@ -50,11 +54,15 @@ function LoginForm(props) {
               ref={emailloginref}
               required
             />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="pwd">Password:</label>
-            <input
-              type="text"
+            <Form.Label htmlFor="email">Email:</Form.Label>
+          </Form.Floating>
+        </Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col xs="10">
+          <Form.Floating className="mb-3 mt-3">
+            <Form.Control
+              type="password"
               className="form-control"
               id="pwd"
               placeholder="Enter password"
@@ -62,13 +70,17 @@ function LoginForm(props) {
               ref={passwordloginref}
               required
             />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Log In
-          </button>
-        </Form>
-      </Card>
-    </div>
+            <Form.Label htmlFor="pwd">Password:</Form.Label>
+          </Form.Floating>
+        </Col>
+      </Row>
+      <Row className="mb-2">
+        <Col xs="8"></Col>
+        <Col xs="4">
+          <Button type="submit">Log In</Button>
+        </Col>
+      </Row>
+    </Form>
   );
 }
 

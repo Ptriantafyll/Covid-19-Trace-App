@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import VisitsContext from "../../Store/VisitsContext";
 import VisitHistoryTable from "../../Components/Tables/VisitHistoryTable";
+import { Container } from "react-bootstrap";
 
 function VisitHistoryPage() {
   const visits_context = useContext(VisitsContext);
@@ -55,15 +56,17 @@ function VisitHistoryPage() {
 
   return myTableData === undefined ? (
     <div>
-      <h1 className="text-center">
+      <h1 className="text-center mt-3">
         You have never visited any points of interest
       </h1>
     </div>
   ) : (
-    <div>
-      <h1 className="text-center">Your visits:</h1>
-      <VisitHistoryTable tableData={myTableData} />;
-    </div>
+    <>
+      <h2 className="text-center mt-3">Your visits:</h2>
+      <Container className="mt-3 w-50 mx-auto p-3">
+        <VisitHistoryTable tableData={myTableData} />;
+      </Container>
+    </>
   );
 }
 

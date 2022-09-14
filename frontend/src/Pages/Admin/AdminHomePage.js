@@ -14,11 +14,14 @@ function AdminHomePage() {
   }
   return (
     <div>
-      <h4 className="text-center">Choose file</h4>
+      <h4 className="text-center my-3">
+        Choose a file to either add, upload, or delete points of interest from
+        the database
+      </h4>
       <FileForm />
       <Container className="w-50 my-2">
         <Row className="justify-content-center">
-          <Col lg="4">
+          <Col sm="4">
             <Button variant="danger" onClick={deleteDBHandler}>
               Delete Database
             </Button>

@@ -6,6 +6,7 @@ function HourlyStats(props) {
     // sliceVisibilityThreshold: 0.2, // 20%
     vAxis: {
       minValue: 0,
+      maxValue: props.maxValue,
     },
     hAxis: {
       title: "Hour",

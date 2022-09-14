@@ -1,5 +1,6 @@
-import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useRef } from "react";
 import axios from "axios";
@@ -61,8 +62,11 @@ function FileForm(props) {
       <Card>
         <Form>
           <Row className="justify-content-center">
-            <Col lg="8">
-              <Form.Label htmlFor="poifile">Enter json file</Form.Label>
+            <Col xs="8">
+              <Form.Label htmlFor="poifile">
+                Enter json file
+                {<i className="bi bi-filetype-json" />}
+              </Form.Label>
               <Form.Control
                 type="file"
                 id="poifile"
@@ -72,7 +76,7 @@ function FileForm(props) {
             </Col>
           </Row>
           <Row className="justify-content-center">
-            <Col lg="3">
+            <Col xs="3">
               <Button
                 type="submit"
                 onClick={fileSubmitAddHandler}
@@ -82,16 +86,17 @@ function FileForm(props) {
                 Add
               </Button>
             </Col>
-            <Col lg="3">
+            <Col xs="3">
               <Button
                 type="submit"
                 onClick={fileSubmitUpdateHandler}
-                className="my-2 mx-2"
+                className="my-2"
+                variant="warning"
               >
                 Update
               </Button>
             </Col>
-            <Col lg="3">
+            <Col xs="3">
               <Button
                 type="submit"
                 onClick={fileSubmitDeleteHandler}

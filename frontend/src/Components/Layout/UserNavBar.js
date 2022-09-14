@@ -15,8 +15,15 @@ function UserNavBar() {
   return (
     <Navbar expand="sm" bg="dark" variant="dark" sticky="top">
       <Container fluid>
-        <Navbar.Brand href="/">Logo</Navbar.Brand>
-
+        <Navbar.Brand href="/">
+          <img
+            width={30}
+            height={30}
+            src={require("../../Icons/logo.png")}
+            alt="hello"
+          />
+          My app name
+        </Navbar.Brand>
         <Nav>
           <Nav.Link
             className="nav-link"
@@ -24,7 +31,8 @@ function UserNavBar() {
               navigate("/UserHomePage", { replace: true });
             }}
           >
-            UserHomePage
+            <i className="bi bi-house-door" />
+            Home Page
           </Nav.Link>
           <Nav.Link
             role="button"
@@ -33,6 +41,7 @@ function UserNavBar() {
               navigate("/UserCovidTestSubmitPage", { replace: true });
             }}
           >
+            <i className="bi bi-virus" />
             Submit Covid Test
           </Nav.Link>
           <Nav.Link
@@ -43,6 +52,7 @@ function UserNavBar() {
               navigate("/CovidCaseStatsPage", { replace: true });
             }}
           >
+            <i className="bi bi-virus2" />
             Covid Case Contact
           </Nav.Link>
 
