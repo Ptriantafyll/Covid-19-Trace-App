@@ -12,6 +12,7 @@ import VisitHistoryPage from "./Pages/User/VisitHistoryPage";
 import CovidTestHistoryPage from "./Pages/User/CovidTestHistoryPage";
 import AdminHomePage from "./Pages/Admin/AdminHomePage";
 import StatisticsPage from "./Pages/Admin/StatisticsPage";
+import ResetPasswordPage from "./Pages/ResetPasswordPage";
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
           <Route exact path="/" element={<StartPage />} />
           <Route path="/LoginPage" element={<LoginPage />} />
           <Route path="/SignupPage" element={<SignupPage />} />
+          <Route path="/ResetPasswordPage" element={<ResetPasswordPage />} />
+
           <Route path="/UserHomePage" element={<UserHomePage />} />
           <Route
             path="/UserCovidTestSubmitPage"

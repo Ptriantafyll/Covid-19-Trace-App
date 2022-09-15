@@ -13,6 +13,10 @@ const visitSchema = mongoose.Schema({
     ref: "POI",
     required: true,
   },
+  POI_id: {
+    type: String,
+    ref: "POI",
+  },
   time: {
     type: String,
     required: true,

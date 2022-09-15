@@ -30,10 +30,7 @@ export function UserContextProvider(props) {
         covidtests.push(response.data.user.covid_test);
 
         const past_tests = response.data.user.past_covid_tests;
-        // console.log(response.data.user.past_covid_tests);
         for (const test in past_tests) {
-          // console.log(past_tests[test]);
-
           if (Object.keys(past_tests[test]).length !== 0) {
             covidtests.push(past_tests[test]);
           }

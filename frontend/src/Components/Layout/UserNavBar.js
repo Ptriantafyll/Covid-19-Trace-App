@@ -22,7 +22,7 @@ function UserNavBar() {
             src={require("../../Icons/logo.png")}
             alt="hello"
           />
-          My app name
+          Viral Map
         </Navbar.Brand>
         <Nav>
           <Nav.Link

@@ -1,12 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useNavigate } from "react-router-dom";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { useContext } from "react";
 import VisitsContext from "../../Store/VisitsContext";
 import UserContext from "../../Store/UserContext";
 import POIContext from "../../Store/POIContext";
-import ScrollContext from "../../Store/ScrollContext";
 import "../../Icons/logo.png";
 
 function AdminNavBar(props) {
@@ -14,7 +13,6 @@ function AdminNavBar(props) {
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
   const poi_context = useContext(POIContext);
-  const scroll_context = useContext(ScrollContext);
 
   return (
     <Navbar expand="sm" bg="dark" variant="dark" sticky="top">
@@ -26,7 +24,7 @@ function AdminNavBar(props) {
             src={require("../../Icons/logo.png")}
             alt="hello"
           />
-          My app name
+          Viral Map
         </Navbar.Brand>
 
         <Nav className="navbar-nav">
@@ -39,7 +37,19 @@ function AdminNavBar(props) {
             <i className="bi bi-house-door" />
             Home Page
           </Nav.Link>
-          <NavDropdown
+          <Nav.Link
+            role="button"
+            onClick={() => {
+              user_context.storeUsers();
+              visits_context.storeAllVisits();
+              poi_context.storePOIs();
+              navigate("/StatisticsPage", { replace: true });
+            }}
+          >
+            <i className="bi bi-file-bar-graph" />
+            Statistics
+          </Nav.Link>
+          {/* <NavDropdown
             id="nav-dropdown-dark"
             title={
               <>
@@ -59,23 +69,7 @@ function AdminNavBar(props) {
             >
               All statistics
             </NavDropdown.Item>
-            <NavDropdown.Item
-              onClick={(event) => {
-                // console.log(event.target.text);
-                scroll_context.setReference(event.target.text);
-              }}
-            >
-              Last stat
-            </NavDropdown.Item>
-            <NavDropdown.Item
-              onClick={(event) => {
-                // console.log(event.target.text);
-                scroll_context.setReference(event.target.text);
-              }}
-            >
-              Random stat
-            </NavDropdown.Item>
-          </NavDropdown>
+          </NavDropdown> */}
           <Nav.Link className="nav-link" href="/">
             Log Out
           </Nav.Link>

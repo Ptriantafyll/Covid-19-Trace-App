@@ -42,9 +42,7 @@ function FileForm() {
 
     axios
       .delete(BaseURL + "POI/bulk/" + fileref.current.files[0].name)
-      .then((response) => {
-        console.log(response);
-      })
+      .then((response) => {})
       .catch((err) => {
         console.log(err);
       });

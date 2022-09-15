@@ -106,13 +106,11 @@ function CovidCaseStatsPage() {
             <hr />
             Be careful, stay safe and stay at home.
           </Alert.Heading>
-          {/* <p className="text-center">You should do a covid-19 test</p> */}
         </Alert>
       )}
 
       <h3 className="text-center mt-3">
-        Last week you came in contact with a comfirmed Covid-19 case during
-        these visits:
+        You came in contact with a comfirmed Covid-19 case during these visits:
       </h3>
       <Container className="mt-2 w-50 mx-auto p-3">
         <CovidCasesStatsTable tableData={myTableData} />

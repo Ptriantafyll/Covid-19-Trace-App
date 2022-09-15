@@ -13,8 +13,8 @@ function AdminHomePage() {
   return (
     <div>
       <h4 className="text-center my-3">
-        Choose a file to either add, upload, or delete points of interest from
-        the database
+        Choose a file to either upload, or delete points of interest from the
+        database
       </h4>
       <FileForm />
       <Container className="w-50 my-2">

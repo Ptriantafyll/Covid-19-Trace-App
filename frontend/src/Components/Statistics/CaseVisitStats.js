@@ -5,6 +5,7 @@ function CaseVisitStats(props) {
 
   const options = {
     title: "Total Visits by Covid-19 Cases: " + casevisits,
+    pieHole: 0.4,
   };
   return (
     <Chart

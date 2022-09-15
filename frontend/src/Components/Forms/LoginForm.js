@@ -52,6 +52,9 @@ function LoginForm(props) {
               required
             />
             <Form.Label htmlFor="pwd">Password:</Form.Label>
+            <div className="text-center">
+              forgot password? <a href="/ResetPasswordPage">press here</a>
+            </div>
           </Form.Floating>
         </Col>
       </Row>

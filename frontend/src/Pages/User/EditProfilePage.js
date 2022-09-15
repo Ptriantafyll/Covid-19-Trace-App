@@ -23,7 +23,6 @@ function EditProfilePage() {
         },
       ])
       .then((response) => {
-        console.log(response.data.message);
         user_context.keepUsername(usernewdata.username);
         setIsloading(false);
       })

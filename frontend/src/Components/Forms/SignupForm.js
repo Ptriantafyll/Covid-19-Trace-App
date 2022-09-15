@@ -8,9 +8,22 @@ function SignupForm(props) {
   const passwordinputref = useRef();
   const [validEmail, setValidEmail] = useState(false);
   const [invalidEmail, setInvalidEmail] = useState(false);
+  const [passwordInvalid, setPasswordInvalid] = useState(false);
+  const [passwordValid, setPasswordValid] = useState(false);
 
-  // /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  //  this is the regex for password to check
+  function handlePasswordKey() {
+    if (
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        passwordinputref.current.value
+      )
+    ) {
+      setPasswordInvalid(false);
+      setPasswordValid(true);
+    } else {
+      setPasswordInvalid(true);
+      setPasswordValid(false);
+    }
+  }
 
   function handleEmailkey() {
     if (
@@ -69,13 +82,13 @@ function SignupForm(props) {
               isValid={validEmail}
               type="text"
               id="email"
-              placeholder="Enter email"
+              placeholder="Enter email address"
               name="email"
               ref={emailinputref}
               onKeyDown={handleEmailkey}
               required
             />
-            <Form.Control.Feedback type="valid"></Form.Control.Feedback>
+            <Form.Control.Feedback type="valid" />
             <Form.Control.Feedback type="invalid">
               Email address is wrong
             </Form.Control.Feedback>
@@ -88,20 +101,24 @@ function SignupForm(props) {
         <Col xs="10">
           <Form.Floating className="mb-3 mt-3">
             <Form.Control
+              isInvalid={passwordInvalid}
+              isValid={passwordValid}
               type="password"
               className="form-control"
               id="pwd"
               placeholder="Enter password"
               name="pswd"
               ref={passwordinputref}
+              onKeyDown={handlePasswordKey}
               required
             />
+            <Form.Control.Feedback type="valid" />
+            <Form.Control.Feedback type="invalid">
+              Password needs to be at least 8 characters with 1 lowercase and 1
+              upercase letter, 1 digit and 1 special character
+            </Form.Control.Feedback>
             <Form.Label htmlFor="pwd">Password:</Form.Label>
           </Form.Floating>
-          <Form.Control.Feedback type="valid">Valid.</Form.Control.Feedback>
-          <Form.Control.Feedback type="invalid">
-            Wrong email address
-          </Form.Control.Feedback>
         </Col>
       </Row>
 

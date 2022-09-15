@@ -41,12 +41,9 @@ export function VisitsContextProvider(props) {
   }
 
   function storeUserVisitsHandler(_callback) {
-    console.log("visists of " + user_context.username);
-
     axios
       .get(BaseURL + "visit/username/" + user_context.username)
       .then((response) => {
-        console.log("here");
         setUserAllVisits(response.data.visits_of_user);
 
         _callback();

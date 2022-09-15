@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import {
   Alert,
   Button,
@@ -17,46 +17,35 @@ import POIContext from "../../Store/POIContext";
 import POIVisitStats from "../../Components/Statistics/POIVisitStats";
 import DailyStats from "../../Components/Statistics/DailyStats";
 import HourlyStats from "../../Components/Statistics/HourlyStats";
-import ScrollContext from "../../Store/ScrollContext";
 
 function StatisticsPage() {
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
   const poi_context = useContext(POIContext);
-  const scroll_context = useContext(ScrollContext);
   const [viewdata, setviewdata] = useState();
   const [mytitle, setmytitle] = useState("Total Visits");
   const [chartView, setChartView] = useState(null);
   const [startDate, setStartDate] = useState("2022-09-01");
   const [endDate, setEndDate] = useState("2022-10-01");
+  const [dayMaxValue, setDayMaxValue] = useState(null);
   const [legendColor, setlegendColor] = useState();
-  const [alertShow, setAlertShow] = useState(false);
-  const [hourChartView, setHourChartView] = useState(null);
-  const [hourChartDay, setHourChartDay] = useState("2022-09-06");
-  const [hourlegendColor, setHourlegendColor] = useState();
   const [mydailytitle, setmydailytitle] = useState(
     "Visits from " + startDate + " to " + endDate
   );
+  const [alertShow, setAlertShow] = useState(false);
 
-  const lastref = useRef();
-  const randomref = useRef();
-  console.log(scroll_context.reference);
-  if (scroll_context.reference === "Last stat") {
-    lastref.current?.scrollIntoView({ behavior: "smooth" });
-  } else if (scroll_context.reference === "Random stat") {
-    randomref.current?.scrollIntoView({ behavior: "smooth" });
-  }
-
-  // scroll_context.setReference(lastref);
-  // console.log(scroll_context.reference.current.value);
+  const [hourChartView, setHourChartView] = useState(null);
+  const [hourChartDay, setHourChartDay] = useState("2022-09-06");
+  const [hourlegendColor, setHourlegendColor] = useState();
+  const [hourMaxValue, setHourMaxValue] = useState(null);
 
   function checkBoxHandler(event) {
     if (event.target.checked) {
-      setviewdata(poivisitdata);
-      setmytitle("Total Visits");
-    } else {
       setviewdata(poicasedata);
       setmytitle("Total Visits by covid-19 cases");
+    } else {
+      setviewdata(poivisitdata);
+      setmytitle("Total Visits");
     }
   }
 
@@ -80,6 +69,14 @@ function StatisticsPage() {
 
   function showDayDataHandler() {
     setChartView(dailydata);
+    // setDayMaxValue()
+    var myarray = [];
+    for (let row of dailydata) {
+      myarray.push(row[1]);
+    }
+    myarray.shift();
+    setDayMaxValue(Math.max(...myarray));
+
     setmydailytitle("Visits from " + startDate + " to " + endDate);
   }
 
@@ -102,6 +99,13 @@ function StatisticsPage() {
 
   function showHourDataHandler() {
     setHourChartView(hourlyData);
+
+    var myarray = [];
+    for (let row of hourlyData) {
+      myarray.push(row[1]);
+    }
+    myarray.shift();
+    setHourMaxValue(Math.max(...myarray));
   }
 
   function hourdropdownHandler(eventKey, event) {
@@ -189,10 +193,11 @@ function StatisticsPage() {
   var mintime = 0;
   if (visits_context.all_visits !== undefined) {
     for (const visit of visits_context.all_visits.visits) {
-      maxtime = parseInt(visit.time) + 2 * 604800000; // 2 weeks
-      mintime = parseInt(visit.time) - 604800000; // 1 week
+      // just in case there is a mistake
       if (!visit.covid_case) {
         for (const test of all_tests) {
+          mintime = new Date(test.date).getTime - 604800000;
+          maxtime = new Date(test.date).getTime + 2 * 604800000;
           if (test.result && test.user === visit.user) {
             if (
               new Date(test.date).getTime() > mintime &&
@@ -381,6 +386,7 @@ function StatisticsPage() {
     }
 
     hourlyMaxValue = Math.max(...Object.values(mydata));
+
     for (const element of Object.entries(mydata)) {
       hourlyVisitData.push(element);
       for (const element2 of Object.entries(mydata2)) {
@@ -396,23 +402,23 @@ function StatisticsPage() {
 
   return (
     <div>
-      <Container className="w-100 mx-auto bg-dark p-2 my-5">
-        <h1 className="text-white text-center">Visits</h1>
+      <Container className="w-50 mx-auto my-5">
+        <h3 className="text-center">Visits</h3>
 
         <TotalVisitStats totalvisits={totalvisits} data={visitdata} />
       </Container>
-      <Container className="w-100 mx-auto bg-dark p-2 my-5">
-        <h1 className="text-white text-center">Covid-19 Cases</h1>
+      <Container className="w-50 mx-auto my-5">
+        <h3 className="text-center">Covid-19 Cases</h3>
 
         <TotalCovidCasesStats totalcases={totalcases} data={coviddata} />
       </Container>
-      <Container className="w-100 mx-auto bg-dark p-2 my-5">
-        <h1 className="text-white text-center">Visits by Covid-19 Cases</h1>
+      <Container className="w-50 mx-auto my-5">
+        <h3 className="text-center">Visits by Covid-19 Cases</h3>
 
         <CaseVisitStats casevisits={casevisits} data={casevisitdata} />
       </Container>
-      <Container className="w-100 mx-auto bg-dark p-2 my-5" ref={randomref}>
-        <h1 className="text-white text-center">POIs ranked by visit</h1>
+      <Container className="w-50 mx-auto p-2 my-5">
+        <h3 className="text-center">POIs ranked by visit</h3>
         <Form.Check
           type="checkbox"
           label="visits by case"
@@ -424,10 +430,11 @@ function StatisticsPage() {
           vaxistitle={mytitle}
         />
       </Container>
-      <Container className="w-100 mx-auto bg-danger p-2 my-5">
-        <h1 className="text-white text-center">Daily # of visits</h1>
+      <Container className="w-50 mx-auto my-5">
+        <h3 className="text-center">Daily # of visits</h3>
+
         <Row className="justify-content-center">
-          <Col md="4">
+          <Col sm="4">
             <Form.Group controlId="startdate" className="mb-2">
               <Form.Label>Start Day</Form.Label>
               <Form.Control
@@ -437,7 +444,7 @@ function StatisticsPage() {
               />
             </Form.Group>
           </Col>
-          <Col md="4">
+          <Col sm="4">
             <Form.Group controlId="enddate" className="mb-2">
               <Form.Label>End Day</Form.Label>
               <Form.Control
@@ -446,11 +453,6 @@ function StatisticsPage() {
                 onChange={enddaySelectHandler}
               />
             </Form.Group>
-          </Col>
-          <Col sm="3">
-            <Button variant="success" onClick={showDayDataHandler}>
-              show data
-            </Button>
           </Col>
         </Row>
         <Row className="justify-content-center">
@@ -462,8 +464,14 @@ function StatisticsPage() {
             )}
           </Col>
         </Row>
-        <Row className="justify-content-center mb-2">
-          <Col md="3">
+        <Row className="mb-1">
+          <Col sm="2" className=""></Col>
+          <Col sm="4" xs="12" className="">
+            <Button variant="success" onClick={showDayDataHandler}>
+              Show data of date range
+            </Button>
+          </Col>
+          <Col sm="4" xs="12" className="">
             <Dropdown onSelect={dropdownSelectHandler}>
               <Dropdown.Toggle variant="success">Select Data</Dropdown.Toggle>
 
@@ -483,17 +491,15 @@ function StatisticsPage() {
         <DailyStats
           data={chartView === null ? dailydata : chartView}
           title={mydailytitle}
-          maxValue={dailyMaxValue}
+          maxValue={dayMaxValue === null ? dailyMaxValue : dayMaxValue}
           colors={legendColor}
         />
       </Container>
-      <Container className="w-100 mx-auto bg-danger p-2 my-5" ref={lastref}>
-        <h1 className="text-white text-center">Hourly # of visits</h1>
+      <Container className="w-50 mx-auto my-5">
+        <h3 className="text-center">Hourly # of visits</h3>
         <Row className="justify-content-center">
-          <Col md="2" className="mt-2">
-            Select Day:
-          </Col>
-          <Col sm="4">
+          <Col xs="4">
+            <Form.Label>Select Date</Form.Label>
             <Form.Group controlId="chosendate" className="mb-2">
               <Form.Control
                 type="date"
@@ -502,14 +508,15 @@ function StatisticsPage() {
               />
             </Form.Group>
           </Col>
-          <Col md="3">
+          <Col xs="5" className="mt-2">
+            <br />
             <Button variant="success" onClick={showHourDataHandler}>
-              show data
+              Show data of date
             </Button>
           </Col>
         </Row>
-        <Row className="justify-content-center mb-2">
-          <Col md="3">
+        <Row className="mb-2 justify-content-center">
+          <Col xs="9">
             <Dropdown onSelect={hourdropdownHandler} id="hourdropdown">
               <Dropdown.Toggle variant="success">Select Data</Dropdown.Toggle>
 
@@ -529,7 +536,7 @@ function StatisticsPage() {
         <HourlyStats
           data={hourChartView === null ? hourlyData : hourChartView}
           title={"Visits of " + hourChartDay}
-          maxValue={hourlyMaxValue}
+          maxValue={hourMaxValue === null ? hourlyMaxValue : hourMaxValue}
           colors={hourlegendColor}
         />
       </Container>

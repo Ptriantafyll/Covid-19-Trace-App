@@ -16,6 +16,7 @@ exports.get_all_users = (req, res, next) => {
             username: user.username,
             email: user.email,
             _id: user._id,
+            tests_count: user.past_covid_tests.length + 1,
             covid_test: user.covid_test,
             past_covid_tests: user.past_covid_tests,
           };
@@ -51,6 +52,21 @@ exports.get_user = (req, res, next) => {
       console.log(err);
       res.status(500).json({
         error: err,
+      });
+    });
+};
+
+exports.post_user_emailusername = (req, res, next) => {
+  User.find({ username: req.body.username, email: req.body.email })
+    .exec()
+    .then((user) => {
+      res.status(200).json({
+        user: user,
+      });
+    })
+    .catch((err) => {
+      res.status(400).json({
+        message: "user doesn't exist",
       });
     });
 };

@@ -9,6 +9,9 @@ router.get("/", UsersController.get_all_users);
 // get a user
 router.get("/:userid", UsersController.get_user);
 
+// get a user from username and email
+router.post("/emailusername", UsersController.post_user_emailusername);
+
 // create user
 router.post("/signup", UsersController.create_user);
 

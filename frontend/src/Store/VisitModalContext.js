@@ -6,7 +6,7 @@ import VisitsContext from "./VisitsContext";
 const VisitModalContext = createContext({
   open: false,
   people: 0,
-  openModal: (name_of_poi) => {},
+  openModal: (name_of_poi, id_of_poi) => {},
   closeModal: () => {},
   enterVisit: (estimate, currentUserContext, covid_tests) => {},
 });
@@ -16,12 +16,14 @@ export function VisitModalContextProvider(props) {
   const [modalIsOpen, setModalIsOpen] = useState();
   const [peopleEstimate, setPeopleEstimate] = useState();
   const [currentPoi, setCurrentPoi] = useState();
+  const [currentPoi_id, setCurrentPoi_id] = useState();
   const today = new Date();
   const user_context = useContext(UserContext);
   const visits_context = useContext(VisitsContext);
 
-  function openModalHandler(poi) {
-    setCurrentPoi(poi);
+  function openModalHandler(poiname, poi_id) {
+    setCurrentPoi(poiname);
+    setCurrentPoi_id(poi_id);
     setModalIsOpen(true);
   }
 
@@ -31,35 +33,16 @@ export function VisitModalContextProvider(props) {
 
   function enterVisitHandler(estimate, current_user, covid_tests) {
     setPeopleEstimate(estimate);
-    var isPositive = false;
-
-    for (const test in covid_tests) {
-      const diff = Math.abs(
-        today.getTime() - new Date(covid_tests[test].date).getTime()
-      );
-
-      if (covid_tests[test].result && diff < 604800000) {
-        console.log("im here");
-        isPositive = true;
-      }
-    }
-    // console.log(current_user);
-    // console.log(currentPoi);
-    // console.log(today.getTime());
-    // console.log(estimate);
-    // console.log(isCovidCase);
 
     axios
       .post(BaseURL + "visit/" + user_context.id, {
         user: current_user,
         POI: currentPoi,
+        poi_id: currentPoi_id,
         time: today.getTime(),
         peopleEstimate: estimate,
-        covid_case: isPositive,
       })
       .then((response) => {
-        console.log(response);
-        console.log("after post visit");
         visits_context.storeUserVisits();
       })
       .catch((error) => {

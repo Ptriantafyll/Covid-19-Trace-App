@@ -120,11 +120,15 @@ exports.bulk_import = (req, res, next) => {
   const given_file = req.body.filename;
   const poisfile = require("../" + given_file);
 
-  POI.collection.insertMany(poisfile, (err, docs) => {
+  POI.collection.insertMany(poisfile, { ordered: false }, (err, docs) => {
     if (err) {
-      console.log(err);
-      res.status(409).json({
-        message: "there pois you are trying to add already exist",
+      // console.log(err);
+      // res.status(409).json({
+      //   message: "there pois you are trying to add already exist",
+      // });
+      // duplicates are ignored
+      res.status(201).json({
+        message: "multiple pois added successfully",
       });
     } else {
       res.status(201).json({

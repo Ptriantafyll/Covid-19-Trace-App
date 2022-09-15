@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 exports.get_all_visits = (req, res, next) => {
   Visit.find()
-    .select("_id user POI time peopleEstimate covid_case")
+    .select("_id user POI POI_id time peopleEstimate covid_case")
     .exec()
     .then((visits) => {
       const response = {
@@ -14,6 +14,7 @@ exports.get_all_visits = (req, res, next) => {
             _id: visit._id,
             user: visit.user,
             POI: visit.POI,
+            POI_id: visit.POI_id,
             time: visit.time,
             covid_case: visit.covid_case,
             peopleEstimate: visit.peopleEstimate,
@@ -123,6 +124,7 @@ exports.create_visit = (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         user: req.body.user,
         POI: req.body.POI,
+        POI_id: req.body.POI_id,
         time: req.body.time,
         covid_case: userWasCovidCase,
         peopleEstimate: req.body.peopleEstimate,
