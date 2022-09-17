@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import "leaflet/dist/leaflet.css"; // needed for map
 import "./MyMap.css"; // just defines the height of a leaflet container
 import L from "leaflet";
@@ -24,6 +24,8 @@ function MyMap(props) {
       </Marker>
       {props.searchedPOIs}
       <MapSearchBar onEnteredSearch={props.onEnteredSearch} />
+
+      {/* <Circle center={props.currentpos} radius={5000} /> */}
     </MapContainer>
   );
 }

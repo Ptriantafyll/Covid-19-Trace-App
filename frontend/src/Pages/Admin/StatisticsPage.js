@@ -22,6 +22,7 @@ function StatisticsPage() {
   const visits_context = useContext(VisitsContext);
   const user_context = useContext(UserContext);
   const poi_context = useContext(POIContext);
+  const [poiVisitColor, setPoiVisitColor] = useState(null);
   const [viewdata, setviewdata] = useState();
   const [mytitle, setmytitle] = useState("Total Visits");
   const [chartView, setChartView] = useState(null);
@@ -42,9 +43,11 @@ function StatisticsPage() {
   function checkBoxHandler(event) {
     if (event.target.checked) {
       setviewdata(poicasedata);
+      setPoiVisitColor(["#b0120a"]);
       setmytitle("Total Visits by covid-19 cases");
     } else {
       setviewdata(poivisitdata);
+      setPoiVisitColor(null);
       setmytitle("Total Visits");
     }
   }
@@ -69,7 +72,6 @@ function StatisticsPage() {
 
   function showDayDataHandler() {
     setChartView(dailydata);
-    // setDayMaxValue()
     var myarray = [];
     for (let row of dailydata) {
       myarray.push(row[1]);
@@ -428,6 +430,7 @@ function StatisticsPage() {
         <POIVisitStats
           data={viewdata === undefined ? poivisitdata : viewdata}
           vaxistitle={mytitle}
+          colors={poiVisitColor}
         />
       </Container>
       <Container className="w-50 mx-auto my-5">

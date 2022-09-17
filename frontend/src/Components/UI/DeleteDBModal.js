@@ -17,23 +17,23 @@ function DeleteDBModal(props) {
         console.log(err);
       });
 
-    axios
-      .delete(BaseURL + "visit")
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .delete(BaseURL + "visit")
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
 
-    axios
-      .delete(BaseURL + "user")
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // axios
+    //   .delete(BaseURL + "user")
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   return (
@@ -41,7 +41,7 @@ function DeleteDBModal(props) {
       <Modal show={modal_context.open} onHide={modal_context.closeModal}>
         <Modal.Header closeButton>
           <Modal.Title className="text-center">
-            Delete enitre Database
+            Delete all Point of Interest from the Database
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="justify-content-center">

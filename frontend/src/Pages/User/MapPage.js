@@ -11,7 +11,7 @@ import orange_icon from "../../Icons/orange-icon";
 import VisitModal from "../../Components/UI/VisitModal";
 import CalculateDistance from "../../Components/CalculateDistance";
 
-function UserHomePage() {
+function MapPage() {
   const BaseURL = "http://localhost:8000/"; // api url
   const [returnedPOIs, setReturnedPOIs] = useState({});
   const [isloading, setIsloading] = useState(false);
@@ -129,11 +129,11 @@ function UserHomePage() {
         returnedPOIs[poi].coordinates[0].lat,
         returnedPOIs[poi].coordinates[0].lng,
         // coordinates close to Flocafe and Libido
-        // 38.2376827,
-        // 21.7259359
+        38.2376827,
+        21.7259359
 
-        currentPositioncontext.latitude,
-        currentPositioncontext.longitude
+        // currentPositioncontext.latitude,
+        // currentPositioncontext.longitude
       );
 
       // closer_than_20 has true for every poi (of those returned from the search) that is whithin 20 meters of the user
@@ -158,7 +158,15 @@ function UserHomePage() {
     var i = 0;
     // myMarkers = markers on the positions of every POI returned from the search
     myMarkers = returnedPOIs.map((poi) => {
-      return (
+      const dist = CalculateDistance(
+        currentPositioncontext.latitude,
+        currentPositioncontext.longitude,
+        // 38.275229, //to test 5km radius
+        // 21.703416,
+        poi.coordinates[0].lat,
+        poi.coordinates[0].lng
+      );
+      return dist > 5000 ? null : (
         <Marker
           key={poi.id}
           position={poi.coordinates[0]}
@@ -180,7 +188,7 @@ function UserHomePage() {
                 </a>
               ) : null}
               {closer_than_20[i] ? " to add visit to " + poi.name : null}
-              <br />
+              {closer_than_20[i] ? <br /> : null}
               {average_messages[i++]}
             </p>
           </Popup>
@@ -200,6 +208,8 @@ function UserHomePage() {
   const pos = [
     currentPositioncontext.latitude,
     currentPositioncontext.longitude,
+    // 38.275229,
+    // 21.703416, // to test 5km radius
   ];
 
   return (
@@ -208,7 +218,7 @@ function UserHomePage() {
         Search for a type of place you wish to see on the map.
       </h1>
 
-      <Container className="w-75 mx-auto">
+      <Container className="w-75 mx-auto mb-5">
         {failureAlertShow && (
           <Alert
             show={failureAlertShow}
@@ -248,4 +258,4 @@ function UserHomePage() {
   );
 }
 
-export default UserHomePage;
+export default MapPage;

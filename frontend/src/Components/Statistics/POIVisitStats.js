@@ -11,6 +11,7 @@ function POIVisitStats(props) {
     hAxis: {
       title: "Points of Interest",
     },
+    colors: props.colors,
   };
   return (
     <Chart

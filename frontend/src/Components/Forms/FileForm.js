@@ -5,7 +5,7 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useRef } from "react";
 import axios from "axios";
 
-function FileForm() {
+function FileForm(props) {
   const fileref = useRef();
   const BaseURL = "http://localhost:8000/"; // api url
 
@@ -17,7 +17,7 @@ function FileForm() {
         filename: fileref.current.files[0].name,
       })
       .then((response) => {
-        console.log(response);
+        props.onPOIsAdd(response.data.message);
       })
       .catch((err) => {
         console.log(err);
@@ -30,7 +30,7 @@ function FileForm() {
     axios
       .patch(BaseURL + "POI/bulk/" + fileref.current.files[0].name)
       .then((response) => {
-        console.log(response);
+        props.onPOIsUpdate(response.data.message);
       })
       .catch((err) => {
         console.log(err);
@@ -42,7 +42,9 @@ function FileForm() {
 
     axios
       .delete(BaseURL + "POI/bulk/" + fileref.current.files[0].name)
-      .then((response) => {})
+      .then((response) => {
+        props.onPOIsDelete(response.data.message);
+      })
       .catch((err) => {
         console.log(err);
       });

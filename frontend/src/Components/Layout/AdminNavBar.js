@@ -29,16 +29,14 @@ function AdminNavBar(props) {
 
         <Nav className="navbar-nav">
           <Nav.Link
-            role="button"
             onClick={() => {
-              navigate("/AdminHomePage", { replace: true });
+              navigate("/AddUpdateDeletePOIsPage", { replace: true });
             }}
           >
-            <i className="bi bi-house-door" />
-            Home Page
+            <i className="bi bi-filetype-json" />
+            Add/Delete/Update POI
           </Nav.Link>
           <Nav.Link
-            role="button"
             onClick={() => {
               user_context.storeUsers();
               visits_context.storeAllVisits();
@@ -49,27 +47,6 @@ function AdminNavBar(props) {
             <i className="bi bi-file-bar-graph" />
             Statistics
           </Nav.Link>
-          {/* <NavDropdown
-            id="nav-dropdown-dark"
-            title={
-              <>
-                <i className="bi bi-file-bar-graph" />
-                Statistics
-              </>
-            }
-            menuVariant="dark"
-          >
-            <NavDropdown.Item
-              onClick={() => {
-                user_context.storeUsers();
-                visits_context.storeAllVisits();
-                poi_context.storePOIs();
-                navigate("/StatisticsPage", { replace: true });
-              }}
-            >
-              All statistics
-            </NavDropdown.Item>
-          </NavDropdown> */}
           <Nav.Link className="nav-link" href="/">
             Log Out
           </Nav.Link>

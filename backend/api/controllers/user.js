@@ -221,7 +221,8 @@ exports.update_user = (req, res, next) => {
         if (oldtestresult && hoursDifference < 336) {
           // if the user has submitted another positive test 14 days before or earlier
           return res.status(200).json({
-            message: "The 14 days needed have not passed",
+            message:
+              "You cannot submit another test until 14 days have passed after you submitted a positive test",
           });
         }
 

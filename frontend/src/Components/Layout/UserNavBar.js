@@ -28,14 +28,13 @@ function UserNavBar() {
           <Nav.Link
             className="nav-link"
             onClick={() => {
-              navigate("/UserHomePage", { replace: true });
+              navigate("/MapPage", { replace: true });
             }}
           >
-            <i className="bi bi-house-door" />
-            Home Page
+            <i className="bi bi-pin-map" />
+            Map
           </Nav.Link>
           <Nav.Link
-            role="button"
             className="nav-link"
             onClick={() => {
               navigate("/UserCovidTestSubmitPage", { replace: true });

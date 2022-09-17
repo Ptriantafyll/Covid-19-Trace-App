@@ -4,15 +4,15 @@ import Layout from "./Components/Layout/Layout";
 import LoginPage from "./Pages/LoginPage";
 import SignupPage from "./Pages/SignupPage";
 import StartPage from "./Pages/StartPage";
-import UserHomePage from "./Pages/User/UserHomePage";
 import UserCovidTestSubmitPage from "./Pages/User/UserCovidTestSubmitPage";
 import CovidCaseStatsPage from "./Pages/User/CovidCaseStatsPage";
 import EditProfilePage from "./Pages/User/EditProfilePage";
 import VisitHistoryPage from "./Pages/User/VisitHistoryPage";
 import CovidTestHistoryPage from "./Pages/User/CovidTestHistoryPage";
-import AdminHomePage from "./Pages/Admin/AdminHomePage";
 import StatisticsPage from "./Pages/Admin/StatisticsPage";
 import ResetPasswordPage from "./Pages/ResetPasswordPage";
+import MapPage from "./Pages/User/MapPage";
+import AddUpdateDeletePOIsPage from "./Pages/Admin/AddUpdateDeletePOIs";
 
 function App() {
   return (
@@ -24,7 +24,8 @@ function App() {
           <Route path="/SignupPage" element={<SignupPage />} />
           <Route path="/ResetPasswordPage" element={<ResetPasswordPage />} />
 
-          <Route path="/UserHomePage" element={<UserHomePage />} />
+          <Route path="/MapPage" element={<MapPage />} />
+
           <Route
             path="/UserCovidTestSubmitPage"
             element={<UserCovidTestSubmitPage />}
@@ -36,7 +37,10 @@ function App() {
             path="/CovidTestHistoryPage"
             element={<CovidTestHistoryPage />}
           />
-          <Route path="/AdminHomePage" element={<AdminHomePage />} />
+          <Route
+            path="/AddUpdateDeletePOIsPage"
+            element={<AddUpdateDeletePOIsPage />}
+          />
           <Route path="/StatisticsPage" element={<StatisticsPage />} />
         </Routes>
       </Layout>

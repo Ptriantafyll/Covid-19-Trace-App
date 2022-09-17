@@ -118,21 +118,17 @@ exports.create_POI = (req, res, next) => {
 
 exports.bulk_import = (req, res, next) => {
   const given_file = req.body.filename;
-  const poisfile = require("../" + given_file);
+  const poisfile = require("../poidata/" + given_file);
 
   POI.collection.insertMany(poisfile, { ordered: false }, (err, docs) => {
     if (err) {
-      // console.log(err);
-      // res.status(409).json({
-      //   message: "there pois you are trying to add already exist",
-      // });
       // duplicates are ignored
       res.status(201).json({
-        message: "multiple pois added successfully",
+        message: "Multiple Points of Interest added successfully",
       });
     } else {
       res.status(201).json({
-        message: "multiple pois added successfully",
+        message: "Multiple Points of Interest added successfully",
       });
     }
   });
@@ -142,7 +138,7 @@ exports.bulk_delete = (req, res, next) => {
   const given_file = req.params.filename;
   const ids_to_delete = [];
 
-  const poisfile = require("../" + given_file);
+  const poisfile = require("../poidata/" + given_file);
 
   for (const poi in poisfile) {
     ids_to_delete.push(poisfile[poi].id);
@@ -157,7 +153,7 @@ exports.bulk_delete = (req, res, next) => {
     } else {
       console.log(docs);
       res.status(200).json({
-        message: "multiple pois deleted successfully",
+        message: "Multiple Points of Interest deleted successfully",
       });
     }
   });
@@ -167,7 +163,7 @@ exports.bulk_update = (req, res, next) => {
   const given_file = req.params.filename;
   const ids_to_update = [];
 
-  const poisfile = require("../" + given_file);
+  const poisfile = require("../poidata/" + given_file);
 
   for (const poi in poisfile) {
     ids_to_update.push(poisfile[poi].id);
@@ -206,7 +202,7 @@ exports.bulk_update = (req, res, next) => {
       });
     } else {
       res.status(200).json({
-        message: "multiple pois updated successfully",
+        message: "Multiple Points of Interest updated successfully",
       });
     }
   });
