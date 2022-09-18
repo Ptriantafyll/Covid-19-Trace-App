@@ -71,7 +71,6 @@ exports.post_user_emailusername = (req, res, next) => {
     });
 };
 
-// todo: authorization?
 exports.create_user = (req, res, next) => {
   User.find({ username: req.body.username })
     .exec()
@@ -230,17 +229,29 @@ exports.update_user = (req, res, next) => {
         const mintime = testtime - 604800000; // a week before
         const maxtime = testtime + 2 * 604800000; // 2 weeks after
 
+        console.log(new Date(mintime));
+        console.log(new Date(maxtime));
+
+        console.log(mintime);
+        console.log(maxtime);
+
         if (updateOps["covid_test"].result) {
           // if user is a covid -> case update his visits a week before and 2 weeks after
 
           Visit.find({
             user: response.username,
             covid_case: false,
-            time: {
-              $gte: mintime,
-              $lte: maxtime,
-            },
+            // time: {
+            //   $gte: mintime,
+            //   $lte: maxtime,
+            // },
           }).then((myres) => {
+            // console.log(myres);
+            for (const visit of myres) {
+              console.log(visit.time > mintime);
+              console.log(visit.time > maxtime);
+            }
+
             const bulkupdate = myres.map((visit) => {
               return {
                 updateOne: {
@@ -249,7 +260,10 @@ exports.update_user = (req, res, next) => {
                   },
                   update: {
                     $set: {
-                      covid_case: true,
+                      covid_case:
+                        visit.time > mintime && visit.time < maxtime
+                          ? true
+                          : false,
                     },
                   },
                   upsert: true,
@@ -316,6 +330,63 @@ exports.update_user = (req, res, next) => {
           });
       }
     });
+};
+
+exports.bulk_insert = (req, res, next) => {
+  const users = req.body.users;
+  const pw_requirements =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  for (const user of users) {
+    if (!pw_requirements.test(user.password)) {
+      return res.status(400).json({
+        message:
+          "Password needs to be at least 8 characters with 1 lowercase and 1 upercase letter, 1 digit and 1 special character",
+      });
+    }
+
+    // salt = 10 - adds random strings to hashed password
+    bcrypt.hash(user.password, 10, (err, hash) => {
+      if (err) {
+        return res.status(500).json({
+          error: err,
+        });
+      } else {
+        const new_user = new User({
+          _id: new mongoose.Types.ObjectId(),
+          username: user.username,
+          password: hash,
+          email: user.email,
+        });
+
+        new_user
+          .save()
+          .then(() => {})
+          .catch((err) => {
+            res.status(500).json({
+              error: err,
+            });
+          });
+      }
+    });
+  }
+
+  res.status(201).json({
+    message: "Users signed up successfully",
+  });
+
+  // User.collection.insertMany(users_correct_pws, (err, docs) => {
+  //   if (err) {
+  //     console.log(err);
+  //     res.status(500).json({
+  //       error: err,
+  //     });
+  //   } else {
+  //     res.status(201).json({
+  //       message: "Users added successfully",
+  //     });
+  //   }
+  // });
 };
 
 exports.delete_collection = (req, res, next) => {

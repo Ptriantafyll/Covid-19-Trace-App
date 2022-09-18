@@ -27,10 +27,9 @@ function LoginForm(props) {
           <Form.Floating className="mb-3 mt-3">
             <Form.Control
               type="text"
-              className="form-control"
-              id="username"
+              id="loginusername"
               placeholder="Enter username"
-              name="username"
+              name="loginusername"
               ref={usernameloginref}
               required
             />
@@ -45,9 +44,9 @@ function LoginForm(props) {
             <Form.Control
               type="password"
               className="form-control"
-              id="pwd"
+              id="loginpwd"
               placeholder="Enter password"
-              name="pswd"
+              name="loginpwd"
               ref={passwordloginref}
               required
             />

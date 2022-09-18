@@ -63,9 +63,9 @@ function SignupForm(props) {
             <Form.Control
               type="text"
               className="form-control"
-              id="username"
+              id="signupusername"
               placeholder="Enter username"
-              name="username"
+              name="signupusername"
               ref={usernameinputref}
               required
             />
@@ -81,9 +81,9 @@ function SignupForm(props) {
               isInvalid={invalidEmail}
               isValid={validEmail}
               type="text"
-              id="email"
+              id="signupemail"
               placeholder="Enter email address"
-              name="email"
+              name="signupemail"
               ref={emailinputref}
               onKeyDown={handleEmailkey}
               required

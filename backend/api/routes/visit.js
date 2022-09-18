@@ -18,6 +18,9 @@ router.get("/", VisitsController.get_all_visits);
 // create visit
 router.post("/:userid", VisitsController.create_visit);
 
+// bulk add visits
+router.post("/bulk/insert", VisitsController.bulk_insert);
+
 // delete all visits
 router.delete("/", VisitsController.delete_collection);
 

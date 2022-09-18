@@ -123,6 +123,7 @@ exports.bulk_import = (req, res, next) => {
   POI.collection.insertMany(poisfile, { ordered: false }, (err, docs) => {
     if (err) {
       // duplicates are ignored
+      console.log(err);
       res.status(201).json({
         message: "Multiple Points of Interest added successfully",
       });

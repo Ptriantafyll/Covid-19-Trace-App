@@ -21,6 +21,9 @@ router.post("/login", UsersController.user_login);
 // update user
 router.patch("/:userid", UsersController.update_user);
 
+// bulk add users
+router.post("/bulk", UsersController.bulk_insert);
+
 // delete all users
 router.delete("/", UsersController.delete_collection);
 

@@ -30,6 +30,14 @@ function AdminNavBar(props) {
         <Nav className="navbar-nav">
           <Nav.Link
             onClick={() => {
+              navigate("/VisitScriptPage", { replace: true });
+            }}
+          >
+            <i className="bi bi-filetype-js" />
+            Add Visits
+          </Nav.Link>
+          <Nav.Link
+            onClick={() => {
               navigate("/AddUpdateDeletePOIsPage", { replace: true });
             }}
           >

@@ -23,9 +23,9 @@ function LoginPage() {
         user_context.keepUser(userdata.username, response.data.id);
         user_context.keepUsername(userdata.username);
         if (userdata.username === "Admin") {
-          navigate("/AdminHomePage", { replace: true });
+          navigate("/VisitScriptPage", { replace: true });
         } else {
-          navigate("/UserHomePage", { replace: true });
+          navigate("/MapPage", { replace: true });
         }
       })
       .catch((error) => {

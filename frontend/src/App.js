@@ -13,6 +13,7 @@ import StatisticsPage from "./Pages/Admin/StatisticsPage";
 import ResetPasswordPage from "./Pages/ResetPasswordPage";
 import MapPage from "./Pages/User/MapPage";
 import AddUpdateDeletePOIsPage from "./Pages/Admin/AddUpdateDeletePOIs";
+import VisitScriptPage from "./Pages/Admin/VisitScriptPage";
 
 function App() {
   return (
@@ -23,7 +24,6 @@ function App() {
           <Route path="/LoginPage" element={<LoginPage />} />
           <Route path="/SignupPage" element={<SignupPage />} />
           <Route path="/ResetPasswordPage" element={<ResetPasswordPage />} />
-
           <Route path="/MapPage" element={<MapPage />} />
 
           <Route
@@ -37,6 +37,7 @@ function App() {
             path="/CovidTestHistoryPage"
             element={<CovidTestHistoryPage />}
           />
+          <Route path="/VisitScriptPage" element={<VisitScriptPage />} />
           <Route
             path="/AddUpdateDeletePOIsPage"
             element={<AddUpdateDeletePOIsPage />}

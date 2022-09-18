@@ -1,4 +1,9 @@
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup /*Circle*/,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css"; // needed for map
 import "./MyMap.css"; // just defines the height of a leaflet container
 import L from "leaflet";

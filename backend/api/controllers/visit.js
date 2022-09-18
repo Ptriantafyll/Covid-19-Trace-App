@@ -185,6 +185,21 @@ exports.get_last_weeks_visits = (req, res, next) => {
     });
 };
 
+exports.bulk_insert = (req, res, next) => {
+  Visit.collection.insertMany(req.body.visits, (err, docs) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    } else {
+      res.status(201).json({
+        message: "Visits added successfully",
+      });
+    }
+  });
+};
+
 exports.delete_collection = (req, res, next) => {
   Visit.collection
     .drop()
