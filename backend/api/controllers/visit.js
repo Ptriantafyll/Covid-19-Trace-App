@@ -193,7 +193,7 @@ exports.bulk_insert = (req, res, next) => {
         error: err,
       });
     } else {
-      res.status(201).json({
+      return res.status(201).json({
         message: "Visits added successfully",
       });
     }

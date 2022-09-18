@@ -43,7 +43,7 @@ function AddUpdateDeletePOIsPage() {
     <div>
       <h4 className="text-center my-3">
         Choose a file to either upload, or delete points of interest from the
-        databases
+        database
       </h4>
       {addAlertShow && (
         <Container className="w-75">

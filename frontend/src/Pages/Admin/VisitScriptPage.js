@@ -1,12 +1,13 @@
 import { useRef, useState } from "react";
 import { Alert, Card, Col, Container, Form, Row } from "react-bootstrap";
-import visitScript from "../../VisitScript";
+import visitScript from "../../visitScript";
 
 function VisitScriptPage() {
   const numberofusersref = useRef();
   const startdayref = useRef();
   const enddayref = useRef();
   const [alertShow, setAlertShow] = useState(false);
+  const [successAlertShow, setSuccessAlertshow] = useState(false);
 
   function runscript(event) {
     event.preventDefault();
@@ -24,8 +25,10 @@ function VisitScriptPage() {
     if (startTimestamp < endTimestamp && num_of_users > 0) {
       visitScript(num_of_users, startDate, endDate);
       setAlertShow(false);
+      setSuccessAlertshow(true);
     } else {
       setAlertShow(true);
+      setSuccessAlertshow(false);
     }
   }
 
@@ -43,6 +46,20 @@ function VisitScriptPage() {
               Please enter valid data.
               <br /> Start day needs to be before end day. <br />
               Number of users needs to be a positive integer.
+            </Alert.Heading>
+          </Alert>
+        </Container>
+      )}
+      {successAlertShow && (
+        <Container className="w-75 mt-3">
+          <Alert
+            show={successAlertShow}
+            variant="success"
+            onClose={() => setSuccessAlertshow(false)}
+            dismissible
+          >
+            <Alert.Heading className="text-center">
+              Visits and users added successfully to the database
             </Alert.Heading>
           </Alert>
         </Container>

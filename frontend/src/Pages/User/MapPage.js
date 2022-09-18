@@ -80,7 +80,8 @@ function MapPage() {
                   }
                 }
               }
-              average = totalvisits === 0 ? 0 : totalpeople / totalvisits;
+              average =
+                totalvisits === 0 ? 0 : Math.ceil(totalpeople / totalvisits);
               pois_avg.push(average);
             }
           } else {

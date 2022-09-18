@@ -229,29 +229,12 @@ exports.update_user = (req, res, next) => {
         const mintime = testtime - 604800000; // a week before
         const maxtime = testtime + 2 * 604800000; // 2 weeks after
 
-        console.log(new Date(mintime));
-        console.log(new Date(maxtime));
-
-        console.log(mintime);
-        console.log(maxtime);
-
         if (updateOps["covid_test"].result) {
           // if user is a covid -> case update his visits a week before and 2 weeks after
-
           Visit.find({
             user: response.username,
             covid_case: false,
-            // time: {
-            //   $gte: mintime,
-            //   $lte: maxtime,
-            // },
           }).then((myres) => {
-            // console.log(myres);
-            for (const visit of myres) {
-              console.log(visit.time > mintime);
-              console.log(visit.time > maxtime);
-            }
-
             const bulkupdate = myres.map((visit) => {
               return {
                 updateOne: {
@@ -334,8 +317,10 @@ exports.update_user = (req, res, next) => {
 
 exports.bulk_insert = (req, res, next) => {
   const users = req.body.users;
+  const users_to_insert = [];
   const pw_requirements =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const flag = false;
 
   for (const user of users) {
     if (!pw_requirements.test(user.password)) {
@@ -359,33 +344,27 @@ exports.bulk_insert = (req, res, next) => {
           email: user.email,
         });
 
-        new_user
-          .save()
-          .then(() => {})
-          .catch((err) => {
-            res.status(500).json({
-              error: err,
-            });
+        users_to_insert.push(new_user);
+        if (users_to_insert.length === users.length) {
+          User.collection.insertMany(users_to_insert, (err, docs) => {
+            if (err) {
+              console.log(err);
+              res.status(500).json({
+                error: err,
+              });
+            } else {
+              res.status(201).json({
+                message: "Users added successfully",
+              });
+            }
           });
+        }
       }
     });
   }
 
-  res.status(201).json({
-    message: "Users signed up successfully",
-  });
-
-  // User.collection.insertMany(users_correct_pws, (err, docs) => {
-  //   if (err) {
-  //     console.log(err);
-  //     res.status(500).json({
-  //       error: err,
-  //     });
-  //   } else {
-  //     res.status(201).json({
-  //       message: "Users added successfully",
-  //     });
-  //   }
+  // res.status(201).json({
+  //   message: "Users signed up successfully",
   // });
 };
 

@@ -13,11 +13,12 @@ function CovidTestHistoryPage() {
 
   function getCovidTests() {
     const tests = user_context.covid_tests;
-    tests.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    if (tests.length > 0) {
+    console.log(user_context);
+    console.log(tests);
+    if (tests.length > 0 && tests[0] !== undefined) {
+      tests.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
       setMyTableData(
         tests.map((test) => {
           var date = test.date;
