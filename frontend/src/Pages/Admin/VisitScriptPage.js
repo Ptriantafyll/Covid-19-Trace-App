@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Alert, Card, Col, Container, Form, Row } from "react-bootstrap";
-import visitScript from "../../visitScript";
+import visitScript from "../../VisitScript";
 
 function VisitScriptPage() {
   const numberofusersref = useRef();
